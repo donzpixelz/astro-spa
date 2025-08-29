@@ -1,106 +1,92 @@
 ---
-import astroLogo from '../assets/astro.svg';
-import background from '../assets/background.svg';
+/**
+	* Minimal, project-owned welcome component.
+	* No Astro branding, no external links.
+	* Tweak the copy below to make it yours.
+	*/
+const title = 'astro-spa';
+const tagline = 'Single Page App on EC2 (Nginx) • CI/CD via GitHub Actions';
+const badge = '007'; // visible marker you asked for
 ---
+<section class="hero" aria-labelledby="site-title">
+	<div class="wrap">
+		<h1 id="site-title" class="title">
+			{title} <span class="badge">{badge}</span>
+		</h1>
+		<p class="tagline">{tagline}</p>
 
-<div id="container">
-	<img id="background" src={background.src} alt="" fetchpriority="high" />
-
-	<main>
-		<section id="hero">
-			<a href="https://astro.build">
-				<img src={astroLogo.src} width="115" height="48" alt="Astro" />
-			</a>
-
-			<h1 class="headline">
-				astro-spa is live <span class="tag">007</span>
-			</h1>
-			<p class="sub">
-				Deployed to AWS EC2 (Nginx) via Terraform + GitHub Actions. This is your home page—edit
-				<code>src/pages/index.astro</code> or this component at
-				<code>src/components/Welcome.astro</code> and push to <code>main</code> to redeploy.
-			</p>
-
-			<div id="links">
-				<a class="button" href="https://docs.astro.build">Astro Docs</a>
-				<a class="ghost" href="https://github.com/donzpixelz/astro-spa/actions">View Deploy Runs</a>
+		<div class="grid">
+			<div class="card">
+				<h2>Welcome</h2>
+				<p>This is your home page. Edit <code>src/pages/index.astro</code> or this component at
+					<code>src/components/Welcome.astro</code> and push to <code>main</code> to redeploy.</p>
 			</div>
-		</section>
-	</main>
-
-	<a href="https://astro.build/blog/" id="news" class="box">
-		<h2>What’s new in Astro?</h2>
-		<p>Explore features, updates, and guides from the Astro team.</p>
-	</a>
-</div>
+			<div class="card">
+				<h2>App paths</h2>
+				<ul>
+					<li><code>src/pages/</code> — routes/pages</li>
+					<li><code>src/components/</code> — UI components</li>
+					<li><code>public/</code> — static assets (served at /)</li>
+				</ul>
+			</div>
+			<div class="card">
+				<h2>Deploy</h2>
+				<p>Commit changes and push to <code>main</code>. The GitHub Action builds and syncs to your EC2.</p>
+			</div>
+		</div>
+	</div>
+</section>
 
 <style>
-	:root {
-		--ink: #111827;
-		--brand: #3245ff;
-		--brand2: #bc52ee;
+	.hero {
+		padding: 28px 0;
 	}
-	#background {
-		position: fixed; inset: 0;
-		width: 100%; height: 100%;
-		z-index: -1; filter: blur(100px);
+	.wrap {
+		display: grid;
+		gap: 18px;
 	}
-	#container {
-		font-family: Inter, Roboto, "Helvetica Neue", Arial, sans-serif;
-		min-height: 60vh;
+	.title {
+		margin: 0;
+		font-size: 28px;
+		line-height: 1.2;
 	}
-	main {
-		display: grid; place-items: center; padding: 24px;
-	}
-	#hero {
-		display: grid; gap: 12px;
-		padding: 16px 0; max-width: 720px;
-	}
-	.headline {
-		font-size: 28px; margin: 0.2em 0 0.1em;
-	}
-	.tag {
+	.badge {
 		display: inline-block;
-		font-size: 18px;
-		margin-left: 8px;
+		margin-left: .5rem;
+		font-size: 0.9rem;
 		padding: 2px 8px;
 		border-radius: 999px;
-		background: linear-gradient(83deg, var(--brand), var(--brand2));
-		color: white;
-	}
-	.sub {
-		color: #4b5563; margin: 0 0 8px;
-	}
-	code {
-		display: inline-block;
-		background: #f5f5f7;
-		border: 1px solid #e6e7eb;
-		border-radius: 8px;
-		padding: 2px 6px;
-	}
-	#links { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 6px; }
-	#links a {
-		display: inline-flex; align-items: center; gap: 8px;
-		text-decoration: none; border-radius: 10px; padding: 10px 14px;
-	}
-	#links a.button {
+		background: linear-gradient(83deg, #7aa2ff, #bc52ee);
 		color: #fff;
-		background: linear-gradient(83deg, var(--brand), var(--brand2));
-		box-shadow: inset 0 -2px 0 rgba(0,0,0,0.18);
+		vertical-align: middle;
 	}
-	#links a.ghost {
-		color: var(--ink); background: #fff; border: 1px solid #e6e7eb;
+	.tagline {
+		margin: 0;
+		color: #a4b0c4;
 	}
-	.box {
-		position: fixed; right: 16px; bottom: 16px;
-		max-width: 320px; padding: 14px; border-radius: 14px;
-		background: rgba(255,255,255,0.92); border: 1px solid #fff;
-		text-decoration: none; color: var(--ink);
-		backdrop-filter: blur(18px);
+	.grid {
+		display: grid;
+		gap: 14px;
 	}
-	.box h2 { margin: 0 0 6px; font-size: 18px; }
-	.box p { margin: 0; color: #4b5563; }
-	@media (max-width: 768px) {
-		.box { position: static; display: block; margin: 16px; }
+	@media (min-width: 720px) {
+		.grid { grid-template-columns: repeat(3, 1fr); }
+	}
+	.card {
+		background: #11172b;
+		border: 1px solid #1b233a;
+		border-radius: 14px;
+		padding: 16px;
+	}
+	h2 {
+		margin: 0 0 8px;
+		font-size: 18px;
+	}
+	p { margin: 0; color: #cfd6e6; }
+	ul { margin: 0; padding-left: 20px; color: #cfd6e6; }
+	code {
+		background: #0b1020;
+		border: 1px solid #1b233a;
+		border-radius: 8px;
+		padding: 1px 6px;
 	}
 </style>
