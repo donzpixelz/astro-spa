@@ -81,7 +81,8 @@ jobs:
             else
               npm install
             fi
-            npx astro build --outDir "$GITHUB_WORKSPACE/$BUILD"
+            npx astro build --outDir "$GITHUB_WORKSPACE/$BUILD/astro"
+            rsync -av --delete "$GITHUB_WORKSPACE/$BUILD/astro/" "$GITHUB_WORKSPACE/$BUILD/"
             popd >/dev/null
           else
             echo "❌ app/astro not found or no astro dependency in package.json"
