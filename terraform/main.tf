@@ -27,6 +27,7 @@ data "aws_ami" "al2" {
     name   = "name"
     values = ["amzn2-ami-hvm-*-x86_64-gp2"]
   }
+
   filter {
     name   = "virtualization-type"
     values = ["hvm"]
@@ -79,6 +80,35 @@ resource "aws_security_group" "web_sg" {
 }
 
 ################################
+# IAM role/profile for EC2 (SSM)
+################################
+data "aws_iam_policy" "ssm_core" {
+  arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
+resource "aws_iam_role" "ec2_ssm_role" {
+  name = "astro-spa-ec2-ssm-role"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [{
+      Effect    = "Allow",
+      Principal = { Service = "ec2.amazonaws.com" },
+      Action    = "sts:AssumeRole"
+    }]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "ec2_ssm_core" {
+  role       = aws_iam_role.ec2_ssm_role.name
+  policy_arn = data.aws_iam_policy.ssm_core.arn
+}
+
+resource "aws_iam_instance_profile" "ec2_ssm_profile" {
+  name = "astro-spa-ec2-ssm-profile"
+  role = aws_iam_role.ec2_ssm_role.name
+}
+
+################################
 # EC2 instance (Docker prepped; container managed by your deploy flow)
 ################################
 resource "aws_instance" "web" {
@@ -86,6 +116,9 @@ resource "aws_instance" "web" {
   instance_type          = "t3.micro"
   key_name               = aws_key_pair.aws_ssh_key.key_name
   vpc_security_group_ids = [aws_security_group.web_sg.id]
+
+  # Attach the SSM role/profile so the instance is reachable via AWS Systems Manager
+  iam_instance_profile = aws_iam_instance_profile.ec2_ssm_profile.name
 
   user_data = <<-EOF
               #!/bin/bash
