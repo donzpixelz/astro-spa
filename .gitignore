@@ -1,0 +1,65 @@
+# ──────────────────────────
+# OS junk
+# ──────────────────────────
+.DS_Store
+
+# ──────────────────────────
+# IDEs / Editors
+# ──────────────────────────
+.idea/
+.vscode/
+
+# ──────────────────────────
+# Terraform (inside /terraform)
+# ──────────────────────────
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.*
+terraform/crash.log
+terraform/crash.*.log
+terraform/terraform.tfvars
+# Keep dependency lockfile (recommended to commit)
+!terraform/.terraform.lock.hcl
+
+# ──────────────────────────
+# Keys / secrets created locally
+# ──────────────────────────
+*.pem
+*.key
+*.pub
+# specific local SSH key (private half)
+aws-ssh-key
+
+# ──────────────────────────
+# Backups & archives
+# ──────────────────────────
+repo-backup.bundle
+site.tgz
+
+# ──────────────────────────
+# Logs (local dev only)
+# ──────────────────────────
+.logs/
+*.log
+*.log.*
+
+# ──────────────────────────
+# Local backup files
+# ──────────────────────────
+*.bak
+*.bak.*
+nginx/*.bak*
+
+# ──────────────────────────
+# Astro (build output)
+# ──────────────────────────
+app/astro/dist/
+
+# ──────────────────────────
+# Node ecosystem (Astro uses Node)
+# ──────────────────────────
+node_modules/
+.npm/
+.pnpm-store/
+.yarn/
+.yarn/cache/

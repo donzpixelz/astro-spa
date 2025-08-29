@@ -1,0 +1,245 @@
+name: Deploy astro-spa (SSM + OIDC + S3)
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'app/**'
+      - '.github/workflows/deploy-site-ssm.yml'
+      - 'nginx/**'
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-astro-spa
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
+    env:
+      # Allow secrets/vars to override these
+      AWS_REGION: ${{ secrets.AWS_REGION || vars.AWS_REGION }}
+      AWS_ROLE_TO_ASSUME: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+      ARTIFACT_S3_BUCKET: ${{ secrets.ARTIFACT_S3_BUCKET }}
+
+      # -------- Safe fallbacks (edit later if needed) --------
+      FALLBACK_AWS_REGION: us-east-2
+      # NOTE: Adjust the role name only after you create it;
+      # kept your known AWS account id from the previous project
+      FALLBACK_ROLE_ARN: arn:aws:iam::953331331353:role/GitHubActions-astro-spa-ssh
+      FALLBACK_BUCKET: astro-spa-artifacts-953331331353-us-east-2
+
+      # Instance selection (prefer EC2_INSTANCE_ID secret; else Name tag)
+      NAME_TAG: astro-spa
+      # -------------------------------------------------------
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Node for Astro
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Resolve settings (region / role / bucket) with fallbacks
+        id: resolve
+        run: |
+          set -euo pipefail
+          REGION="${AWS_REGION:-${FALLBACK_AWS_REGION}}"
+          ROLE="${AWS_ROLE_TO_ASSUME:-${FALLBACK_ROLE_ARN}}"
+          BUCKET="${ARTIFACT_S3_BUCKET:-${FALLBACK_BUCKET}}"
+
+          echo "region=$REGION" >> "$GITHUB_OUTPUT"
+          echo "role=$ROLE"     >> "$GITHUB_OUTPUT"
+          echo "bucket=$BUCKET" >> "$GITHUB_OUTPUT"
+
+          {
+            echo "### Deploy config"
+            echo "- Region:  \`$REGION\`"
+            echo "- Role:    \`$ROLE\`"
+            echo "- Bucket:  \`$BUCKET\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Build astro-spa only
+        run: |
+          set -euo pipefail
+          BUILD="__deploy_root"
+          rm -rf "$BUILD"; mkdir -p "$BUILD"
+
+          # Expect Astro app at app/astro (adjust if you use another path)
+          if [ -d app/astro ] && grep -q '"astro"' app/astro/package.json 2>/dev/null; then
+            pushd app/astro >/dev/null
+            if [ -f package-lock.json ]; then
+              npm ci
+            elif [ -f pnpm-lock.yaml ]; then
+              npm i -g pnpm && pnpm i
+            else
+              npm install
+            fi
+            npx astro build --outDir "$GITHUB_WORKSPACE/$BUILD"
+            popd >/dev/null
+          else
+            echo "❌ app/astro not found or no astro dependency in package.json"
+            exit 1
+          fi
+
+      - name: Package site
+        run: |
+          set -euo pipefail
+          tar -czf site.tgz -C "__deploy_root" .
+          ls -lh site.tgz
+
+      - name: Configure AWS (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ steps.resolve.outputs.role }}
+          aws-region: ${{ steps.resolve.outputs.region }}
+
+      - name: Ensure jq on runner
+        run: |
+          set -euo pipefail
+          command -v jq >/dev/null 2>&1 || { sudo apt-get update -y && sudo apt-get install -y jq; }
+
+      - name: Upload tarball to S3
+        id: s3
+        env:
+          BUCKET: ${{ steps.resolve.outputs.bucket }}
+        run: |
+          set -Eeuo pipefail
+          trap 'echo "ERR(upload) line $LINENO: $BASH_COMMAND" >&2' ERR
+          KEY="deploys/${GITHUB_RUN_ID}/site.tgz"
+          echo "Uploading to s3://${BUCKET}/${KEY}"
+          aws s3 cp site.tgz "s3://${BUCKET}/${KEY}" --only-show-errors
+          echo "key=${KEY}" >> "$GITHUB_OUTPUT"
+          echo "bucket=${BUCKET}" >> "$GITHUB_OUTPUT"
+
+      - name: Resolve target instance
+        id: target
+        run: |
+          set -euo pipefail
+          if [ -n "${{ secrets.EC2_INSTANCE_ID }}" ]; then
+            IID="${{ secrets.EC2_INSTANCE_ID }}"
+            SRC="EC2_INSTANCE_ID secret"
+          else
+            IID="$(aws ec2 describe-instances \
+              --filters "Name=tag:Name,Values=${{ env.NAME_TAG }}" "Name=instance-state-name,Values=running" \
+              --query "Reservations[].Instances[].InstanceId" --output text | head -n1 || true)"
+            SRC="tag:Name=${{ env.NAME_TAG }}"
+          fi
+          [ -n "$IID" ] || { echo "❌ No running instance found via $SRC" >&2; exit 1; }
+          echo "instance_id=$IID" >> "$GITHUB_OUTPUT"
+          echo "Target: $IID ($SRC)" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Deploy via SSM (reuse runner OIDC creds for S3 download) + diagnostics
+        env:
+          REGION: ${{ steps.resolve.outputs.region }}
+          TARGET: ${{ steps.target.outputs.instance_id }}
+          BUCKET: ${{ steps.s3.outputs.bucket }}
+          KEY:    ${{ steps.s3.outputs.key }}
+          SHA:    ${{ github.sha }}
+        run: |
+          set -Eeuo pipefail
+          trap 'echo "ERR(ssm) line $LINENO: $BASH_COMMAND" >&2' ERR
+
+          # Hand off runner creds (short-lived) to remote
+          AKID_B64="$(printf '%s' "$AWS_ACCESS_KEY_ID" | base64 | tr -d '\n')"
+          ASEC_B64="$(printf '%s' "$AWS_SECRET_ACCESS_KEY" | base64 | tr -d '\n')"
+          ATOK_B64="$(printf '%s' "$AWS_SESSION_TOKEN" | base64 | tr -d '\n')"
+          AREG_B64="$(printf '%s' "$REGION" | base64 | tr -d '\n')"
+
+          TEMPLATE="$(cat <<'EOS'
+          set -euo pipefail
+          export AWS_ACCESS_KEY_ID="$(printf %s "__AK__" | base64 -d)"
+          export AWS_SECRET_ACCESS_KEY="$(printf %s "__SK__" | base64 -d)"
+          export AWS_SESSION_TOKEN="$(printf %s "__TK__" | base64 -d)"
+          export AWS_DEFAULT_REGION="$(printf %s "__RG__" | base64 -d)"
+
+          ARTIFACT_BUCKET="__BUCKET__"
+          ARTIFACT_KEY="__KEY__"
+          SHA="__SHA__"
+
+          get_docroot() {
+            if command -v nginx >/dev/null 2>&1; then
+              ROOTS="$(sudo nginx -T 2>/dev/null | awk "/server_name _;|server_name _ default_server;|server_name _ default;|server_name _;/{flag=1} flag && /root /{print \$2}" | tr -d ';' | head -n1 || true)"
+              if [ -n "$ROOTS" ]; then echo "$ROOTS"; return 0; fi
+            fi
+            echo "/usr/share/nginx/html"
+          }
+          DOCROOT="$(get_docroot)"
+
+          TMP="$(mktemp -d)"
+          PKG="$TMP/site.tgz"
+          WORK="$TMP/unpack"
+          mkdir -p "$WORK"
+
+          echo "==> Downloading artifact from s3://${ARTIFACT_BUCKET}/${ARTIFACT_KEY}"
+          aws s3 cp "s3://${ARTIFACT_BUCKET}/${ARTIFACT_KEY}" "$PKG"
+
+          echo "==> Unpacking"
+          tar -xzf "$PKG" -C "$WORK"
+
+          echo "==> Deploying to DOCROOT: $DOCROOT"
+          sudo mkdir -p "$DOCROOT"
+          sudo rsync -av --delete "$WORK"/ "$DOCROOT"/
+
+          echo "==> nginx test/reload"
+          if command -v nginx >/dev/null 2>&1; then
+            sudo nginx -t && (sudo systemctl reload nginx || sudo nginx -s reload || true)
+          fi
+
+          echo "===== DIAGNOSTIC SUMMARY ====="
+          echo "BUCKET_USED=$ARTIFACT_BUCKET"
+          echo "KEY_USED=$ARTIFACT_KEY"
+          echo "DOCROOT=$DOCROOT"
+          echo "HAS_INDEX=$([ -f "$DOCROOT/index.html" ] && echo 1 || echo 0)"
+          echo "=============================="
+
+          rm -rf "$TMP"
+          EOS
+          )"
+
+          RS="$TEMPLATE"
+          RS="${RS//__AK__/$AKID_B64}"
+          RS="${RS//__SK__/$ASEC_B64}"
+          RS="${RS//__TK__/$ATOK_B64}"
+          RS="${RS//__RG__/$AREG_B64}"
+          RS="${RS//__BUCKET__/$BUCKET}"
+          RS="${RS//__KEY__/$KEY}"
+          RS="${RS//__SHA__/$SHA}"
+
+          jq -n --arg cmd "$RS" '{commands: [$cmd]}' > params.json
+
+          CID="$(aws ssm send-command \
+            --instance-ids "$TARGET" \
+            --document-name 'AWS-RunShellScript' \
+            --comment "Deploy ${SHA}" \
+            --parameters file://params.json \
+            --region "$REGION" \
+            --query 'Command.CommandId' --output text)"
+          echo "SSM CommandId: $CID"
+
+          # Wait and print logs
+          while true; do
+            STATUS="$(aws ssm get-command-invocation --instance-id "$TARGET" --command-id "$CID" --query 'Status' --output text 2>/dev/null || echo unknown)"
+            echo "SSM status: $STATUS"
+            case "$STATUS" in
+              Success) break ;;
+              Failed|Cancelled|TimedOut) echo "❌ SSM failed: $STATUS"; break ;;
+              *) sleep 4 ;;
+            esac
+          done
+
+          OUT="$(aws ssm get-command-invocation --instance-id "$TARGET" --command-id "$CID" --plugin-name 'aws:runShellScript' --output json 2>/dev/null || echo '{}')"
+          echo "----- Remote STDOUT (first 120 lines) -----"
+          echo "$OUT" | jq -r '.StandardOutputContent // ""' | sed -n '1,120p'
+          echo "----- Remote STDERR (first 120 lines) -----"
+          echo "$OUT" | jq -r '.StandardErrorContent // ""' | sed -n '1,120p'
+
+          FINAL="$(echo "$OUT" | jq -r '.Status // empty')"
+          [ "$FINAL" = "Success" ] || { echo "❌ Final SSM plugin status: ${FINAL:-unknown}"; exit 1; }
+          echo "✅ Remote deploy completed."

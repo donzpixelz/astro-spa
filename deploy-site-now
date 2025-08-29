@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# deploy-site-now — commit/push and trigger the workflow; returns to prompt; optionally open Actions page
+set -euo pipefail
+MSG="${1:-site: update}"
+BRANCH="$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo main)"
+
+# stage/commit if there are changes
+git add -A || true
+if git diff --cached --quiet; then
+  echo "ℹ️ Nothing to commit; pushing anyway (may still trigger workflow)."
+else
+  git commit -m "$MSG" || true
+fi
+
+# push and don't crash terminal if remote rejects (still return to prompt)
+git push origin "$BRANCH" || true
+
+# open Actions page without blocking terminal; ignore failures
+ACTIONS_URL="$(git config --get remote.origin.url \
+  | sed -e 's#^git@github.com:#https://github.com/#' -e 's#\.git$##')/actions"
+( command -v open >/dev/null 2>&1 && nohup open "$ACTIONS_URL" >/dev/null 2>&1 & ) || true
+( command -v xdg-open >/dev/null 2>&1 && nohup xdg-open "$ACTIONS_URL" >/dev/null 2>&1 & ) || true
+
+echo "✅ Pushed. Workflow should run shortly. Message: $MSG"
+exit 0
