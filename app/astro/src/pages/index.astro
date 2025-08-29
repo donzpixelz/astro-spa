@@ -1,12 +1,9 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import BaseLayout from "../layouts/BaseLayout.astro";
 ---
-
-<Layout>
-	<Welcome />
-	<p style="font-size: 2rem; font-weight: bold; color: #222;">007</p>
-</Layout>
+<BaseLayout title="Home · Astro SPA Demo">
+	<section class="stack">
+		<h1>Welcome</h1>
+		<p>This is your Astro single-page vibe with file-based routing. Use the nav to hop around.</p>
+	</section>
+</BaseLayout>

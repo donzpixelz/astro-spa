@@ -1,0 +1,32 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+<BaseLayout title="Contact · Astro SPA Demo" description="Contact page">
+    <section class="stack">
+        <h1>Contact</h1>
+        <p>Drop a note below. (No backend wired up yet—this is a front-end form.)</p>
+
+        <form class="card stack" method="post" action="mailto:hello@yourdomain.com" enctype="text/plain">
+            <label>
+                <span>Name</span>
+                <input name="name" type="text" required placeholder="Your name" />
+            </label>
+
+            <label>
+                <span>Email</span>
+                <input name="email" type="email" required placeholder="you@example.com" />
+            </label>
+
+            <label>
+                <span>Message</span>
+                <textarea name="message" rows="6" required placeholder="How can we help?"></textarea>
+            </label>
+
+            <button type="submit">Send</button>
+        </form>
+
+        <p class="muted">
+            Want real submissions later? We can hook this up to something like Netlify Forms, Formspree, or your own API.
+        </p>
+    </section>
+</BaseLayout>

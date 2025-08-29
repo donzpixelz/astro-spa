@@ -1,0 +1,28 @@
+---
+// Base layout for all pages
+const { title = "Astro SPA Demo", description = "Just enough layout & nav" } = Astro.props;
+import Nav from "../components/Nav.astro";
+---
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.svg" />
+    <link rel="stylesheet" href="/styles/global.css" />
+</head>
+<body>
+<header class="site-header">
+    <Nav />
+</header>
+
+<main class="site-main">
+    <slot />
+</main>
+
+<footer class="site-footer">
+    <p>&copy; {new Date().getFullYear()} Spell Casters Moon · All rights reserved.</p>
+</footer>
+</body>
+</html>

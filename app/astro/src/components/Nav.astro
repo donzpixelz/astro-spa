@@ -1,0 +1,10 @@
+---
+const path = Astro.url.pathname;
+// Helper to mark current route
+const isActive = (href: string) => (path === href || (href !== "/" && path.startsWith(href)));
+---
+<nav class="nav">
+    <a class={`nav-link ${isActive("/") ? "active" : ""}`} href="/">Home</a>
+    <a class={`nav-link ${isActive("/about") ? "active" : ""}`} href="/about">About</a>
+    <a class={`nav-link ${isActive("/contact") ? "active" : ""}`} href="/contact">Contact</a>
+</nav>
