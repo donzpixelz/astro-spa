@@ -10,15 +10,12 @@
     --title-face: 'Playfair Display', Georgia, 'Times New Roman', serif;
 
     /* Clock theme */
-    --clock-led: black;        /* amber/orange like the photo - #ff8a00 */
-    /* Clock colors — pick ONE */
-    /* --clock-led: #ff8a00;   Amber (current) */
-    /* --clock-led: #3466cb;   Blue (your brand) */
-    /* --clock-led: #ff3b30;   Red */
-    /* --clock-led: #2ecc71;   Green */
-    /* --clock-led: #ffd60a;   Yellow */
-    /* --clock-led: #a855f7;   Purple */
+    --clock-led: black;        /* e.g. #ff8a00 for amber */
+    /* Optional soft glow color for the clock digits (tweak if you set --clock-led) */
+    --clock-glow: rgba(0,0,0,.12);
 
+    /* “Powder” airbrush tint used behind title & clock */
+    --powder: rgba(0,0,0,.06);
 }
 
 *{ box-sizing:border-box }
@@ -67,7 +64,12 @@ body{
     font-weight: 900;
     font-size: clamp(24px, 4vw, 38px);
     line-height:1.1;
-    padding:.45rem 0;
+    padding:.45rem .6rem;             /* a bit of side padding for the powder */
+    border-radius:.6rem;
+
+    /* Soft “powder” behind the title text (not the lines) */
+    background-image: radial-gradient(120% 120% at 50% 60%, var(--powder), transparent 60%);
+    background-clip: padding-box;     /* keep it within padding box */
 }
 .brand::before{
     content:"";
@@ -140,26 +142,40 @@ button:hover{ opacity:.95 }
     .nav-link{ padding:.35rem .6rem; }
 }
 @media (max-width: 480px){
-    .brand{ font-size:20px; padding:.35rem 0; }
+    .brand{ font-size:20px; padding:.35rem .5rem; }
     .nav-links{ gap:.5rem; }
     .nav-link{ padding:.3rem .55rem; font-size:13px; }
 }
 
-/* === Digital clock (simple, no box) ========================= */
+/* === Digital clock (simple, with powder) ===================== */
 .clock-shell{
     display: grid;
     place-items: center;
     margin: .2rem auto 0;
+    position: relative;                 /* for powder layer */
+}
+.clock-shell::before{
+    content:"";
+    position:absolute; inset:-6px -12px;
+    background: radial-gradient(60% 70% at 50% 55%, var(--powder), transparent 65%);
+    filter: blur(8px);
+    z-index:0;
+    pointer-events:none;
 }
 .clock-time{
+    position: relative;
+    z-index:1;
     font-family: 'Orbitron', ui-monospace, monospace !important;
     font-weight: 700;
     font-size: 1.25rem;
     letter-spacing: .08em;
     color: var(--clock-led);
-    text-shadow: none;   /* crisp, no glow */
-}
 
+    /* Soft ambient shadow + optional color glow */
+    text-shadow:
+            0 6px 18px var(--powder),
+            0 0 22px var(--clock-glow);
+}
 
 /* Examples sub-nav */
 .examples-subnav ul{
@@ -193,18 +209,17 @@ button:hover{ opacity:.95 }
 .map-panel{ border:1px solid var(--border); border-radius:.8rem; overflow:hidden; }
 .leaflet-container{ height: 480px; width: 100%; }
 
-
-
 /* ========= Theme tokens via [data-theme] on <html> ========== */
-/* Light is already your default via :root; optional explicit: */
+/* Light explicit (mirrors :root) */
 html[data-theme="light"] {
-    /* optional explicit mapping to your current :root values */
     --brand:#000000;
     --text:#111111;
     --muted:#666666;
     --bg:#ffffff;
     --bg-soft:#f5f5f5;
     --border:#e5e5e5;
+    --powder: rgba(0,0,0,.06);
+    --clock-glow: rgba(0,0,0,.12);
 }
 
 /* Dark theme */
@@ -215,6 +230,8 @@ html[data-theme="dark"] {
     --bg:#0b0e11;
     --bg-soft:#11161d;
     --border:#2a2f3a;
+    --powder: rgba(0,0,0,.5);       /* darker backdrop yields soft lift */
+    --clock-glow: rgba(255,255,255,.06);
 }
 
 /* Sepia theme (newspaper-y) */
@@ -225,6 +242,8 @@ html[data-theme="sepia"] {
     --bg:#f9f5e7;
     --bg-soft:#f3ebd4;
     --border:#e0d5bf;
+    --powder: rgba(31,20,8,.08);
+    --clock-glow: rgba(31,20,8,.12);
 }
 
 /* Header background should respect theme */
@@ -278,7 +297,6 @@ html[data-theme="dark"] .segmented > label.on {
     overflow:hidden; clip:rect(1px,1px,1px,1px);
     white-space:nowrap; border:0; padding:0; margin:0;
 }
-
 
 /* ===== Command Palette ===== */
 .cp-launch{
@@ -334,7 +352,6 @@ html[data-theme="dark"] .segmented > label.on {
 .cp-item-title{ font-weight:600 }
 .cp-item-sub{ color:var(--muted); font-size:.95em }
 
-
 /* ===== URL Shortener (mock) ================================== */
 .us { display:grid; gap:1rem; }
 .us-form { display:grid; gap:.75rem; }
@@ -373,7 +390,6 @@ html[data-theme="dark"] .segmented > label.on {
 
 /* Use your existing table styles (.ex-table) for consistency */
 .us-table code{ background:transparent; }
-
 
 /* ==== Image Gallery + Lightbox ================================= */
 .ig-grid{
@@ -442,7 +458,6 @@ html[data-theme="dark"] .segmented > label.on {
     text-align:center;
 }
 
-
 /* ===== Clipboard tools (copy code / copy link) =============== */
 .clip { display:grid; gap:1rem; }
 .clip-block{
@@ -477,7 +492,6 @@ html[data-theme="dark"] .segmented > label.on {
     font-size: .95rem; line-height: 1.45;
 }
 
-
 /* === Clipboard tools: filename badge + line numbers ========== */
 .clip-file{
     display:inline-block; font-size:.8rem; padding:.1rem .45rem;
@@ -507,7 +521,6 @@ html[data-theme="dark"] .segmented > label.on {
     /* Already has padding from your previous block; ensure it matches the lnums top/bottom */
     padding:.85rem 1rem;
 }
-
 
 /* === Shopping Cart demo styles === */
 .cart-grid{
@@ -539,64 +552,28 @@ html[data-theme="dark"] .segmented > label.on {
     display:flex; align-items:center; gap:.5rem; justify-self:end;
 }
 .qty .btn{
-    padding:.25rem .6rem;
-    border-radius:.5rem;
-    border:1px solid var(--border);
-    background:var(--bg-soft);
-    cursor:pointer;
-}
-.qty .count{ min-width:2ch; text-align:center }
-
-.cart-summary .total{
-    display:flex; justify-content:space-between;
-    margin-top:.75rem; font-weight:700;
-}
-
-.paypal-wrap{ margin-top:1rem } /* spacing above PayPal buttons */
-
-
-/* === Shopping Cart: buttons & states === */
-.qty { display:flex; align-items:center; gap:.5rem; justify-self:end; }
-.qty .btn{
     padding:.35rem .7rem;
-    border:1px solid var(--border);
-    border-radius:.5rem;
-    background:var(--bg-soft);
-    font:600 14px/1 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
-    min-width:2.2rem; /* keeps width stable */
-    cursor:pointer;
-    transition:transform .02s ease, background .15s ease, border-color .15s ease;
-}
-.qty .btn:hover{ background:#f0f2f5; }
-.qty .btn:active{ transform:translateY(1px); }
-.qty .btn:focus{ outline:2px solid rgba(52,102,203,.35); outline-offset:2px; }
-
-.qty .btn[disabled]{
-    opacity:.45;
-    cursor:not-allowed;
-}
-
-.qty .count{ min-width:2ch; text-align:center; font-variant-numeric: tabular-nums; }
-
-.paypal-wrap{ margin-top:1rem; }
-.paypal-wrap iframe{ min-height:45px; } /* prevents collapse while loading */
-
-
-/* --- Fix: Cart buttons visibility --- */
-.qty .btn{
-    appearance:none; -webkit-appearance:none;
-    padding:.4rem .75rem;
     border:1px solid rgba(31,35,40,.25);
     border-radius:.5rem;
     background:var(--bg);
     color:var(--text);
     font:600 14px/1 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
-    min-width:2.2rem; cursor:pointer;
+    min-width:2.2rem;
+    cursor:pointer;
+    transition:transform .02s ease, background .15s ease, border-color .15s ease;
 }
 .qty .btn:hover{ background:var(--bg-soft) }
+.qty .btn:active{ transform:translateY(1px) }
+.qty .btn:focus{ outline:2px solid rgba(52,102,203,.35); outline-offset:2px }
 .qty .btn[disabled]{ opacity:.7; cursor:not-allowed }
+.qty .count{ min-width:2ch; text-align:center; font-variant-numeric: tabular-nums; }
 
-
+.cart-summary .total{
+    display:flex; justify-content:space-between;
+    margin-top:.75rem; font-weight:700;
+}
+.paypal-wrap{ margin-top:1rem }
+.paypal-wrap iframe{ min-height:45px }
 
 /* === Markdown Previewer === */
 .mdp-grid{ display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
@@ -608,52 +585,7 @@ html[data-theme="dark"] .segmented > label.on {
 }
 .mdp-actions .btn{
     padding:.35rem .7rem; border:1px solid var(--border); border-radius:.5rem;
-    background:var(--bg-soft); cursor:pointer;
-}
-.mdp-input{
-    width:100%; min-height:360px; resize:vertical;
-    padding:.75rem; border:1px solid var(--border); border-radius:.75rem;
-    font:14px/1.45 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
-    background:var(--bg); color:var(--text);
-}
-.mdp-preview{
-    min-height:360px; padding:.75rem; border:1px solid var(--border); border-radius:.75rem;
-    background:var(--bg); color:var(--text);
-}
-.mdp-preview h1,.mdp-preview h2,.mdp-preview h3{ margin:.6em 0 .35em; }
-.mdp-preview pre.mdp-code{ padding:.75rem; border-radius:.5rem; overflow:auto; border:1px solid var(--border); }
-.mdp-preview code.mdp-inline{ padding:.15rem .35rem; border-radius:.35rem; background:var(--bg-soft); border:1px solid var(--border); }
-.mdp-preview ul{ padding-left:1.25rem; }
-.mdp-preview blockquote{
-    margin:.75rem 0; padding:.5rem .75rem; border-left:3px solid var(--border);
-    background:var(--bg-soft);
-}
-
-
-
-/* === Buttons: ensure solid contrast (used by cart & previewer) === */
-.btn {
-    appearance: none; -webkit-appearance: none;
-    padding: .45rem .8rem;
-    border: 1px solid rgba(31,35,40,.28);
-    border-radius: .55rem;
-    background: var(--bg);
-    color: var(--text);
-    font: 600 14px/1 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
-    cursor: pointer;
-}
-.btn:hover { background: var(--bg-soft); }
-.btn:active { transform: translateY(1px); }
-.btn:focus { outline: 2px solid rgba(52,102,203,.35); outline-offset: 2px; }
-.btn[disabled] { opacity: .65; cursor: not-allowed; }
-
-/* Markdown Previewer polish */
-.mdp-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
-@media (max-width: 980px){ .mdp-grid{ grid-template-columns:1fr; } }
-.mdp-pane { padding:1rem; }
-.mdp-toolbar {
-    display:flex; align-items:center; justify-content:space-between;
-    gap:.5rem; margin-bottom:.5rem;
+    background:var(--bg-soft); color:var(--text); cursor:pointer;
 }
 .mdp-input{
     width:100%; min-height:360px; resize:vertical;
@@ -675,6 +607,5 @@ html[data-theme="dark"] .segmented > label.on {
     margin:.75rem 0; padding:.5rem .75rem; border-left:3px solid var(--border);
     background:var(--bg-soft);
 }
-
 
 
