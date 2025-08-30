@@ -6,8 +6,8 @@
     --bg-soft:#f6f8fa;
     --border:#e5e7eb;
 
-    /* NEW: title font variable */
-    --title-face: 'Gothic A1', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+    /* Title font: Caslon-style via Google Fonts */
+    --title-face: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
 }
 
 *{ box-sizing:border-box }
@@ -16,7 +16,7 @@ body{
     margin:0;
     color:var(--text);
     background:var(--bg);
-    font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+    font:16px/1.6 system-ui,-apple-system, Segoe UI, Roboto, Helvetica, Arial;
 }
 
 /* Layout */
@@ -40,20 +40,19 @@ body{
 
 /* Brand (site name, top left) */
 .brand{
-    /* CHANGED: use Gothic A1 just for the title */
     font-family: var(--title-face);
-    font-weight: 700;          /* use the bold weight you loaded */
+    font-weight: 700;          /* use 700 for a confident title */
     font-size: 36px;           /* desktop default */
     color: black;
-    letter-spacing: .5px;      /* tighter than 2px for a sans */
+    letter-spacing: .2px;      /* serif: keep tracking subtle */
     text-decoration:none;
-    line-height: 1;
+    line-height: 1.05;         /* slightly compact for display */
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
 }
 .brand:hover{ opacity:.8 }
 
-/* OPTIONAL: quick switch back to Playball if you ever want it
+/* OPTIONAL: quick switch back to Playball
 .brand.playball{
     font-family: 'Playball', 'Copperplate', cursive, sans-serif;
     font-weight: 400;
