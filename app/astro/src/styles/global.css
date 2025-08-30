@@ -279,3 +279,27 @@ html[data-theme="dark"] .segmented > label.on {
     white-space:nowrap; border:0; padding:0; margin:0;
 }
 
+/* === Tabs (Examples submenu) =================================== */
+.tabs{ display:grid; gap:.6rem }
+.tablist{
+    display:flex; flex-wrap:wrap; gap:.5rem;
+    border:1px solid var(--border); border-radius:.6rem;
+    background:var(--bg-soft); padding:.25rem;
+}
+.tab{
+    appearance:none; border:0; background:transparent; cursor:pointer;
+    padding:.45rem .75rem; border-radius:.45rem; font:inherit; color:var(--text);
+}
+.tab[aria-selected="true"]{
+    background:#fff; outline:2px solid var(--border);
+}
+html[data-theme="dark"] .tab[aria-selected="true"]{ background:#1a2230 }
+.tabpanel{
+    border:1px solid var(--border); border-radius:.6rem; background:#fff;
+    padding:.75rem 1rem;
+}
+.tab-links{ list-style:none; margin:0; padding:0; display:grid; gap:.5rem }
+.tab-links a{ text-decoration:none; }
+.tab-links a:hover{ text-decoration:underline; }
+
+

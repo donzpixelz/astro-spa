@@ -1,24 +1,47 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import Tabs from "../../components/examples/Tabs.jsx";
 
-const links = [
-    { href: "/examples/react-theme-switcher", label: "Theme Switcher (Light/Dark/Sepia)" },
-    { href: "/examples/react-accordion", label: "React Accordion (Accessible)" },
-    // later: { href: "/examples/react-weather-map", label: "React Weather Map" },
+const tabs = [
+    {
+        id: "components",
+        label: "Components",
+        items: [
+            { href: "/examples/react-theme-switcher", label: "Theme Switcher", desc: "Light/Dark/Sepia" },
+        ],
+    },
+    {
+        id: "patterns",
+        label: "UI Patterns",
+        items: [
+            { href: "/examples/react-accordion", label: "Accordion", desc: "Accessible, keyboard-friendly" },
+        ],
+    },
+    {
+        id: "data",
+        label: "Data & Lists",
+        items: [
+            { href: "/examples/react-filter-table", label: "Filterable List/Table", desc: "Search · Filter · Sort" },
+        ],
+    },
 ];
 ---
 <BaseLayout title="Examples · Astro" description="Interactive examples and UI demos">
     <section class="stack">
         <h1>Examples</h1>
-        <p class="muted">A small gallery of interactive demos. Pick a category or jump straight to an example.</p>
+        <p class="muted">Pick a tab, then jump to an example.</p>
 
-        <nav class="examples-subnav" aria-label="Examples sub navigation">
-            <ul>
-                {links.map(link => (
-                        <li><a href={link.href}>{link.label}</a></li>
-                ))}
-            </ul>
-        </nav>
+        <div class="card">
+            <!-- Tabs island: stays MPA, just enhances this page -->
+            <Tabs client:load tabs={tabs} defaultTabId="components" />
+            <noscript>
+                <ul class="tab-links" style="margin-top:.75rem">
+                    <li><a href="/examples/react-theme-switcher">Theme Switcher</a></li>
+                    <li><a href="/examples/react-accordion">Accordion</a></li>
+                    <li><a href="/examples/react-filter-table">Filterable List/Table</a></li>
+                </ul>
+            </noscript>
+        </div>
 
         <div class="card">
             <h2 style="margin-top:0">Categories (coming soon)</h2>
