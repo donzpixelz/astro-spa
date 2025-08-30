@@ -1,0 +1,14 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import MarkdownPreviewer from "../../components/examples/MarkdownPreviewer.jsx";
+---
+<BaseLayout title="Markdown Previewer · Examples" description="Type Markdown on the left, see preview on the right">
+    <section class="stack">
+        <h1>Markdown Previewer</h1>
+        <p class="muted">Live Markdown-to-HTML preview with a tiny, dependency-free parser.</p>
+
+        <div class="card" style="padding:0">
+            <MarkdownPreviewer client:load />
+        </div>
+    </section>
+</BaseLayout>
