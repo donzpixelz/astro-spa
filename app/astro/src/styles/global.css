@@ -373,3 +373,71 @@ html[data-theme="dark"] .segmented > label.on {
 
 /* Use your existing table styles (.ex-table) for consistency */
 .us-table code{ background:transparent; }
+
+
+/* ==== Image Gallery + Lightbox ================================= */
+.ig-grid{
+    list-style:none; margin:0; padding:0;
+    display:grid; gap: .75rem;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+.ig-card{ display:grid; gap:.35rem }
+.ig-thumbbtn{
+    padding:0; border:0; background:transparent; cursor:pointer;
+    border-radius:.6rem; overflow:hidden;
+    border:1px solid var(--border);
+}
+.ig-thumbbtn:focus-visible{ outline:2px solid #000; outline-offset:2px }
+.ig-thumb{
+    display:block; width:100%; height:160px; object-fit:cover;
+    transition: transform .18s ease;
+}
+.ig-thumbbtn:hover .ig-thumb{ transform: scale(1.03) }
+.ig-cap{ color:var(--muted); font-size:.92em }
+
+.ig-overlay{
+    position:fixed; inset:0; z-index:60; background:rgba(0,0,0,.5);
+    display:grid; place-items:center; padding:1rem;
+}
+.ig-panel{
+    width:min(96vw, 1000px); max-height:92vh;
+    background:var(--bg); color:var(--text);
+    border:1px solid var(--border); border-radius:.8rem;
+    box-shadow: 0 16px 40px rgba(0,0,0,.35);
+    display:grid; grid-template-rows:auto 1fr auto; gap:.5rem;
+    padding:.5rem;
+}
+.ig-topbar{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:.25rem .25rem .25rem .5rem;
+}
+.ig-counter{ color:var(--muted) }
+.ig-close{
+    appearance:none; border:0; background:transparent; cursor:pointer;
+    font-size:1.35rem; line-height:1; padding:.2rem .4rem; border-radius:.4rem;
+}
+.ig-close:focus-visible{ outline:2px solid #000; outline-offset:2px }
+
+.ig-stage{
+    position:relative; display:grid; place-items:center;
+    background:var(--bg-soft); border:1px solid var(--border); border-radius:.6rem;
+    min-height: 300px;
+}
+.ig-full{
+    max-width:100%; max-height:78vh; width:auto; height:auto; display:block;
+}
+
+.ig-nav{
+    position:absolute; top:50%; transform:translateY(-50%);
+    appearance:none; border:0; background:rgba(0,0,0,.35); color:#fff;
+    width:42px; height:42px; border-radius:50%; cursor:pointer;
+    display:grid; place-items:center; font-size:1.4rem;
+}
+.ig-nav:hover{ background:rgba(0,0,0,.5) }
+.ig-nav.prev{ left:.5rem }
+.ig-nav.next{ right:.5rem }
+
+.ig-caption{
+    padding:.25rem .5rem .5rem; color:var(--muted);
+    text-align:center;
+}

@@ -1,0 +1,31 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ImageGallery from "../../components/examples/ImageGallery.jsx";
+
+/* Sample items using picsum.photos (free placeholders).
+   Swap to your local images later:
+   - Put files in /public/images/gallery/...
+   - Then set src: "/images/gallery/NAME-400x300.jpg"
+            full: "/images/gallery/NAME-1600x1200.jpg"
+*/
+const items = [
+    { id: "p1015", src: "https://picsum.photos/id/1015/400/300",  full: "https://picsum.photos/id/1015/1600/1200",  alt: "Mountain lake", caption: "Mountain lake at dawn" },
+    { id: "p1025", src: "https://picsum.photos/id/1025/400/300",  full: "https://picsum.photos/id/1025/1600/1200",  alt: "Dog portrait",  caption: "Portrait of a patient pup" },
+    { id: "p1035", src: "https://picsum.photos/id/1035/400/300",  full: "https://picsum.photos/id/1035/1600/1200",  alt: "Forest trail",  caption: "Trail through a quiet forest" },
+    { id: "p1041", src: "https://picsum.photos/id/1041/400/300",  full: "https://picsum.photos/id/1041/1600/1200",  alt: "Coastline",     caption: "Cliffs along the coast" },
+    { id: "p1050", src: "https://picsum.photos/id/1050/400/300",  full: "https://picsum.photos/id/1050/1600/1200",  alt: "City skyline",  caption: "Evening skyline lights" },
+    { id: "p1069", src: "https://picsum.photos/id/1069/400/300",  full: "https://picsum.photos/id/1069/1600/1200",  alt: "Snowy peak",    caption: "Snow on the summit" },
+    { id: "p1074", src: "https://picsum.photos/id/1074/400/300",  full: "https://picsum.photos/id/1074/1600/1200",  alt: "Desert road",   caption: "Long line through the desert" },
+    { id: "p1084", src: "https://picsum.photos/id/1084/400/300",  full: "https://picsum.photos/id/1084/1600/1200",  alt: "Seaside",       caption: "Quiet seaside afternoon" },
+];
+---
+<BaseLayout title="Image Gallery · Examples" description="Keyboard-friendly gallery with lightbox">
+    <section class="stack">
+        <h1>Image Gallery (Lightbox + Keyboard)</h1>
+        <p class="muted">Click a thumbnail or press <kbd>Enter</kbd>. In the lightbox, use <kbd>←</kbd>/<kbd>→</kbd> to navigate and <kbd>Esc</kbd> to close.</p>
+
+        <div class="card">
+            <ImageGallery client:load items={items} />
+        </div>
+    </section>
+</BaseLayout>
