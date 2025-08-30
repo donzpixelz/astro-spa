@@ -151,15 +151,15 @@ button:hover{ opacity:.95 }
     display: grid;
     place-items: center;
     margin: .6rem auto 0;
-    width: max(260px, 46ch);
-    padding: .65rem 1rem;
-    border-radius: 16px;
+    width: max(200px, 24ch);        /* smaller */
+    padding: .5rem .9rem;           /* smaller */
+    border-radius: 12px;
     background: radial-gradient(120% 180% at 50% 10%, #1b1b1b 0%, #0c0c0c 40%, var(--clock-shell-bg) 100%);
     border: 1px solid var(--clock-shell-edge);
     box-shadow:
             inset 0 1px 2px rgba(255,255,255,.05),
-            inset 0 -8px 16px rgba(0,0,0,.6),
-            0 8px 18px rgba(0,0,0,.25);
+            inset 0 -6px 12px rgba(0,0,0,.6),
+            0 6px 14px rgba(0,0,0,.25);
     position: relative;
     overflow: hidden;
 }
@@ -170,37 +170,36 @@ button:hover{ opacity:.95 }
     position: absolute; inset: 0;
     background:
             linear-gradient(to bottom,
-            rgba(255,255,255,.22) 0%,
-            rgba(255,255,255,.10) 22%,
-            rgba(255,255,255,.04) 35%,
+            rgba(255,255,255,.18) 0%,
+            rgba(255,255,255,.08) 25%,
             rgba(255,255,255,0) 55%);
     pointer-events: none;
     border-radius: inherit;
 }
 
 .clock-time{
-    font-family: 'Orbitron', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    font-family: 'Orbitron', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace !important;
     font-weight: 700;
-    font-size: clamp(1.4rem, 2.2vw + 1rem, 2.4rem);
-    letter-spacing: .12em;
+    font-size: 1.25rem;      /* smaller digits */
+    letter-spacing: .08em;
     color: var(--clock-led);
     text-shadow:
-            0 0 6px var(--clock-led),
-            0 0 18px var(--clock-led-glow),
-            0 0 28px rgba(255,136,0,.35);
+            0 0 4px var(--clock-led),
+            0 0 10px var(--clock-led-glow),
+            0 0 18px rgba(255,136,0,.30);
 }
 
 /* Fallback for any earlier clock that used .digital-clock */
 .digital-clock{
-    font-family: 'Orbitron', monospace;
-    font-size: 1.5rem;
-    color: var(--clock-led); /* match amber theme */
+    font-family: 'Orbitron', monospace !important;
+    font-size: 1.25rem;
+    color: var(--clock-led);
     text-align: center;
     margin-top: .5rem;
-    letter-spacing: 2px;
+    letter-spacing: .08em;
 }
 
 /* Reduce glow for users who prefer less distraction */
 @media (prefers-reduced-motion: reduce){
-    .clock-time{ text-shadow: 0 0 6px var(--clock-led) }
+    .clock-time{ text-shadow: 0 0 4px var(--clock-led) }
 }
