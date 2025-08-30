@@ -1,0 +1,31 @@
+---
+/* Header.astro — wraps the site header + nav */
+const path = Astro.url.pathname;
+const isActive = (href: string) =>
+    path === href || (href !== "/" && path.startsWith(href));
+---
+<header class="site-header" role="banner">
+    <div class="nav">
+        <a class="brand" href="/">
+            <span class="brand-lines">Astro Example</span>
+        </a>
+
+        <nav class="nav-links" aria-label="Primary">
+            <a
+                    class={`nav-link ${isActive("/") ? "active" : ""}`}
+                    href="/"
+                    aria-current={isActive("/") ? "page" : undefined}
+            >Home</a>
+            <a
+                    class={`nav-link ${isActive("/about") ? "active" : ""}`}
+                    href="/about"
+                    aria-current={isActive("/about") ? "page" : undefined}
+            >About</a>
+            <a
+                    class={`nav-link ${isActive("/contact") ? "active" : ""}`}
+                    href="/contact"
+                    aria-current={isActive("/contact") ? "page" : undefined}
+            >Contact</a>
+        </nav>
+    </div>
+</header>

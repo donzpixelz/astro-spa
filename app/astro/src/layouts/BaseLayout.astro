@@ -2,10 +2,10 @@
 // src/layouts/BaseLayout.astro
 const { title = "Astro MPA/SPA Demo", description = "Just enough layout & nav" } = Astro.props;
 
-import Nav from "../components/Nav.astro";
+import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 
-/* Import global CSS so Vite bundles it */
+/* Import global CSS so Vite bundles it (if using src/styles/global.css) */
 import "../styles/global.css";
 ---
 <html lang="en">
@@ -24,9 +24,7 @@ import "../styles/global.css";
     <!-- <link href="https://fonts.googleapis.com/css2?family=Playball&display=swap" rel="stylesheet" /> -->
 </head>
 <body>
-<header class="site-header" role="banner">
-    <Nav />
-</header>
+<Header />
 
 <main class="site-main" role="main">
     <slot />
