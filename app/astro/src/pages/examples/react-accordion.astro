@@ -1,0 +1,21 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Accordion from "../../components/examples/Accordion.jsx";
+
+const items = [
+    { id: "a1", title: "What is this demo?", body: "An accessible React Accordion rendered as an Astro island. It supports keyboard navigation (↑ ↓ Home End), Space/Enter toggle, and ARIA semantics." },
+    { id: "a2", title: "Why accordion?", body: "Great for FAQs, dense info, or progressive disclosure without sending readers to new pages." },
+    { id: "a3", title: "Accessibility details", body: "Each header is a <button> inside a <h3>. Buttons have aria-expanded + aria-controls, panels have role=region and aria-labelledby, and the list is grouped in a <div role='presentation'> for semantics." },
+    { id: "a4", title: "Styling approach", body: "All styles live in global.css so components stay structural. Minimal, readable defaults that match your newspaper theme." },
+];
+---
+<BaseLayout title="React Accordion · Examples" description="Accessible, keyboard-friendly accordion in React">
+    <section class="stack">
+        <h1>React Accordion (Accessible)</h1>
+        <p class="muted">Try arrow keys (↑/↓), Home/End, or Space/Enter to toggle.</p>
+
+        <div class="card">
+            <Accordion client:load items={items} allowMultiple={false} />
+        </div>
+    </section>
+</BaseLayout>

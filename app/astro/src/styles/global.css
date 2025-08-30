@@ -159,3 +159,37 @@ button:hover{ opacity:.95 }
     color: var(--clock-led);
     text-shadow: none;   /* crisp, no glow */
 }
+
+
+/* Examples sub-nav */
+.examples-subnav ul{
+    list-style:none; margin:0 0 1rem 0; padding:0;
+    display:flex; gap:.75rem; flex-wrap:wrap;
+}
+.examples-subnav a{
+    display:inline-block; padding:.45rem .7rem; border-radius:.6rem;
+    text-decoration:none; color:var(--text); background:var(--bg-soft);
+    border:1px solid var(--border);
+}
+.examples-subnav a:hover{ background:#fff }
+
+/* Accordion */
+.accordion{ display:grid; gap:.5rem }
+.acc-item{ border:1px solid var(--border); border-radius:.6rem; background:#fff }
+.acc-header{ margin:0 }
+.acc-trigger{
+    width:100%; text-align:left;
+    display:flex; justify-content:space-between; align-items:center;
+    gap:.75rem; padding:.75rem 1rem; border:0; background:transparent; cursor:pointer;
+    font:inherit; color:inherit;
+}
+.acc-trigger:hover{ background:var(--bg-soft) }
+.acc-trigger:focus-visible{ outline:2px solid #000; outline-offset:2px; border-radius:.3rem }
+.acc-indicator{ font-weight:900; }
+.acc-panel[hidden]{ display:none }
+.acc-panel-inner{ padding:.5rem 1rem 1rem }
+
+/* Map panel (if you later switch the weather map back on) */
+.map-panel{ border:1px solid var(--border); border-radius:.8rem; overflow:hidden; }
+.leaflet-container{ height: 480px; width: 100%; }
+
