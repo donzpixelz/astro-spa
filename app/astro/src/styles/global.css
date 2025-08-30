@@ -41,7 +41,7 @@ body{
     display:flex;
     flex-direction:column;
     align-items:center;
-    gap:1rem;
+    gap:1.5rem;   /* 👈 more breathing room between brand & nav */
 }
 
 /* Brand (site title link) */
@@ -63,7 +63,7 @@ body{
 .brand::before{
     content:"";
     position:absolute;
-    top:-0.15em;   /* 👈 nudged upward to balance underline */
+    top:-0.15em;   /* balanced upward nudge */
     left:-0.6em;
     width:calc(100% + 0.6em);
     height:2px;
@@ -74,7 +74,7 @@ body{
 .brand::after{
     content:"";
     position:absolute;
-    bottom:-0.15em;  /* stays nudged downward */
+    bottom:-0.15em;  /* balanced downward nudge */
     left:0;
     width:calc(100% + 0.6em);
     height:2px;
