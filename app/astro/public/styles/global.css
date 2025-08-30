@@ -1,13 +1,13 @@
 :root{
-    --brand:#000000;          /* newspaper black */
+    --brand:#000000;
     --text:#111111;
     --muted:#666666;
     --bg:#ffffff;
     --bg-soft:#f5f5f5;
     --border:#e5e5e5;
 
-    /* Title font: Caslon-style via Google Fonts (Black 900) */
-    --title-face: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    /* Title font: Playfair Display Black */
+    --title-face: 'Playfair Display', Georgia, 'Times New Roman', serif;
 }
 
 *{ box-sizing:border-box }
@@ -40,23 +40,17 @@ body{
     display:flex; align-items:center; justify-content:space-between; gap:1rem;
 }
 
-/* Brand (site name, top left) */
+/* Brand */
 .brand{
     font-family: var(--title-face);
     font-weight: 900;
-    font-size: clamp(22px, 4vw, 36px);
+    font-size: clamp(24px, 4vw, 38px);
     color: black;
     letter-spacing: 0;
     text-decoration:none;
-    line-height: 1.15;
+    line-height: 1.1;
     padding:.45rem 0;
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
     position: relative;
-
-    /* Boldness boost (stronger so it's noticeable) */
-    -webkit-text-stroke: 0.6px black;
-    text-shadow: 0 0 1px rgba(0,0,0,0.75);
 }
 
 /* OVERLINE: over-extends left, meets right */
@@ -85,7 +79,7 @@ body{
 
 .brand:hover{ opacity:.9 }
 
-/* Nav links (right side) */
+/* Nav links */
 .nav-links{
     display:flex; align-items:center; gap:.75rem; margin-left:auto;
 }
@@ -98,7 +92,7 @@ body{
 .nav-link:hover{ background:var(--bg-soft) }
 .nav-link.active{ color:#fff; background:#000 }
 
-/* Keyboard accessibility */
+/* Accessibility */
 .brand:focus-visible,
 .nav-link:focus-visible{
     outline:2px solid #000;
@@ -106,7 +100,7 @@ body{
     border-radius:.6rem;
 }
 
-/* Content helpers */
+/* Helpers */
 .stack > * + *{ margin-top:1rem }
 .card{
     border:1px solid var(--border); background:var(--bg-soft); padding:1rem; border-radius:.8rem;
@@ -122,21 +116,14 @@ button{
 button:hover{ opacity:.95 }
 .muted{ color:var(--muted) }
 
-/* Responsive tweaks */
+/* Responsive */
 @media (max-width: 768px){
-    .brand{ font-size: clamp(20px, 6vw, 28px); }
+    .brand{ font-size: clamp(20px, 6vw, 30px); }
     .nav-link{ padding:.35rem .6rem; }
 }
 @media (max-width: 480px){
     .nav{ flex-wrap:wrap }
-    .brand{ padding:.35rem 0; }
-    .nav-links{
-        width:100%;
-        justify-content:flex-end;
-        gap:.5rem;
-    }
-    .nav-link{
-        padding:.3rem .55rem;
-        font-size:13px;
-    }
+    .brand{ font-size: 20px; padding:.35rem 0; }
+    .nav-links{ width:100%; justify-content:flex-end; gap:.5rem; }
+    .nav-link{ padding:.3rem .55rem; font-size:13px; }
 }
