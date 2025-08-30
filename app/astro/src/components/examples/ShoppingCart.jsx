@@ -26,7 +26,6 @@ function Line({ item, qty, inc, dec }) {
 export default function ShoppingCart(){
     const [cart, setCart] = useState(() => Object.fromEntries(PRODUCTS.map(p => [p.id, 0])));
     const paypalRef = useRef(null);
-    const [sdkState, setSdkState] = useState("init"); // init | ready | missing | error
 
     const total = useMemo(
         () => PRODUCTS.reduce((s, p) => s + p.price * (cart[p.id] || 0), 0),
@@ -40,63 +39,42 @@ export default function ShoppingCart(){
     const inc = (id) => setCart(c => ({ ...c, [id]: (c[id] || 0) + 1 }));
     const dec = (id) => setCart(c => ({ ...c, [id]: Math.max(0, (c[id] || 0) - 1) }));
 
-    // Render/paypal buttons whenever items/total change
     useEffect(() => {
-        // If no items, clear any previous buttons
-        if (items.length === 0) {
-            if (paypalRef.current) paypalRef.current.innerHTML = "";
-            return;
-        }
+        if (!paypalRef.current) return;
+        paypalRef.current.innerHTML = "";
+        if (items.length === 0) return;
 
-        // Check SDK
-        const sdk = window?.paypal?.Buttons;
-        if (typeof sdk !== "function") {
-            setSdkState("missing");
-            console.warn("[Cart] PayPal SDK not available. window.paypal =", window?.paypal);
-            return;
-        }
+        if (typeof window?.paypal?.Buttons !== "function") return;
 
-        setSdkState("ready");
-        // Clear any previous render
-        if (paypalRef.current) paypalRef.current.innerHTML = "";
-
-        // Render buttons
         window.paypal.Buttons({
             style: { layout: "vertical" },
-            createOrder: (_data, actions) => {
-                return actions.order.create({
-                    purchase_units: [
-                        {
-                            amount: {
-                                currency_code: "USD",
-                                value: total.toFixed(2),
-                                breakdown: { item_total: { currency_code: "USD", value: total.toFixed(2) } }
-                            },
-                            items: items.map(i => ({
-                                name: i.name,
-                                unit_amount: { currency_code: "USD", value: i.price.toFixed(2) },
-                                quantity: String(i.qty),
-                                category: "PHYSICAL_GOODS"
-                            }))
-                        }
-                    ]
-                });
-            },
+            createOrder: (_data, actions) => actions.order.create({
+                purchase_units: [
+                    {
+                        amount: {
+                            currency_code: "USD",
+                            value: total.toFixed(2),
+                            breakdown: { item_total: { currency_code: "USD", value: total.toFixed(2) } }
+                        },
+                        items: items.map(i => ({
+                            name: i.name,
+                            unit_amount: { currency_code: "USD", value: i.price.toFixed(2) },
+                            quantity: String(i.qty),
+                            category: "PHYSICAL_GOODS"
+                        }))
+                    }
+                ]
+            }),
             onApprove: async (_data, actions) => {
                 try {
                     const details = await actions.order.capture();
                     alert(`✅ Payment approved. Order: ${details.id}`);
                     setCart(Object.fromEntries(PRODUCTS.map(p => [p.id, 0])));
                 } catch (e) {
-                    console.error("Capture failed", e);
                     alert(`❌ Capture failed: ${String(e?.message || e)}`);
                 }
             },
-            onError: (err) => {
-                console.error("PayPal error", err);
-                setSdkState("error");
-                alert(`❌ PayPal error: ${String(err)}`);
-            }
+            onError: (err) => alert(`❌ PayPal error: ${String(err)}`)
         }).render(paypalRef.current);
     }, [items, total]);
 
@@ -137,13 +115,8 @@ export default function ShoppingCart(){
                     </>
                 )}
 
-                {/* PayPal buttons mount here */}
                 <div className="paypal-wrap">
-                    <div className="cart-muted" style={{marginBottom:".25rem"}}>
-                        PayPal SDK: {sdkState}
-                        {"  "}
-                        (<a href="https://www.paypal.com/sdk/js?client-id=ASrkcLLY2_J5zbYK1SHFVxdosWRvwcwG2qWkNgA4C_PsrP5Qvs2UcbQH8V53OkicaVFzljp1QqoRIfpb&components=buttons&currency=USD" target="_blank" rel="noreferrer">open SDK</a>)
-                    </div>
+                    {/* Buttons mount here only if items exist */}
                     <div ref={paypalRef} />
                 </div>
             </aside>
