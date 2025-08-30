@@ -38,15 +38,12 @@ body{
 /* Brand (site name, top left) */
 .brand{
     font-family: 'Playball', 'Copperplate', cursive, sans-serif;
-    font-size: 30px;
-    color: white;
+    font-size: 36px;          /* bigger than before */
+    color: black;             /* black text */
     letter-spacing: 2px;
     text-decoration:none;
-    padding:.35rem .55rem;
-    border-radius:.6rem;
-    background: var(--brand);
 }
-.brand:hover{ opacity:.9 }
+.brand:hover{ opacity:.8 }
 
 /* Nav links (right side) */
 .nav-links{
