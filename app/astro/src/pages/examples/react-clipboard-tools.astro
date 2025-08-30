@@ -7,6 +7,8 @@ const snippets = [
         id: "bash-update",
         title: "Deploy helper (zsh function)",
         language: "bash",
+        filename: "~/.zshrc",
+        lineNumbers: true,
         code: `update-astro() {
   local msg="\${1:-"Update Astro"}"
   git add .
@@ -18,6 +20,8 @@ const snippets = [
         id: "js-fetch",
         title: "Tiny fetch wrapper",
         language: "javascript",
+        filename: "src/lib/http.js",
+        lineNumbers: true,
         code: `export async function getJSON(url) {
   const res = await fetch(url, { headers: { "Accept": "application/json" }});
   if (!res.ok) throw new Error(\`HTTP \${res.status}\`);
@@ -28,6 +32,8 @@ const snippets = [
         id: "html-card",
         title: "Card pattern (HTML)",
         language: "html",
+        filename: "src/components/Card.html",
+        lineNumbers: false,
         code: `<div class="card">
   <h3>Card title</h3>
   <p>Body text…</p>
@@ -35,10 +41,13 @@ const snippets = [
     },
 ];
 ---
-<BaseLayout title="Clipboard Tools · Examples" description="Copy code buttons and deep links for snippets">
+<BaseLayout title="Clipboard Tools · Examples" description="Copy code buttons, deep links, line numbers, and a copyable filename badge">
     <section class="stack">
         <h1>“Copy code” / Clipboard Tools</h1>
-        <p class="muted">Copy code to clipboard or copy a deep link to any snippet (look for <code>#id</code> in the URL). All client-side.</p>
+        <p class="muted">
+            Copy code or a deep link to any snippet. Click the filename badge to copy the file name.
+            Toggle line numbers per snippet via <code>lineNumbers: true</code>.
+        </p>
 
         <div class="card">
             <ClipboardTools client:load snippets={snippets} />

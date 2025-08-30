@@ -476,3 +476,34 @@ html[data-theme="dark"] .segmented > label.on {
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
     font-size: .95rem; line-height: 1.45;
 }
+
+
+/* === Clipboard tools: filename badge + line numbers ========== */
+.clip-file{
+    display:inline-block; font-size:.8rem; padding:.1rem .45rem;
+    border:1px solid var(--border); border-radius:.5rem;
+    background:#fff; color:var(--muted); cursor:pointer;
+}
+.clip-file:hover{ color:var(--text); background:#fff }
+
+.clip-code{ width:100% }
+.clip-code.has-lines{
+    display:grid; grid-template-columns:auto 1fr; column-gap:.75rem;
+    align-items:start;
+}
+.clip-lnums{
+    /* Keep numbers aligned with code lines */
+    padding:.85rem 0 .85rem .75rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    font-size:.95rem; line-height:1.45;
+    text-align:right; color:var(--muted);
+    user-select:none;
+}
+.clip-lnums > span{ display:block; height:1.45em } /* matches code line-height */
+
+.clip-pre{
+    /* Ensure no wraps so numbers align 1:1 */
+    white-space:pre;
+    /* Already has padding from your previous block; ensure it matches the lnums top/bottom */
+    padding:.85rem 1rem;
+}

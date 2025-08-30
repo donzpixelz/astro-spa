@@ -1,14 +1,22 @@
 import React, { useEffect, useState } from "react";
 
 /**
- * ClipboardTools — copy code + copy deep link per snippet.
+ * ClipboardTools — copy code, copy deep link, optional line numbers, and filename badge.
+ *
  * Props:
- *   snippets: Array<{ id, title?, language?, code }>
+ *   snippets: Array<{
+ *     id: string;
+ *     title?: string;
+ *     language?: string;
+ *     code: string;
+ *     filename?: string;        // shows a badge; clicking it copies the filename
+ *     lineNumbers?: boolean;    // turn on line numbers for this snippet
+ *   }>
  */
 export default function ClipboardTools({ snippets = [] }) {
-    const [status, setStatus] = useState({}); // { [id]: "Copied!" | "Link copied!" | "Error" }
+    const [status, setStatus] = useState({}); // { [id]: "Copied!" | "Link copied!" | "Name copied!" | "Copy failed" }
 
-    // Clear status after a short delay
+    // Clear per-snippet status after a short delay
     useEffect(() => {
         if (!Object.keys(status).length) return;
         const t = setTimeout(() => setStatus({}), 1500);
@@ -48,6 +56,39 @@ export default function ClipboardTools({ snippets = [] }) {
         setStatus({ [snippet.id]: ok ? "Link copied!" : "Copy failed" });
     }
 
+    async function copyFilename(snippet) {
+        if (!snippet.filename) return;
+        const ok = await writeText(snippet.filename);
+        setStatus({ [snippet.id]: ok ? "Name copied!" : "Copy failed" });
+    }
+
+    const renderCode = (s) => {
+        if (s.lineNumbers) {
+            // Keep whitespace and prevent wrapping so numbers align
+            const lines = s.code.replace(/\n$/, "\n").split("\n");
+            return (
+                <div className="clip-code has-lines">
+                    <div className="clip-lnums" aria-hidden="true">
+                        {lines.map((_, idx) => (
+                            <span key={idx + 1}>{idx + 1}</span>
+                        ))}
+                    </div>
+                    <pre className="clip-pre" tabIndex={0}>
+            <code className={`language-${(s.language || "").toLowerCase()}`}>{s.code}</code>
+          </pre>
+                </div>
+            );
+        }
+        // No line numbers (simple)
+        return (
+            <div className="clip-code">
+        <pre className="clip-pre" tabIndex={0}>
+          <code className={`language-${(s.language || "").toLowerCase()}`}>{s.code}</code>
+        </pre>
+            </div>
+        );
+    };
+
     return (
         <div className="clip">
             {snippets.map((s) => (
@@ -56,7 +97,19 @@ export default function ClipboardTools({ snippets = [] }) {
                         <div className="clip-titles">
                             <h3 className="clip-title">{s.title || "Snippet"}</h3>
                             {s.language ? <span className="clip-lang">{s.language}</span> : null}
+                            {s.filename ? (
+                                <button
+                                    className="clip-file"
+                                    type="button"
+                                    onClick={() => copyFilename(s)}
+                                    title="Copy filename"
+                                    aria-label={`Copy filename ${s.filename}`}
+                                >
+                                    {s.filename}
+                                </button>
+                            ) : null}
                         </div>
+
                         <div className="clip-toolbar" role="group" aria-label="Clipboard actions">
                             <button className="clip-btn" type="button" onClick={() => copyCode(s)} aria-label="Copy code">
                                 Copy
@@ -70,11 +123,7 @@ export default function ClipboardTools({ snippets = [] }) {
                         </div>
                     </header>
 
-                    <div className="clip-codewrap">
-            <pre className="clip-pre" tabIndex={0}>
-              <code className={`language-${(s.language || "").toLowerCase()}`}>{s.code}</code>
-            </pre>
-                    </div>
+                    <div className="clip-codewrap">{renderCode(s)}</div>
                 </section>
             ))}
         </div>
