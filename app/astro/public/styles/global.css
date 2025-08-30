@@ -42,6 +42,7 @@ body{
 
 /* Brand */
 .brand{
+    display:inline-block;               /* ensure precise box for line math */
     font-family: var(--title-face);
     font-weight: 900;
     font-size: clamp(24px, 4vw, 38px);
@@ -57,10 +58,10 @@ body{
 .brand::before{
     content:"";
     position:absolute;
-    top:2px;
-    left:-10%;
-    right:0;                 /* meet right edge */
-    height:2px;
+    top: 0.08em;                        /* tight to glyphs */
+    left: -0.6em;                       /* over-extend on the left */
+    right: 0;                           /* meet the right edge exactly */
+    height: 2px;
     background:#000;
     box-shadow: 0 1px 2px rgba(0,0,0,0.25);
 }
@@ -69,10 +70,10 @@ body{
 .brand::after{
     content:"";
     position:absolute;
-    bottom:2px;
-    left:0;                  /* meet left edge */
-    width:110%;              /* extend past right */
-    height:2px;
+    bottom: 0.08em;                     /* tight to glyphs */
+    left: 0;                            /* meet left edge */
+    width: calc(100% + 0.6em);          /* extend past right by same amount */
+    height: 2px;
     background:#000;
     box-shadow: 0 1px 2px rgba(0,0,0,0.25);
 }
