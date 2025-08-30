@@ -25,8 +25,8 @@ body{
     backdrop-filter:saturate(180%) blur(8px);
     background:rgba(255,255,255,.92);
     border-bottom:1px solid var(--border);
-    padding-top:.5rem;
-    padding-bottom:.5rem;
+    padding-top:.75rem;
+    padding-bottom:.75rem;
     overflow:visible;
 }
 .site-main{ max-width:900px; margin:2rem auto; padding:0 1rem }
@@ -35,10 +35,13 @@ body{
     padding:2rem 1rem; color:var(--muted); text-align:center;
 }
 
-/* Nav container */
+/* Nav container now vertical, centered */
 .nav{
     max-width:900px; margin:0 auto; padding:.75rem 1rem;
-    display:flex; align-items:center; justify-content:space-between; gap:1rem;
+    display:flex;
+    flex-direction:column;        /* stack brand + links */
+    align-items:center;           /* center horizontally */
+    gap:.5rem;
 }
 
 /* Brand (site title link) */
@@ -47,6 +50,7 @@ body{
     position:relative;
     text-decoration:none;
     color:black;
+    text-align:center;
 
     font-family: var(--title-face);
     font-weight: 900;
@@ -55,7 +59,7 @@ body{
     padding:.45rem 0;
 }
 
-/* OVERLINE: over-extend left by 0.6em, meet right EXACTLY */
+/* OVERLINE: over-extend left, meet right EXACTLY */
 .brand::before{
     content:"";
     position:absolute;
@@ -79,13 +83,22 @@ body{
 
 .brand:hover{ opacity:.9 }
 
-/* Nav links */
+/* Nav links now centered under brand */
 .nav-links{
-    display:flex; align-items:center; gap:.75rem; margin-left:auto;
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:.75rem;
+    margin:0;
 }
+
 .nav-link{
-    display:inline-block; padding:.4rem .7rem; border-radius:.6rem;
-    text-decoration:none; color:var(--text); line-height:1.2;
+    display:inline-block;
+    padding:.4rem .7rem;
+    border-radius:.6rem;
+    text-decoration:none;
+    color:var(--text);
+    line-height:1.2;
 }
 .nav-link:hover{ background:var(--bg-soft) }
 .nav-link.active{ color:#fff; background:#000 }
@@ -122,8 +135,7 @@ button:hover{ opacity:.95 }
     .nav-link{ padding:.35rem .6rem; }
 }
 @media (max-width: 480px){
-    .nav{ flex-wrap:wrap }
     .brand{ font-size:20px; padding:.35rem 0; }
-    .nav-links{ width:100%; justify-content:flex-end; gap:.5rem; }
+    .nav-links{ gap:.5rem; }
     .nav-link{ padding:.3rem .55rem; font-size:13px; }
 }
