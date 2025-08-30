@@ -8,11 +8,6 @@
 
     /* Title font: Playfair Display Black */
     --title-face: 'Playfair Display', Georgia, 'Times New Roman', serif;
-
-    /* Masthead geometry */
-    --overhang: 0.6em;          /* how far to extend past the edge */
-    --gap: 0.08em;              /* distance from glyphs to lines */
-    --line: 2px;                /* line thickness */
 }
 
 *{ box-sizing:border-box }
@@ -32,7 +27,7 @@ body{
     border-bottom:1px solid var(--border);
     padding-top:.5rem;
     padding-bottom:.5rem;
-    overflow:visible; /* allow pseudo-lines to extend */
+    overflow:visible; /* don’t clip brand lines */
 }
 .site-main{ max-width:900px; margin:2rem auto; padding:0 1rem }
 .site-footer{
@@ -46,37 +41,43 @@ body{
     display:flex; align-items:center; justify-content:space-between; gap:1rem;
 }
 
-/* Brand link */
-.site-header .brand{
-    text-decoration:none; color:black;
+/* ───────────────── Brand (site title link) ───────────────── */
+.brand{
+    display:inline-block;              /* measurable box */
+    position:relative;                 /* anchor pseudo-elements */
+    text-decoration:none;
+    color:black;
+
     font-family: var(--title-face);
     font-weight: 900;
     font-size: clamp(24px, 4vw, 38px);
     line-height:1.1;
+    padding:.45rem 0;                  /* vertical breathing room */
 }
 
-/* Inner span becomes the precise measurement box for lines */
-.site-header .brand .brand-lines{
-    display:inline-block; position:relative;
+/* OVERLINE: over-extend left by 0.6em, meet right EXACTLY */
+.brand::before{
+    content:"";
+    position:absolute;
+    top:0.08em;                        /* close to glyphs */
+    left:-0.6em;                       /* overhang left */
+    width:calc(100% + 0.6em);          /* ends flush at right edge */
+    height:2px;
+    background:#000;
 }
 
-/* OVERLINE: over-extend left, meet right exactly */
-.site-header .brand .brand-lines::before{
-    content:""; position:absolute;
-    top: var(--gap);
-    left: calc(-1 * var(--overhang));     /* extend left */
-    width: calc(100% + var(--overhang));  /* ends flush at right edge */
-    height: var(--line); background:#000;
+/* UNDERLINE: meet left, over-extend right by 0.6em */
+.brand::after{
+    content:"";
+    position:absolute;
+    bottom:0.08em;                     /* close to glyphs */
+    left:0;                            /* flush left */
+    width:calc(100% + 0.6em);          /* extend past right */
+    height:2px;
+    background:#000;
 }
 
-/* UNDERLINE: meet left, over-extend right */
-.site-header .brand .brand-lines::after{
-    content:""; position:absolute;
-    bottom: var(--gap);
-    left: 0;                               /* flush on the left */
-    width: calc(100% + var(--overhang));   /* extend past right */
-    height: var(--line); background:#000;
-}
+.brand:hover{ opacity:.9 }
 
 /* Nav links */
 .nav-links{
@@ -122,7 +123,7 @@ button:hover{ opacity:.95 }
 }
 @media (max-width: 480px){
     .nav{ flex-wrap:wrap }
-    .brand{ font-size:20px; }
+    .brand{ font-size:20px; padding:.35rem 0; }
     .nav-links{ width:100%; justify-content:flex-end; gap:.5rem; }
     .nav-link{ padding:.3rem .55rem; font-size:13px; }
 }
