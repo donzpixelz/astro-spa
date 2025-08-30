@@ -38,10 +38,11 @@ body{
 /* Brand (site name, top left) */
 .brand{
     font-family: 'Playball', 'Copperplate', cursive, sans-serif;
-    font-size: 36px;          /* bigger than before */
+    font-size: 36px;          /* desktop default */
     color: black;             /* black text */
     letter-spacing: 2px;
     text-decoration:none;
+    line-height: 1;           /* keeps the text tight vertically */
 }
 .brand:hover{ opacity:.8 }
 
@@ -53,9 +54,18 @@ body{
 .nav-link{
     display:inline-block; padding:.4rem .7rem; border-radius:.6rem;
     text-decoration:none; color:var(--text);
+    line-height:1.2;
 }
 .nav-link:hover{ background:var(--bg-soft) }
 .nav-link.active{ color:#fff; background:var(--brand) }
+
+/* Keyboard accessibility */
+.brand:focus-visible,
+.nav-link:focus-visible{
+    outline:2px solid var(--brand);
+    outline-offset:2px;
+    border-radius:.6rem;
+}
 
 /* Content helpers */
 .stack > * + *{ margin-top:1rem }
@@ -73,8 +83,23 @@ button{
 button:hover{ opacity:.95 }
 .muted{ color:var(--muted) }
 
-/* (optional) small screens */
-@media (max-width: 520px){
+/* Responsive tweaks */
+/* Tablet */
+@media (max-width: 768px){
+    .brand{ font-size: 28px; }
+    .nav-link{ padding:.35rem .6rem; }
+}
+/* Mobile */
+@media (max-width: 480px){
     .nav{ flex-wrap:wrap }
-    .nav-links{ width:100%; justify-content:flex-end }
+    .brand{ font-size: 22px; }
+    .nav-links{
+        width:100%;
+        justify-content:flex-end;
+        gap:.5rem;
+    }
+    .nav-link{
+        padding:.3rem .55rem;
+        font-size: 13px;
+    }
 }
