@@ -184,9 +184,7 @@ button:hover{ opacity:.95 }
     letter-spacing: .08em;
     color: var(--clock-led);
     text-shadow:
-            0 0 4px var(--clock-led),
-            0 0 10px var(--clock-led-glow),
-            0 0 18px rgba(255,136,0,.30);
+            none;
 }
 
 /* Fallback for any earlier clock that used .digital-clock */
