@@ -1,25 +1,25 @@
 import React, { useEffect, useState } from "react";
 
-/**
- * ThemeSwitcher — Light / Dark / Sepia
- * - Persists to localStorage("theme")
- * - Applies to <html data-theme="..."> for global CSS variables
- */
+/** ThemeSwitcher — Light / Dark / Sepia (persists to localStorage) */
 export default function ThemeSwitcher() {
-    // Default to saved value; if none, detect system dark vs light
     const getInitial = () => {
         if (typeof window === "undefined") return "light";
-        const saved = localStorage.getItem("theme");
-        if (saved === "light" || saved === "dark" || saved === "sepia") return saved;
-        const systemDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-        return systemDark ? "dark" : "light";
+        try {
+            const saved = localStorage.getItem("theme");
+            if (saved === "light" || saved === "dark" || saved === "sepia") return saved;
+            const prefersDark =
+                window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+            return prefersDark ? "dark" : "light";
+        } catch {
+            return "light";
+        }
     };
 
     const [theme, setTheme] = useState(getInitial);
 
     useEffect(() => {
         document.documentElement.setAttribute("data-theme", theme);
-        localStorage.setItem("theme", theme);
+        try { localStorage.setItem("theme", theme); } catch {}
     }, [theme]);
 
     return (
@@ -41,4 +41,25 @@ export default function ThemeSwitcher() {
                 <label className={theme === "dark" ? "on" : ""}>
                     <input
                         type="radio"
-                        name="
+                        name="theme"
+                        value="dark"
+                        checked={theme === "dark"}
+                        onChange={() => setTheme("dark")}
+                    />
+                    Dark
+                </label>
+
+                <label className={theme === "sepia" ? "on" : ""}>
+                    <input
+                        type="radio"
+                        name="theme"
+                        value="sepia"
+                        checked={theme === "sepia"}
+                        onChange={() => setTheme("sepia")}
+                    />
+                    Sepia
+                </label>
+            </fieldset>
+        </div>
+    );
+}
