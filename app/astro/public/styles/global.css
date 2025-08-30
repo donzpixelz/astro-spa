@@ -25,6 +25,8 @@ body{
     backdrop-filter:saturate(180%) blur(8px);
     background:rgba(255,255,255,.8);
     border-bottom:1px solid var(--border);
+    padding-top:.5rem;       /* 👈 extra space top */
+    padding-bottom:.5rem;    /* 👈 extra space bottom */
 }
 .site-main{ max-width:900px; margin:2rem auto; padding:0 1rem }
 .site-footer{
@@ -41,12 +43,13 @@ body{
 /* Brand (site name, top left) */
 .brand{
     font-family: var(--title-face);
-    font-weight: 700;          /* use 700 for a confident title */
+    font-weight: 700;          /* confident title weight */
     font-size: 36px;           /* desktop default */
     color: black;
-    letter-spacing: .2px;      /* serif: keep tracking subtle */
+    letter-spacing: .2px;      /* serif: subtle tracking */
     text-decoration:none;
-    line-height: 1.05;         /* slightly compact for display */
+    line-height: 1.2;
+    padding:.4rem 0;           /* 👈 vertical breathing room */
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
 }
@@ -106,7 +109,7 @@ button:hover{ opacity:.95 }
 /* Mobile */
 @media (max-width: 480px){
     .nav{ flex-wrap:wrap }
-    .brand{ font-size: 22px; }
+    .brand{ font-size: 22px; padding:.3rem 0; } /* adjust brand padding smaller */
     .nav-links{
         width:100%;
         justify-content:flex-end;
