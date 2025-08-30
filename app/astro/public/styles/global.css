@@ -127,3 +127,7 @@ button:hover{ opacity:.95 }
     .nav-links{ width:100%; justify-content:flex-end; gap:.5rem; }
     .nav-link{ padding:.3rem .55rem; font-size:13px; }
 }
+
+/* TEMP TEST — remove after verifying */
+.brand{ outline: 1px dashed red; }
+
