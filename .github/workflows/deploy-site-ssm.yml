@@ -66,29 +66,15 @@ jobs:
             echo "- Bucket:  \`$BUCKET\`"
           } >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Build astro-spa (auto-detect location)
+      # 🔧 Build the Astro site from the REPO ROOT (the folder that has astro.config.mjs)
+      - name: Build astro-spa (repo root)
         run: |
           set -euo pipefail
           BUILD="__deploy_root"
           rm -rf "$BUILD"; mkdir -p "$BUILD"
 
-          # Auto-detect Astro app location:
-          # 1) Prefer app/astro if it exists AND has an astro dep.
-          # 2) Else try repo root if it has an astro dep.
-          APP_DIR=""
-          if [ -d app/astro ] && grep -q '"astro"' app/astro/package.json 2>/dev/null; then
-            APP_DIR="app/astro"
-          elif [ -f package.json ] && grep -q '"astro"' package.json 2>/dev/null; then
-            APP_DIR="."
-          else
-            echo "❌ Could not find an Astro project at app/astro or repo root."
-            echo "   Expected a package.json with an 'astro' dependency."
-            exit 1
-          fi
-
-          echo "Building from: ${APP_DIR}"
-          pushd "$APP_DIR" >/dev/null
-
+          echo "Building from repo root: $GITHUB_WORKSPACE"
+          # Install dependencies using root lockfile
           if [ -f package-lock.json ]; then
             npm ci
           elif [ -f pnpm-lock.yaml ]; then
@@ -97,10 +83,8 @@ jobs:
             npm install
           fi
 
-          # Build into repo-level __deploy_root
+          # Build into __deploy_root
           npx astro build --outDir "$GITHUB_WORKSPACE/$BUILD"
-
-          popd >/dev/null
 
       - name: Package site
         run: |
