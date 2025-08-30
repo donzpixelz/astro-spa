@@ -9,7 +9,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 			single-page experience later if you ever want.
 		</p>
 
-		<!-- Quick value props -->
+		<!-- What’s here -->
 		<div class="card">
 			<h2 style="margin-top:0">What’s here</h2>
 			<ul>
@@ -19,7 +19,32 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 			</ul>
 		</div>
 
-		<!-- Useful links -->
+		<!-- Stack & topics -->
+		<div class="card">
+			<h2 style="margin-top:0">Stack & topics</h2>
+			<p class="muted" style="margin-top:.25rem">
+				This demo anchors a broader toolbox and learning path. Highlights include:
+			</p>
+			<ul style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:.5rem 1rem; margin-top:.75rem;">
+				<li><strong>CI/CD:</strong> GitHub Actions pipelines, build → test → deploy</li>
+				<li><strong>OIDC:</strong> short-lived cloud creds from GitHub to AWS (no static keys)</li>
+				<li><strong>SSH:</strong> secure admin access & rollout checks when needed</li>
+				<li><strong>AWS:</strong> infra targets for static hosting or servers</li>
+				<li><strong>GitHub:</strong> repo hygiene, PR flow, protected branches</li>
+				<li><strong>React:</strong> component islands when interactive UI is required</li>
+				<li><strong>Packer:</strong> golden images for consistent server builds</li>
+				<li><strong>Vagrant:</strong> quick local VMs for reproducible dev envs</li>
+				<li><strong>Docker:</strong> containerized runtime for apps and Nginx</li>
+				<li><strong>DevOps:</strong> repeatable workflows, automation, observability</li>
+				<li><strong>DevSecOps:</strong> shift-left checks, secrets hygiene, least privilege</li>
+				<li><strong>And more:</strong> linting, formatting, tagging, release notes</li>
+			</ul>
+			<p class="muted" style="margin:.5rem 0 0">
+				Goal: small pieces, loosely coupled—easy to extend without junking the core.
+			</p>
+		</div>
+
+		<!-- Quick links -->
 		<div class="card">
 			<h2 style="margin-top:0">Quick links</h2>
 			<p>
@@ -28,7 +53,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 			</p>
 		</div>
 
-		<!-- Tiny “how to extend” section -->
+		<!-- Next steps -->
 		<div class="card">
 			<h2 style="margin-top:0">Next steps</h2>
 			<ol>
@@ -37,11 +62,11 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 				<li>Customize styles in <code>public/styles/global.css</code>.</li>
 			</ol>
 			<p class="muted" style="margin:0">
-				Tip: keep it MPA for stability; experiment with SPA transitions later in a branch.
+				Tip: keep it MPA for stability; branch off later if you want to explore SPA transitions.
 			</p>
 		</div>
 
-		<!-- Small showcase row (no extra CSS: inline grid for convenience) -->
+		<!-- Small showcase row -->
 		<div style="display:grid; gap:1rem; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));">
 			<div class="card">
 				<h3 style="margin-top:0">Performance-first</h3>
@@ -57,7 +82,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 			</div>
 		</div>
 
-		<!-- Tiny code breadcrumb for devs -->
+		<!-- Project map -->
 		<div class="card">
 			<h2 style="margin-top:0">Project map</h2>
 			<pre style="margin:0;"><code>.
