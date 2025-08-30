@@ -3,27 +3,54 @@ const path = Astro.url.pathname;
 const isActive = (href: string) =>
     path === href || (href !== "/" && path.startsWith(href));
 ---
+
 <div class="nav">
-    <a class="brand" href="/">Astro Example</a>
+    <a class="brand" href="/">
+        <span class="brand-lines">Astro Example</span>
+    </a>
 
     <nav class="nav-links" aria-label="Primary">
-        <a
-                class={`nav-link ${isActive("/") ? "active" : ""}`}
-                href="/"
-                aria-current={isActive("/") ? "page" : undefined}
-        >Home</a
-        >
-        <a
-                class={`nav-link ${isActive("/about") ? "active" : ""}`}
-                href="/about"
-                aria-current={isActive("/about") ? "page" : undefined}
-        >About</a
-        >
-        <a
-                class={`nav-link ${isActive("/contact") ? "active" : ""}`}
-                href="/contact"
-                aria-current={isActive("/contact") ? "page" : undefined}
-        >Contact</a
-        >
+        <a class={`nav-link ${isActive("/") ? "active" : ""}`} href="/" aria-current={isActive("/") ? "page" : undefined}>Home</a>
+        <a class={`nav-link ${isActive("/about") ? "active" : ""}`} href="/about" aria-current={isActive("/about") ? "page" : undefined}>About</a>
+        <a class={`nav-link ${isActive("/contact") ? "active" : ""}`} href="/contact" aria-current={isActive("/contact") ? "page" : undefined}>Contact</a>
     </nav>
 </div>
+
+<style>
+    /* Keep typography coming from your global.css; this file only guarantees the lines render. */
+    .brand { display: inline-block; line-height: 1.1; text-decoration: none; color: inherit; }
+
+    /* Create a reliable, measurable box just around the text */
+    .brand-lines {
+        display: inline-block;
+        position: relative;
+        line-height: 1.1;
+        /* no padding/margins here; geometry stays tied to glyph box */
+    }
+
+    /* OVERLINE: over-extends left, meets right exactly */
+    .brand-lines::before {
+        content: "";
+        position: absolute;
+        top: 0.08em;          /* close to glyphs */
+        left: -0.6em;         /* overhang on the left */
+        right: 0;             /* meet right edge exactly */
+        height: 2px;
+        background: #000;
+        box-shadow: 0 1px 2px rgba(0,0,0,.25);
+    }
+
+    /* UNDERLINE: meets left, over-extends right */
+    .brand-lines::after {
+        content: "";
+        position: absolute;
+        bottom: 0.08em;       /* close to glyphs */
+        left: 0;              /* meet left edge */
+        right: -0.6em;        /* extend past right by same amount */
+        height: 2px;
+        background: #000;
+        box-shadow: 0 1px 2px rgba(0,0,0,.25);
+    }
+
+    /* Preserve your active link styles via global.css; no conflicts here */
+</style>
