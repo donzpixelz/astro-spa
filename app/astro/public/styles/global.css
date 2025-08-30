@@ -55,25 +55,25 @@ body{
     position: relative;
 }
 
-/* overline: aligned left, extends past right */
+/* OVERLINE: over-extends left, meets right */
 .brand::before{
     content:"";
     position:absolute;
-    top:2px;                   /* closer to text */
-    left:0;                    /* align with left edge of text */
-    width:115%;                /* extend past right side */
+    top:2px;                   /* close to text */
+    left:-10%;                 /* extend left */
+    width:100%;                /* stop at right edge */
     height:2px;
     background:#000;
     box-shadow: 0 1px 2px rgba(0,0,0,0.25);
 }
 
-/* underline: starts short left, aligns right */
+/* UNDERLINE: meets left, over-extends right */
 .brand::after{
     content:"";
     position:absolute;
-    bottom:2px;                /* closer to text */
-    right:0;                   /* align with right edge of text */
-    width:70%;                 /* shorter, leaves left gap */
+    bottom:2px;                /* close to text */
+    left:0;                    /* align with left edge */
+    width:110%;                /* extend past right edge */
     height:2px;
     background:#000;
     box-shadow: 0 1px 2px rgba(0,0,0,0.25);
