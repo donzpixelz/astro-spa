@@ -1,10 +1,10 @@
 :root{
-    --brand:#3466cb;
-    --text:#1f2328;
-    --muted:#6b7280;
+    --brand:#000000;          /* newspaper black */
+    --text:#111111;
+    --muted:#666666;
     --bg:#ffffff;
-    --bg-soft:#f6f8fa;
-    --border:#e5e7eb;
+    --bg-soft:#f5f5f5;
+    --border:#e5e5e5;
 
     /* Title font: Caslon-style via Google Fonts */
     --title-face: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
@@ -23,10 +23,10 @@ body{
 .site-header{
     position:sticky; top:0; z-index:10;
     backdrop-filter:saturate(180%) blur(8px);
-    background:rgba(255,255,255,.8);
+    background:rgba(255,255,255,.92);
     border-bottom:1px solid var(--border);
-    padding-top:.5rem;       /* 👈 extra space top */
-    padding-bottom:.5rem;    /* 👈 extra space bottom */
+    padding-top:.5rem;
+    padding-bottom:.5rem;
 }
 .site-main{ max-width:900px; margin:2rem auto; padding:0 1rem }
 .site-footer{
@@ -43,17 +43,41 @@ body{
 /* Brand (site name, top left) */
 .brand{
     font-family: var(--title-face);
-    font-weight: 700;          /* confident title weight */
+    font-weight: 700;
     font-size: 36px;           /* desktop default */
     color: black;
-    letter-spacing: .2px;      /* serif: subtle tracking */
+    letter-spacing: .2px;
     text-decoration:none;
     line-height: 1.2;
-    padding:.4rem 0;           /* 👈 vertical breathing room */
+    padding:.45rem 0;          /* vertical breathing room */
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+    position: relative;        /* for pseudo-lines */
 }
-.brand:hover{ opacity:.8 }
+
+/* overline: short on right, overhangs left */
+.brand::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:-18%;                 /* overhang left */
+    width:68%;                 /* shorter than full width */
+    height:2px;
+    background:#000;
+}
+
+/* underline: short on left, underhands right */
+.brand::after{
+    content:"";
+    position:absolute;
+    bottom:0;
+    right:-18%;                /* underhand right */
+    width:68%;                 /* shorter than full width */
+    height:2px;
+    background:#000;
+}
+
+.brand:hover{ opacity:.9 }
 
 /* OPTIONAL: quick switch back to Playball
 .brand.playball{
@@ -74,12 +98,14 @@ body{
     line-height:1.2;
 }
 .nav-link:hover{ background:var(--bg-soft) }
-.nav-link.active{ color:#fff; background:var(--brand) }
+.nav-link.active{
+    color:#fff; background:#000;   /* black pill for active */
+}
 
 /* Keyboard accessibility */
 .brand:focus-visible,
 .nav-link:focus-visible{
-    outline:2px solid var(--brand);
+    outline:2px solid #000;
     outline-offset:2px;
     border-radius:.6rem;
 }
@@ -95,7 +121,7 @@ input, textarea{
     background:#fff;
 }
 button{
-    padding:.6rem .9rem; border:none; border-radius:.6rem; background:var(--brand); color:#fff; cursor:pointer;
+    padding:.6rem .9rem; border:none; border-radius:.6rem; background:#000; color:#fff; cursor:pointer;
 }
 button:hover{ opacity:.95 }
 .muted{ color:var(--muted) }
@@ -109,7 +135,7 @@ button:hover{ opacity:.95 }
 /* Mobile */
 @media (max-width: 480px){
     .nav{ flex-wrap:wrap }
-    .brand{ font-size: 22px; padding:.3rem 0; } /* adjust brand padding smaller */
+    .brand{ font-size: 22px; padding:.35rem 0; }
     .nav-links{
         width:100%;
         justify-content:flex-end;
@@ -117,6 +143,6 @@ button:hover{ opacity:.95 }
     }
     .nav-link{
         padding:.3rem .55rem;
-        font-size: 13px;
+        font-size:13px;
     }
 }
