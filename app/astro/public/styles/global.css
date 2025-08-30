@@ -44,48 +44,42 @@ body{
 .brand{
     font-family: var(--title-face);
     font-weight: 700;
-    font-size: 36px;           /* desktop default */
+    font-size: 36px;
     color: black;
     letter-spacing: .2px;
     text-decoration:none;
     line-height: 1.2;
-    padding:.45rem 0;          /* vertical breathing room */
+    padding:.45rem 0;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
-    position: relative;        /* for pseudo-lines */
+    position: relative;
 }
 
-/* overline: short on right, overhangs left */
+/* overline: short on right, slight overhang left */
 .brand::before{
     content:"";
     position:absolute;
     top:0;
-    left:-18%;                 /* overhang left */
-    width:68%;                 /* shorter than full width */
+    left:-8%;                  /* 👈 less overhang left */
+    width:60%;                 /* 👈 shorter overall */
     height:2px;
     background:#000;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.35);  /* 👈 shadow beneath line */
 }
 
-/* underline: short on left, underhands right */
+/* underline: short on left, slight underhang right */
 .brand::after{
     content:"";
     position:absolute;
     bottom:0;
-    right:-18%;                /* underhand right */
-    width:68%;                 /* shorter than full width */
+    right:-8%;                 /* 👈 less underhang right */
+    width:60%;                 /* 👈 shorter overall */
     height:2px;
     background:#000;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.35);
 }
 
 .brand:hover{ opacity:.9 }
-
-/* OPTIONAL: quick switch back to Playball
-.brand.playball{
-    font-family: 'Playball', 'Copperplate', cursive, sans-serif;
-    font-weight: 400;
-    letter-spacing: 2px;
-}
-*/
 
 /* Nav links (right side) */
 .nav-links{
@@ -99,7 +93,7 @@ body{
 }
 .nav-link:hover{ background:var(--bg-soft) }
 .nav-link.active{
-    color:#fff; background:#000;   /* black pill for active */
+    color:#fff; background:#000;
 }
 
 /* Keyboard accessibility */
