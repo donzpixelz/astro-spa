@@ -27,7 +27,7 @@ body{
     border-bottom:1px solid var(--border);
     padding-top:.5rem;
     padding-bottom:.5rem;
-    overflow:visible; /* don’t clip brand lines */
+    overflow:visible;
 }
 .site-main{ max-width:900px; margin:2rem auto; padding:0 1rem }
 .site-footer{
@@ -41,10 +41,10 @@ body{
     display:flex; align-items:center; justify-content:space-between; gap:1rem;
 }
 
-/* ───────────────── Brand (site title link) ───────────────── */
+/* Brand (site title link) */
 .brand{
-    display:inline-block;              /* measurable box */
-    position:relative;                 /* anchor pseudo-elements */
+    display:inline-block;
+    position:relative;
     text-decoration:none;
     color:black;
 
@@ -52,16 +52,16 @@ body{
     font-weight: 900;
     font-size: clamp(24px, 4vw, 38px);
     line-height:1.1;
-    padding:.45rem 0;                  /* vertical breathing room */
+    padding:.45rem 0;
 }
 
 /* OVERLINE: over-extend left by 0.6em, meet right EXACTLY */
 .brand::before{
     content:"";
     position:absolute;
-    top:0.08em;                        /* close to glyphs */
-    left:-0.6em;                       /* overhang left */
-    width:calc(100% + 0.6em);          /* ends flush at right edge */
+    top:0.08em;
+    left:-0.6em;
+    width:calc(100% + 0.6em);
     height:2px;
     background:#000;
 }
@@ -70,9 +70,9 @@ body{
 .brand::after{
     content:"";
     position:absolute;
-    bottom:0.08em;                     /* close to glyphs */
-    left:0;                            /* flush left */
-    width:calc(100% + 0.6em);          /* extend past right */
+    bottom:0.08em;
+    left:0;
+    width:calc(100% + 0.6em);
     height:2px;
     background:#000;
 }
@@ -127,7 +127,3 @@ button:hover{ opacity:.95 }
     .nav-links{ width:100%; justify-content:flex-end; gap:.5rem; }
     .nav-link{ padding:.3rem .55rem; font-size:13px; }
 }
-
-/* TEMP TEST — remove after verifying */
-.brand{ outline: 1px dashed red; }
-

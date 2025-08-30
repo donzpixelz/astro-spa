@@ -1,7 +1,10 @@
 ---
-// Base layout for all pages
+/* Base layout for all pages */
 const { title = "Astro MPA/SPA Demo", description = "Just enough layout & nav" } = Astro.props;
 import Nav from "../components/Nav.astro";
+
+/* ✅ Import your global CSS so Vite bundles it */
+import "../styles/global.css";
 ---
 <html lang="en">
 <head>
@@ -10,18 +13,14 @@ import Nav from "../components/Nav.astro";
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="icon" href="/favicon.svg" />
-    <link rel="stylesheet" href="/styles/global.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Playball&display=swap" ßrel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@900&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@900&display=swap" rel="stylesheet" />
+
+    <!-- Clean, valid font links (removed the malformed ßrel) -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&display=swap" rel="stylesheet" />
-
-
-
-
-
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700;900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;700&display=swap" rel="stylesheet" />
+    <!-- Optional: Playball (commented out if not used) -->
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Playball&display=swap" rel="stylesheet" /> -->
 </head>
 <body>
 <header class="site-header">
