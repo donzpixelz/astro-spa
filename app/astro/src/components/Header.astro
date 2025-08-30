@@ -17,6 +17,11 @@ const isActive = (href: string) =>
                     aria-current={isActive("/") ? "page" : undefined}
             >Home</a>
             <a
+                    class={`nav-link ${isActive("/examples") ? "active" : ""}`}
+                    href="/examples"
+                    aria-current={isActive("/examples") ? "page" : undefined}
+            >Examples</a>
+            <a
                     class={`nav-link ${isActive("/about") ? "active" : ""}`}
                     href="/about"
                     aria-current={isActive("/about") ? "page" : undefined}
