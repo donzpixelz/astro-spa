@@ -1,5 +1,7 @@
 ---
-/* Header.astro — wraps the site header + nav */
+/* Header.astro — site header with nav + clock */
+import Clock from "./Clock.astro";
+
 const path = Astro.url.pathname;
 const isActive = (href: string) =>
     path === href || (href !== "/" && path.startsWith(href));
@@ -28,4 +30,9 @@ const isActive = (href: string) =>
             >Contact</a>
         </nav>
     </div>
+
+    <Clock />
 </header>
+
+<!-- Digital clock font -->
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">

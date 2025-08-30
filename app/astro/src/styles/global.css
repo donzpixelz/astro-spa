@@ -139,3 +139,12 @@ button:hover{ opacity:.95 }
     .nav-links{ gap:.5rem; }
     .nav-link{ padding:.3rem .55rem; font-size:13px; }
 }
+
+.digital-clock {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.5rem;
+    color: #3466cb;
+    text-align: center;
+    margin-top: .5rem;
+    letter-spacing: 2px;
+}
