@@ -1,0 +1,14 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import UrlShortener from "../../components/examples/UrlShortener.jsx";
+---
+<BaseLayout title="URL Shortener (Mock) · Examples" description="Local-only URL shortener UI with validation and clipboard">
+    <section class="stack">
+        <h1>URL Shortener (Mock front-end)</h1>
+        <p class="muted">Validate, generate slugs, copy preview links, and keep a local list. No backend required.</p>
+
+        <div class="card">
+            <UrlShortener client:load />
+        </div>
+    </section>
+</BaseLayout>
