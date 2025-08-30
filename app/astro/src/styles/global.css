@@ -74,7 +74,7 @@ body{
 .brand::after{
     content:"";
     position:absolute;
-    bottom:0.18em;  /* 👈 nudged further down */
+    bottom:-0.15em;  /* 👈 negative pushes it DOWN from the text */
     left:0;
     width:calc(100% + 0.6em);
     height:2px;
