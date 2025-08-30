@@ -27,7 +27,7 @@ body{
     border-bottom:1px solid var(--border);
     padding-top:.5rem;
     padding-bottom:.5rem;
-    overflow: visible; /* ensure pseudo-lines can extend */
+    overflow: visible; /* ensure pseudo-lines aren't clipped */
 }
 .site-main{ max-width:900px; margin:2rem auto; padding:0 1rem }
 .site-footer{
@@ -41,9 +41,10 @@ body{
     display:flex; align-items:center; justify-content:space-between; gap:1rem;
 }
 
-/* Brand */
-.brand{
-    display:inline-block;               /* precise box for line geometry */
+/* Brand (site title link) */
+.site-header .brand{
+    display:inline-block;             /* give a measurable box */
+    position:relative;                /* anchor pseudo-elements */
     font-family: var(--title-face);
     font-weight: 900;
     font-size: clamp(24px, 4vw, 38px);
@@ -51,32 +52,31 @@ body{
     letter-spacing: 0;
     text-decoration:none;
     line-height: 1.1;
-    padding:.45rem 0;
-    position: relative;
+    padding:.45rem 0;                 /* vertical breathing room */
 }
 
 /* OVERLINE: over-extend left, meet right exactly */
-.brand::before{
+.site-header .brand::before{
     content:"";
     position:absolute;
-    top: 0.08em;            /* tight to glyphs */
-    left: -0.6em;           /* overhang left */
-    right: 0;               /* meet right edge exactly */
-    height: 2px;
+    top:0.08em;                       /* sits close to glyphs */
+    left:-0.6em;                      /* overhang left */
+    right:0;                          /* meet right edge exactly */
+    height:2px;
     background:#000;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.25);
+    box-shadow:0 1px 2px rgba(0,0,0,.25);
 }
 
 /* UNDERLINE: meet left, over-extend right */
-.brand::after{
+.site-header .brand::after{
     content:"";
     position:absolute;
-    bottom: 0.08em;         /* tight to glyphs */
-    left: 0;                /* meet left edge */
-    right: -0.6em;          /* extend past right by same amount */
-    height: 2px;
+    bottom:0.08em;                    /* sits close to glyphs */
+    left:0;                           /* meet left edge */
+    right:-0.6em;                     /* overhang right */
+    height:2px;
     background:#000;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.25);
+    box-shadow:0 1px 2px rgba(0,0,0,.25);
 }
 
 .brand:hover{ opacity:.9 }
@@ -87,8 +87,7 @@ body{
 }
 .nav-link{
     display:inline-block; padding:.4rem .7rem; border-radius:.6rem;
-    text-decoration:none; color:var(--text);
-    line-height:1.2;
+    text-decoration:none; color:var(--text); line-height:1.2;
 }
 .nav-link:hover{ background:var(--bg-soft) }
 .nav-link.active{ color:#fff; background:#000 }
@@ -104,15 +103,17 @@ body{
 /* Helpers */
 .stack > * + *{ margin-top:1rem }
 .card{
-    border:1px solid var(--border); background:var(--bg-soft); padding:1rem; border-radius:.8rem;
+    border:1px solid var(--border); background:var(--bg-soft);
+    padding:1rem; border-radius:.8rem;
 }
 label{ display:grid; gap:.4rem }
 input, textarea{
-    width:100%; padding:.65rem .7rem; border:1px solid var(--border); border-radius:.6rem;
-    background:#fff;
+    width:100%; padding:.65rem .7rem; border:1px solid var(--border);
+    border-radius:.6rem; background:#fff;
 }
 button{
-    padding:.6rem .9rem; border:none; border-radius:.6rem; background:#000; color:#fff; cursor:pointer;
+    padding:.6rem .9rem; border:none; border-radius:.6rem;
+    background:#000; color:#fff; cursor:pointer;
 }
 button:hover{ opacity:.95 }
 .muted{ color:var(--muted) }
