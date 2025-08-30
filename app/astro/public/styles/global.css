@@ -55,28 +55,28 @@ body{
     position: relative;
 }
 
-/* overline: short on right, slight overhang left */
+/* overline: aligned left, extends past right */
 .brand::before{
     content:"";
     position:absolute;
-    top:0;
-    left:-8%;                  /* 👈 less overhang left */
-    width:60%;                 /* 👈 shorter overall */
+    top:2px;                   /* closer to text */
+    left:0;                    /* align with left edge of text */
+    width:115%;                /* extend past right side */
     height:2px;
     background:#000;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.35);  /* 👈 shadow beneath line */
+    box-shadow: 0 1px 2px rgba(0,0,0,0.25);
 }
 
-/* underline: short on left, slight underhang right */
+/* underline: starts short left, aligns right */
 .brand::after{
     content:"";
     position:absolute;
-    bottom:0;
-    right:-8%;                 /* 👈 less underhang right */
-    width:60%;                 /* 👈 shorter overall */
+    bottom:2px;                /* closer to text */
+    right:0;                   /* align with right edge of text */
+    width:70%;                 /* shorter, leaves left gap */
     height:2px;
     background:#000;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.35);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.25);
 }
 
 .brand:hover{ opacity:.9 }
