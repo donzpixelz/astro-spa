@@ -1,13 +1,12 @@
 ---
-/* Clock.astro — self-contained, no inline styles */
+/* Clock.astro — clean, no black box */
 ---
 <div class="clock-shell" aria-label="Current time" aria-live="polite">
     <span class="clock-time">--:--:-- --</span>
 </div>
 
-<!-- Keep this inline so document.currentScript is reliable -->
+<!-- Inline script for reliable targeting -->
 <script is:inline>
-    // The script tag sits immediately after .clock-shell
     const el = document.currentScript.previousElementSibling.querySelector('.clock-time');
 
     function updateClock() {
