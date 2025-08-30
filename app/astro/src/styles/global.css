@@ -193,3 +193,89 @@ button:hover{ opacity:.95 }
 .map-panel{ border:1px solid var(--border); border-radius:.8rem; overflow:hidden; }
 .leaflet-container{ height: 480px; width: 100%; }
 
+
+
+/* ========= Theme tokens via [data-theme] on <html> ========== */
+/* Light is already your default via :root; optional explicit: */
+html[data-theme="light"] {
+    /* optional explicit mapping to your current :root values */
+    --brand:#000000;
+    --text:#111111;
+    --muted:#666666;
+    --bg:#ffffff;
+    --bg-soft:#f5f5f5;
+    --border:#e5e5e5;
+}
+
+/* Dark theme */
+html[data-theme="dark"] {
+    --brand:#ffffff;
+    --text:#e5e7eb;
+    --muted:#9aa4b2;
+    --bg:#0b0e11;
+    --bg-soft:#11161d;
+    --border:#2a2f3a;
+}
+
+/* Sepia theme (newspaper-y) */
+html[data-theme="sepia"] {
+    --brand:#1f1408;
+    --text:#2c1e10;
+    --muted:#6b5b4d;
+    --bg:#f9f5e7;
+    --bg-soft:#f3ebd4;
+    --border:#e0d5bf;
+}
+
+/* Header background should respect theme */
+html[data-theme="dark"] .site-header {
+    background: rgba(17,22,29,.92);
+    border-bottom-color: var(--border);
+}
+html[data-theme="sepia"] .site-header {
+    background: rgba(249,245,231,.92);
+    border-bottom-color: var(--border);
+}
+
+/* ========== Segmented control styles (ThemeSwitcher) ========= */
+.theme-switcher { display: grid; justify-items: start; }
+
+.segmented {
+    display: inline-grid;
+    grid-auto-flow: column;
+    gap: 0;
+    padding: .25rem;
+    border: 1px solid var(--border);
+    border-radius: .6rem;
+    background: var(--bg-soft);
+}
+
+.segmented > label {
+    position: relative;
+    padding: .45rem .8rem;
+    border-radius: .4rem;
+    cursor: pointer;
+    user-select: none;
+}
+
+.segmented > label.on {
+    background: #fff;               /* pops in light/sepia */
+    outline: 2px solid var(--border);
+}
+html[data-theme="dark"] .segmented > label.on {
+    background: #1a2230;            /* subtle pop in dark */
+}
+
+.segmented input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.visually-hidden {
+    position:absolute !important;
+    height:1px; width:1px;
+    overflow:hidden; clip:rect(1px,1px,1px,1px);
+    white-space:nowrap; border:0; padding:0; margin:0;
+}
+

@@ -1,0 +1,35 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ThemeSwitcher from "../../components/examples/ThemeSwitcher.jsx";
+---
+
+<BaseLayout title="Theme Switcher · Examples" description="Light, Dark, Sepia with CSS variables">
+    <!-- Preload saved theme to avoid flash -->
+    <script is:inline>
+        try {
+            const saved = localStorage.getItem('theme');
+            if (saved) document.documentElement.setAttribute('data-theme', saved);
+        } catch {}
+    </script>
+
+    <section class="stack">
+        <h1>Theme Switcher (Light / Dark / Sepia)</h1>
+        <p class="muted">Switch themes; styles are driven by CSS variables on <code>html[data-theme]</code>.</p>
+
+        <div class="card">
+            <ThemeSwitcher client:load />
+        </div>
+
+        <!-- A small demo area that shows the theme variables in action -->
+        <div class="card">
+            <h2 style="margin-top:0">Demo content</h2>
+            <p>Body text uses <code>--text</code> on <code>var(--bg)</code>. Cards use <code>--bg-soft</code> and <code>--border</code>.</p>
+            <label>
+                <span>Example input</span>
+                <input placeholder="Type here..." />
+            </label>
+            <p class="muted">Muted uses <code>--muted</code>.</p>
+            <button>Primary button</button>
+        </div>
+    </section>
+</BaseLayout>
