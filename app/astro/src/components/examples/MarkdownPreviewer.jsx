@@ -2,11 +2,17 @@ import React, { useMemo, useState } from "react";
 import { marked } from "marked";
 import DOMPurify from "dompurify";
 
-/**
- * Full Markdown (GFM) previewer using marked + DOMPurify.
- * - GFM enabled: tables | strikethrough | task lists | autolinks | fenced code
- * - Sanitized output for safety
- */
+// Astro will SSR this component first, then hydrate in the browser.
+// DOMPurify.sanitize only exists in the browser build; guard for SSR.
+const IS_BROWSER = typeof window !== "undefined";
+
+// Full GFM
+marked.setOptions({
+    gfm: true,
+    breaks: false,
+    headerIds: true,
+    mangle: false,
+});
 
 const SAMPLE = `# Markdown Previewer
 
@@ -37,25 +43,17 @@ function hello(name){ console.log("Hello, " + name); }
 > Tip: Try editing this text!
 `;
 
-// Configure marked once
-marked.setOptions({
-    gfm: true,
-    breaks: false,
-    headerIds: true,
-    mangle: false
-});
-
 export default function MarkdownPreviewer() {
     const [text, setText] = useState(SAMPLE);
 
     const html = useMemo(() => {
-        // Convert to HTML
         const raw = marked.parse(text);
-        // Sanitize
-        const clean = DOMPurify.sanitize(raw, {
-            USE_PROFILES: { html: true }
-        });
-        return clean;
+        // Only sanitize in the browser (after hydration). During SSR, return raw.
+        if (!IS_BROWSER) return raw;
+        const maybeSanitize =
+            (DOMPurify && DOMPurify.sanitize) ||
+            (DOMPurify && DOMPurify.default && DOMPurify.default.sanitize);
+        return maybeSanitize ? maybeSanitize(raw) : raw;
     }, [text]);
 
     return (
