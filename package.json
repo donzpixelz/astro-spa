@@ -1,11 +1,22 @@
 {
+  "name": "app-astro",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
   "dependencies": {
+    "@paypal/react-paypal-js": "^8.8.3",
     "@types/react": "^19.1.12",
     "@types/react-dom": "^19.1.9",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },
   "devDependencies": {
-    "@astrojs/react": "^4.3.0"
+    "@astrojs/react": "^4.3.0",
+    "astro": "^5.13.5"
   }
 }
