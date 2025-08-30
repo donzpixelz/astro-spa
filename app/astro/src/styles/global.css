@@ -8,6 +8,12 @@
 
     /* Title font: Playfair Display Black */
     --title-face: 'Playfair Display', Georgia, 'Times New Roman', serif;
+
+    /* Clock theme (retro LED) */
+    --clock-led: #ff8a00;        /* amber/orange like the photo */
+    --clock-led-glow: #ffbb55;
+    --clock-shell-bg: #000;      /* black shell */
+    --clock-shell-edge: #151515; /* bezel line */
 }
 
 *{ box-sizing:border-box }
@@ -41,7 +47,7 @@ body{
     display:flex;
     flex-direction:column;
     align-items:center;
-    gap:1.5rem;   /* 👈 more breathing room between brand & nav */
+    gap:1.5rem;   /* breathing room between brand & nav */
 }
 
 /* Brand (site title link) */
@@ -140,11 +146,61 @@ button:hover{ opacity:.95 }
     .nav-link{ padding:.3rem .55rem; font-size:13px; }
 }
 
-.digital-clock {
+/* === Digital clock (retro LED with glossy shell) ========================= */
+.clock-shell{
+    display: grid;
+    place-items: center;
+    margin: .6rem auto 0;
+    width: max(260px, 46ch);
+    padding: .65rem 1rem;
+    border-radius: 16px;
+    background: radial-gradient(120% 180% at 50% 10%, #1b1b1b 0%, #0c0c0c 40%, var(--clock-shell-bg) 100%);
+    border: 1px solid var(--clock-shell-edge);
+    box-shadow:
+            inset 0 1px 2px rgba(255,255,255,.05),
+            inset 0 -8px 16px rgba(0,0,0,.6),
+            0 8px 18px rgba(0,0,0,.25);
+    position: relative;
+    overflow: hidden;
+}
+
+/* glossy highlight */
+.clock-shell::after{
+    content: "";
+    position: absolute; inset: 0;
+    background:
+            linear-gradient(to bottom,
+            rgba(255,255,255,.22) 0%,
+            rgba(255,255,255,.10) 22%,
+            rgba(255,255,255,.04) 35%,
+            rgba(255,255,255,0) 55%);
+    pointer-events: none;
+    border-radius: inherit;
+}
+
+.clock-time{
+    font-family: 'Orbitron', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    font-weight: 700;
+    font-size: clamp(1.4rem, 2.2vw + 1rem, 2.4rem);
+    letter-spacing: .12em;
+    color: var(--clock-led);
+    text-shadow:
+            0 0 6px var(--clock-led),
+            0 0 18px var(--clock-led-glow),
+            0 0 28px rgba(255,136,0,.35);
+}
+
+/* Fallback for any earlier clock that used .digital-clock */
+.digital-clock{
     font-family: 'Orbitron', monospace;
     font-size: 1.5rem;
-    color: #3466cb;
+    color: var(--clock-led); /* match amber theme */
     text-align: center;
     margin-top: .5rem;
     letter-spacing: 2px;
+}
+
+/* Reduce glow for users who prefer less distraction */
+@media (prefers-reduced-motion: reduce){
+    .clock-time{ text-shadow: 0 0 6px var(--clock-led) }
 }

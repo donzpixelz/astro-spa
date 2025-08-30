@@ -1,19 +1,25 @@
 ---
-/* Clock.astro — live digital clock */
+/* Clock.astro — self-contained, no inline styles */
 ---
-<div id="clock" class="digital-clock"></div>
+<div class="clock-shell" aria-label="Current time" aria-live="polite">
+    <span class="clock-time">--:--:-- --</span>
+</div>
 
 <script>
+    // Scope to this component instance
+    const root = document.currentScript.closest('.clock-shell');
+    const el = root.querySelector('.clock-time');
+
     function updateClock() {
         const now = new Date();
-        let hours = now.getHours();
-        const minutes = now.getMinutes().toString().padStart(2, '0');
-        const seconds = now.getSeconds().toString().padStart(2, '0');
-        const ampm = hours >= 12 ? 'PM' : 'AM';
-        hours = hours % 12 || 12;
-        const timeString = `${hours.toString().padStart(2,'0')}:${minutes}:${seconds} ${ampm}`;
-        document.getElementById("clock").textContent = timeString;
+        let h = now.getHours();
+        const m = now.getMinutes().toString().padStart(2, '0');
+        const s = now.getSeconds().toString().padStart(2, '0');
+        const ampm = h >= 12 ? 'PM' : 'AM';
+        h = h % 12 || 12;
+        el.textContent = `${h.toString().padStart(2,'0')}:${m}:${s} ${ampm}`;
     }
-    setInterval(updateClock, 1000);
+
     updateClock();
+    setInterval(updateClock, 1000);
 </script>
