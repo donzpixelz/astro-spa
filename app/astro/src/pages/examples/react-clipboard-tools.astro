@@ -1,0 +1,47 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ClipboardTools from "../../components/examples/ClipboardTools.jsx";
+
+const snippets = [
+    {
+        id: "bash-update",
+        title: "Deploy helper (zsh function)",
+        language: "bash",
+        code: `update-astro() {
+  local msg="\${1:-"Update Astro"}"
+  git add .
+  git commit -m "\${msg}"
+  git push origin main
+}`,
+    },
+    {
+        id: "js-fetch",
+        title: "Tiny fetch wrapper",
+        language: "javascript",
+        code: `export async function getJSON(url) {
+  const res = await fetch(url, { headers: { "Accept": "application/json" }});
+  if (!res.ok) throw new Error(\`HTTP \${res.status}\`);
+  return res.json();
+}`,
+    },
+    {
+        id: "html-card",
+        title: "Card pattern (HTML)",
+        language: "html",
+        code: `<div class="card">
+  <h3>Card title</h3>
+  <p>Body text…</p>
+</div>`,
+    },
+];
+---
+<BaseLayout title="Clipboard Tools · Examples" description="Copy code buttons and deep links for snippets">
+    <section class="stack">
+        <h1>“Copy code” / Clipboard Tools</h1>
+        <p class="muted">Copy code to clipboard or copy a deep link to any snippet (look for <code>#id</code> in the URL). All client-side.</p>
+
+        <div class="card">
+            <ClipboardTools client:load snippets={snippets} />
+        </div>
+    </section>
+</BaseLayout>
