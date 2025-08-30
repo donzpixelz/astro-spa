@@ -1,0 +1,16 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import CommandPalette from "../../components/examples/CommandPalette.jsx";
+---
+<BaseLayout title="Command Palette · Examples" description="Ctrl/Cmd-K palette as a React island">
+    <section class="stack">
+        <h1>Command Palette (React)</h1>
+        <p class="muted">Press <kbd>⌘K</kbd> (Mac) or <kbd>Ctrl+K</kbd> (Windows/Linux) to open. Arrow keys navigate; <kbd>Enter</kbd> runs; <kbd>Esc</kbd> closes.</p>
+
+        <div class="card">
+            <CommandPalette client:load />
+        </div>
+
+        <p class="muted">This is a self-contained island; the rest of the site remains an MPA.</p>
+    </section>
+</BaseLayout>
