@@ -1,7 +1,5 @@
 ---
-/* Header.astro — site header with nav + clock */
-import Clock from "./Clock.astro";
-
+/* Header.astro — site header with brand + nav (no clock) */
 const path = Astro.url.pathname;
 const isActive = (href: string) =>
     path === href || (href !== "/" && path.startsWith(href));
@@ -30,7 +28,4 @@ const isActive = (href: string) =>
             >Contact</a>
         </nav>
     </div>
-
-    <!-- Digital clock sits beneath the nav -->
-    <Clock />
 </header>

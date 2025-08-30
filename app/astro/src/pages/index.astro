@@ -1,7 +1,11 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import Clock from "../components/Clock.astro";
 ---
 <BaseLayout title="Home · Astro Example" description="Clean MPA starter with About & Contact">
+	<!-- Clock centered at top of the home page -->
+	<Clock />
+
 	<section class="stack">
 		<h1>Welcome</h1>
 		<p class="muted">
@@ -48,8 +52,8 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 		<div class="card">
 			<h2 style="margin-top:0">Quick links</h2>
 			<p>
-				Learn more about this demo on the <a href="/about">About</a> page, or say hello on
-				<a href="/contact">Contact</a>.
+				Learn more about this demo on the <a href="/about" target="_blank" rel="noopener">About</a> page, or say hello on
+				<a href="/contact" target="_blank" rel="noopener">Contact</a>.
 			</p>
 		</div>
 
@@ -88,9 +92,9 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 			<pre style="margin:0;"><code>.
 ├── src/
 │   ├── components/
-│   │   └── Nav.astro
-│   ├── layouts/
-│   │   └── BaseLayout.astro
+│   │   ├── Header.astro
+│   │   ├── Footer.astro
+│   │   └── Clock.astro
 │   └── pages/
 │       ├── index.astro   ←
 │       ├── about.astro

@@ -11,6 +11,14 @@
 
     /* Clock theme */
     --clock-led: black;        /* amber/orange like the photo - #ff8a00 */
+    /* Clock colors — pick ONE */
+    /* --clock-led: #ff8a00;   Amber (current) */
+    /* --clock-led: #3466cb;   Blue (your brand) */
+    /* --clock-led: #ff3b30;   Red */
+    /* --clock-led: #2ecc71;   Green */
+    /* --clock-led: #ffd60a;   Yellow */
+    /* --clock-led: #a855f7;   Purple */
+
 }
 
 *{ box-sizing:border-box }
