@@ -10,7 +10,7 @@
     --title-face: 'Playfair Display', Georgia, 'Times New Roman', serif;
 
     /* Clock theme */
-    --clock-led: #ff8a00;        /* amber/orange like the photo */
+    --clock-led: black;        /* amber/orange like the photo - #ff8a00 */
 }
 
 *{ box-sizing:border-box }
