@@ -54,9 +54,9 @@ body{
     text-rendering: optimizeLegibility;
     position: relative;
 
-    /* Boldness boost */
-    -webkit-text-stroke: 0.4px black;         /* outline stroke */
-    text-shadow: 0 0 .5px rgba(0,0,0,0.6);    /* fallback + “ink fill” */
+    /* Boldness boost (stronger so it's noticeable) */
+    -webkit-text-stroke: 0.6px black;
+    text-shadow: 0 0 1px rgba(0,0,0,0.75);
 }
 
 /* OVERLINE: over-extends left, meets right */
