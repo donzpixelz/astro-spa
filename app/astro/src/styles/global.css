@@ -40,7 +40,7 @@ body{
     padding-bottom:.75rem;
     overflow:visible;
 }
-.site-main{ max-width:900px; margin:2rem auto; padding:0 1rem }
+.site-main{ max-width:900px; margin:1rem auto; padding:0 1rem }
 .site-footer{
     border-top:1px solid var(--border);
     padding:2rem 1rem; color:var(--muted); text-align:center;
