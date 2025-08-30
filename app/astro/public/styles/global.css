@@ -27,6 +27,7 @@ body{
     border-bottom:1px solid var(--border);
     padding-top:.5rem;
     padding-bottom:.5rem;
+    overflow: visible; /* ensure pseudo-lines can extend */
 }
 .site-main{ max-width:900px; margin:2rem auto; padding:0 1rem }
 .site-footer{
@@ -42,7 +43,7 @@ body{
 
 /* Brand */
 .brand{
-    display:inline-block;               /* ensure precise box for line math */
+    display:inline-block;               /* precise box for line geometry */
     font-family: var(--title-face);
     font-weight: 900;
     font-size: clamp(24px, 4vw, 38px);
@@ -54,25 +55,25 @@ body{
     position: relative;
 }
 
-/* OVERLINE: over-extends left, meets right exactly */
+/* OVERLINE: over-extend left, meet right exactly */
 .brand::before{
     content:"";
     position:absolute;
-    top: 0.08em;                        /* tight to glyphs */
-    left: -0.6em;                       /* over-extend on the left */
-    right: 0;                           /* meet the right edge exactly */
+    top: 0.08em;            /* tight to glyphs */
+    left: -0.6em;           /* overhang left */
+    right: 0;               /* meet right edge exactly */
     height: 2px;
     background:#000;
     box-shadow: 0 1px 2px rgba(0,0,0,0.25);
 }
 
-/* UNDERLINE: meets left, over-extends right */
+/* UNDERLINE: meet left, over-extend right */
 .brand::after{
     content:"";
     position:absolute;
-    bottom: 0.08em;                     /* tight to glyphs */
-    left: 0;                            /* meet left edge */
-    width: calc(100% + 0.6em);          /* extend past right by same amount */
+    bottom: 0.08em;         /* tight to glyphs */
+    left: 0;                /* meet left edge */
+    right: -0.6em;          /* extend past right by same amount */
     height: 2px;
     background:#000;
     box-shadow: 0 1px 2px rgba(0,0,0,0.25);
@@ -84,7 +85,6 @@ body{
 .nav-links{
     display:flex; align-items:center; gap:.75rem; margin-left:auto;
 }
-
 .nav-link{
     display:inline-block; padding:.4rem .7rem; border-radius:.6rem;
     text-decoration:none; color:var(--text);
