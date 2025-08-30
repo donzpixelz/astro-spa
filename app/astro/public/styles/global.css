@@ -29,19 +29,36 @@ body{
     padding:2rem 1rem; color:var(--muted); text-align:center;
 }
 
-/* Nav */
+/* Nav container */
 .nav{
     max-width:900px; margin:0 auto; padding:.75rem 1rem;
-    display:flex; gap:.75rem; align-items:center;
+    display:flex; align-items:center; justify-content:space-between; gap:1rem;
 }
+
+/* Brand (site name, top left) */
+.brand{
+    font-family: 'Playball', 'Copperplate', cursive, sans-serif;
+    font-size: 30px;
+    color: white;
+    letter-spacing: 2px;
+    text-decoration:none;
+    padding:.35rem .55rem;
+    border-radius:.6rem;
+    background: var(--brand);
+}
+.brand:hover{ opacity:.9 }
+
+/* Nav links (right side) */
+.nav-links{
+    display:flex; align-items:center; gap:.75rem; margin-left:auto;
+}
+
 .nav-link{
     display:inline-block; padding:.4rem .7rem; border-radius:.6rem;
     text-decoration:none; color:var(--text);
 }
 .nav-link:hover{ background:var(--bg-soft) }
-.nav-link.active{
-    color:#fff; background:var(--brand);
-}
+.nav-link.active{ color:#fff; background:var(--brand) }
 
 /* Content helpers */
 .stack > * + *{ margin-top:1rem }
@@ -58,29 +75,6 @@ button{
 }
 button:hover{ opacity:.95 }
 .muted{ color:var(--muted) }
-
-/* Header/Nav layout */
-.nav{
-    max-width:900px; margin:0 auto; padding:.75rem 1rem;
-    display:flex; align-items:center; justify-content:space-between; gap:1rem;
-}
-
-.brand{
-    font-weight:700; font-size:1.05rem; text-decoration:none; color:var(--text);
-    padding:.35rem .55rem; border-radius:.6rem;
-}
-.brand:hover{ background:var(--bg-soft) }
-
-.nav-links{
-    display:flex; align-items:center; gap:.75rem; margin-left:auto;
-}
-
-.nav-link{
-    display:inline-block; padding:.4rem .7rem; border-radius:.6rem;
-    text-decoration:none; color:var(--text);
-}
-.nav-link:hover{ background:var(--bg-soft) }
-.nav-link.active{ color:#fff; background:var(--brand) }
 
 /* (optional) small screens */
 @media (max-width: 520px){
