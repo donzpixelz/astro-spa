@@ -63,7 +63,7 @@ body{
 .brand::before{
     content:"";
     position:absolute;
-    top:0.08em;
+    top:-0.15em;   /* 👈 nudged upward to balance underline */
     left:-0.6em;
     width:calc(100% + 0.6em);
     height:2px;
@@ -74,7 +74,7 @@ body{
 .brand::after{
     content:"";
     position:absolute;
-    bottom:-0.15em;  /* 👈 negative pushes it DOWN from the text */
+    bottom:-0.15em;  /* stays nudged downward */
     left:0;
     width:calc(100% + 0.6em);
     height:2px;
