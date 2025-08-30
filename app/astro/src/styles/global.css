@@ -41,7 +41,7 @@ body{
     display:flex;
     flex-direction:column;        /* stack brand + links */
     align-items:center;           /* center horizontally */
-    gap:.5rem;
+    gap:1rem;                     /* more breathing room between brand & nav */
 }
 
 /* Brand (site title link) */
@@ -59,7 +59,7 @@ body{
     padding:.45rem 0;
 }
 
-/* OVERLINE: over-extend left, meet right EXACTLY */
+/* OVERLINE: over-extend left by 0.6em, meet right EXACTLY */
 .brand::before{
     content:"";
     position:absolute;
