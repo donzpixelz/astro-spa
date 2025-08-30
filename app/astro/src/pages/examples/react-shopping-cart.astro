@@ -1,0 +1,22 @@
+---
+import ShoppingCart from "../../components/examples/ShoppingCart.jsx";
+const title = "Shopping Cart (PayPal)";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+  </head>
+  <body class="bg-[var(--bg)] text-[var(--text)]">
+    <main style="max-width:900px;margin:2rem auto;padding:1rem">
+      <h1 style="margin:0 0 .5rem 0;font-size:2rem;line-height:1.2">{title}</h1>
+      <p style="margin:0 0 1rem 0;color:var(--muted)">
+        Add a few items to your cart, then checkout with PayPal Sandbox. (Uses React island.)
+      </p>
+
+      <ShoppingCart client:load />
+    </main>
+  </body>
+</html>
