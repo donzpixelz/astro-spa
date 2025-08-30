@@ -1,11 +1,79 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 ---
-<BaseLayout title="Home · Astro Demo">
+<BaseLayout title="Home · Astro Example" description="Clean MPA starter with About & Contact">
 	<section class="stack">
 		<h1>Welcome</h1>
-		<p>
-			Built with Astro’s multi/single-page approach for speed and simplicity—ready to switch to a smooth single-page experience whenever you want.
+		<p class="muted">
+			Built with Astro’s multi-page approach for speed and simplicity—ready to switch to a smooth
+			single-page experience later if you ever want.
 		</p>
+
+		<!-- Quick value props -->
+		<div class="card">
+			<h2 style="margin-top:0">What’s here</h2>
+			<ul>
+				<li><strong>File-based routing:</strong> <code>/</code>, <code>/about</code>, <code>/contact</code></li>
+				<li><strong>Shared layout:</strong> consistent header, footer, and meta tags</li>
+				<li><strong>Clean styles:</strong> tiny global CSS, accessible focus states</li>
+			</ul>
+		</div>
+
+		<!-- Useful links -->
+		<div class="card">
+			<h2 style="margin-top:0">Quick links</h2>
+			<p>
+				Learn more about this demo on the <a href="/about">About</a> page, or say hello on
+				<a href="/contact">Contact</a>.
+			</p>
+		</div>
+
+		<!-- Tiny “how to extend” section -->
+		<div class="card">
+			<h2 style="margin-top:0">Next steps</h2>
+			<ol>
+				<li>Edit copy in <code>src/pages/about.astro</code> and <code>src/pages/contact.astro</code>.</li>
+				<li>Add a new page by creating a file under <code>src/pages/your-page.astro</code>.</li>
+				<li>Customize styles in <code>public/styles/global.css</code>.</li>
+			</ol>
+			<p class="muted" style="margin:0">
+				Tip: keep it MPA for stability; experiment with SPA transitions later in a branch.
+			</p>
+		</div>
+
+		<!-- Small showcase row (no extra CSS: inline grid for convenience) -->
+		<div style="display:grid; gap:1rem; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));">
+			<div class="card">
+				<h3 style="margin-top:0">Performance-first</h3>
+				<p>Minimal JavaScript by default. Fast loads, simple deployment.</p>
+			</div>
+			<div class="card">
+				<h3 style="margin-top:0">Good bones</h3>
+				<p>Shared layout + sane defaults make it easy to grow without clutter.</p>
+			</div>
+			<div class="card">
+				<h3 style="margin-top:0">Room to play</h3>
+				<p>Flip on client navigation later to explore transitions—no lock-in.</p>
+			</div>
+		</div>
+
+		<!-- Tiny code breadcrumb for devs -->
+		<div class="card">
+			<h2 style="margin-top:0">Project map</h2>
+			<pre style="margin:0;"><code>.
+├── src/
+│   ├── components/
+│   │   └── Nav.astro
+│   ├── layouts/
+│   │   └── BaseLayout.astro
+│   └── pages/
+│       ├── index.astro   ← you are here
+│       ├── about.astro
+│       └── contact.astro
+└── public/
+    └── styles/
+        └── global.css
+</code></pre>
+		</div>
 	</section>
 </BaseLayout>
