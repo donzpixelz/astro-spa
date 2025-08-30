@@ -12,6 +12,8 @@
     "@paypal/react-paypal-js": "^8.8.3",
     "@types/react": "^19.1.12",
     "@types/react-dom": "^19.1.9",
+    "dompurify": "^3.2.6",
+    "marked": "^16.2.1",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },
