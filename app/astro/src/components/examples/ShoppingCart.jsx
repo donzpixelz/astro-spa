@@ -1,13 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
-/**
- * Notes:
- * - Uses PayPal Sandbox via clientId: "sb". Swap for your real ID when ready.
- * - Currency: USD.
- * - No server in this demo; we compute totals on the client for simplicity.
- */
-
 const PRODUCTS = [
     { id: "p1", name: "Sticker Pack", price: 4.99 },
     { id: "p2", name: "T-Shirt",     price: 19.0 },
@@ -16,13 +9,14 @@ const PRODUCTS = [
 
 function ProductRow({ p, value, inc, dec }){
     return (
-        <div className="row">
+        <div className="row" style={{display:"grid",gridTemplateColumns:"1fr auto",gap:".75rem",alignItems:"center",padding:".75rem 0",borderBottom:"1px solid var(--border)"}}>
             <div>
-                <div className="name">{p.name}</div>
-                <div className="price">${p.price.toFixed(2)}</div>
+                <div className="name" style={{fontWeight:600}}>{p.name}</div>
+                <div className="price" style={{color:"var(--muted)"}}>${p.price.toFixed(2)}</div>
             </div>
             <div className="qty">
-                <button className="btn" onClick={() => dec(p.id)} aria-label={`Decrease ${p.name}`}>−</button>
+                {/* NOTE: ASCII '-' and '+' plus disabled state at 0 */}
+                <button className="btn" onClick={() => dec(p.id)} aria-label={`Decrease ${p.name}`} disabled={value <= 0}>-</button>
                 <span className="count">{value}</span>
                 <button className="btn" onClick={() => inc(p.id)} aria-label={`Increase ${p.name}`}>+</button>
             </div>
@@ -32,13 +26,13 @@ function ProductRow({ p, value, inc, dec }){
 
 function CartLine({ item, qty, inc, dec }){
     return (
-        <div className="line" style={{gridTemplateColumns:"1fr auto auto"}}>
+        <div className="line" style={{display:"grid",gridTemplateColumns:"1fr auto auto",gap:".75rem",alignItems:"center",padding:".75rem 0",borderBottom:"1px solid var(--border)"}}>
             <div>
-                <div className="name">{item.name}</div>
-                <div className="price">${item.price.toFixed(2)}</div>
+                <div className="name" style={{fontWeight:600}}>{item.name}</div>
+                <div className="price" style={{color:"var(--muted)"}}>${item.price.toFixed(2)}</div>
             </div>
             <div className="qty">
-                <button className="btn" onClick={() => dec(item.id)} aria-label={`Decrease ${item.name}`}>−</button>
+                <button className="btn" onClick={() => dec(item.id)} aria-label={`Decrease ${item.name}`} disabled={qty <= 0}>-</button>
                 <span className="count">{qty}</span>
                 <button className="btn" onClick={() => inc(item.id)} aria-label={`Increase ${item.name}`}>+</button>
             </div>
@@ -65,16 +59,14 @@ export default function ShoppingCart(){
 
     return (
         <div className="cart-grid">
-            {/* Products */}
             <section className="cart-products">
                 <h2 style={{margin:"0 0 .5rem 0", fontSize:"1.15rem"}}>Products</h2>
                 {PRODUCTS.map(p => (
                     <ProductRow key={p.id} p={p} value={cart[p.id] || 0} inc={inc} dec={dec} />
                 ))}
-                <p className="cart-muted" style={{marginTop:".5rem"}}>Use +/− to adjust quantities.</p>
+                <p className="cart-muted" style={{marginTop:".5rem"}}>Use +/- to adjust quantities.</p>
             </section>
 
-            {/* Cart + Checkout */}
             <aside className="cart-summary">
                 <h2 style={{margin:"0 0 .5rem 0", fontSize:"1.15rem"}}>Your Cart</h2>
 
@@ -85,18 +77,23 @@ export default function ShoppingCart(){
                         {cartLines.map(p => (
                             <CartLine key={p.id} item={p} qty={cart[p.id]} inc={inc} dec={dec} />
                         ))}
-
-                        <div className="total">
+                        <div className="total" style={{display:"flex",justifyContent:"space-between",marginTop:".75rem",fontWeight:700}}>
                             <span>Total</span>
                             <span>${total.toFixed(2)}</span>
                         </div>
                     </>
                 )}
 
-                {/* PayPal buttons only render when there are items, so it's obvious */}
                 <div className="paypal-wrap">
                     {hasItems ? (
-                        <PayPalScriptProvider options={{ clientId: "sb", currency: "USD", intent: "CAPTURE" }}>
+                        <PayPalScriptProvider
+                            options={{
+                                clientId: "sb",            // replace soon with your Sandbox Client ID
+                                currency: "USD",
+                                intent: "CAPTURE",
+                                components: "buttons"      // explicit; helps some blockers/configs
+                            }}
+                        >
                             <PayPalButtons
                                 style={{ layout: "vertical" }}
                                 createOrder={(_data, actions) => {
@@ -140,7 +137,6 @@ export default function ShoppingCart(){
                     )}
                 </div>
 
-                {/* Status messages */}
                 {status?.type === "approved" && (
                     <div className="cart-muted" style={{marginTop:".75rem"}}>
                         ✅ Payment approved. Thanks, {status.payer}! <span style={{fontSize:".9rem"}}>Order ID: {status.id}</span>

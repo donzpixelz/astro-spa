@@ -553,3 +553,30 @@ html[data-theme="dark"] .segmented > label.on {
 }
 
 .paypal-wrap{ margin-top:1rem } /* spacing above PayPal buttons */
+
+
+/* === Shopping Cart: buttons & states === */
+.qty { display:flex; align-items:center; gap:.5rem; justify-self:end; }
+.qty .btn{
+    padding:.35rem .7rem;
+    border:1px solid var(--border);
+    border-radius:.5rem;
+    background:var(--bg-soft);
+    font:600 14px/1 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+    min-width:2.2rem; /* keeps width stable */
+    cursor:pointer;
+    transition:transform .02s ease, background .15s ease, border-color .15s ease;
+}
+.qty .btn:hover{ background:#f0f2f5; }
+.qty .btn:active{ transform:translateY(1px); }
+.qty .btn:focus{ outline:2px solid rgba(52,102,203,.35); outline-offset:2px; }
+
+.qty .btn[disabled]{
+    opacity:.45;
+    cursor:not-allowed;
+}
+
+.qty .count{ min-width:2ch; text-align:center; font-variant-numeric: tabular-nums; }
+
+.paypal-wrap{ margin-top:1rem; }
+.paypal-wrap iframe{ min-height:45px; } /* prevents collapse while loading */
