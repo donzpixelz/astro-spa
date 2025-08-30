@@ -43,25 +43,26 @@ body{
 /* Brand (site name, top left) */
 .brand{
     font-family: var(--title-face);
-    font-weight: 700;
-    font-size: 36px;
+    font-weight: 700;                 /* strong serif weight */
+    /* Fluid size: 26px on small phones → up to 48px on wide screens */
+    font-size: clamp(26px, 5vw, 48px);
     color: black;
-    letter-spacing: .2px;
+    letter-spacing: 0;                /* tighter for a bolder feel */
     text-decoration:none;
-    line-height: 1.2;
-    padding:.45rem 0;
+    line-height: 1.15;                /* a touch tighter for display */
+    padding:.45rem 0;                 /* vertical breathing room */
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
-    position: relative;
+    position: relative;               /* for the lines */
 }
 
 /* OVERLINE: over-extends left, meets right */
 .brand::before{
     content:"";
     position:absolute;
-    top:2px;                   /* close to text */
-    left:-10%;                 /* extend left */
-    width:100%;                /* stop at right edge */
+    top:2px;                          /* sits close to text */
+    left:-10%;                        /* extend left */
+    width:100%;                       /* stop at right edge */
     height:2px;
     background:#000;
     box-shadow: 0 1px 2px rgba(0,0,0,0.25);
@@ -71,9 +72,9 @@ body{
 .brand::after{
     content:"";
     position:absolute;
-    bottom:2px;                /* close to text */
-    left:0;                    /* align with left edge */
-    width:110%;                /* extend past right edge */
+    bottom:2px;                       /* sits close to text */
+    left:0;                           /* align with left edge */
+    width:110%;                       /* extend past right edge */
     height:2px;
     background:#000;
     box-shadow: 0 1px 2px rgba(0,0,0,0.25);
@@ -92,9 +93,7 @@ body{
     line-height:1.2;
 }
 .nav-link:hover{ background:var(--bg-soft) }
-.nav-link.active{
-    color:#fff; background:#000;
-}
+.nav-link.active{ color:#fff; background:#000 }
 
 /* Keyboard accessibility */
 .brand:focus-visible,
@@ -121,15 +120,9 @@ button:hover{ opacity:.95 }
 .muted{ color:var(--muted) }
 
 /* Responsive tweaks */
-/* Tablet */
-@media (max-width: 768px){
-    .brand{ font-size: 28px; }
-    .nav-link{ padding:.35rem .6rem; }
-}
-/* Mobile */
 @media (max-width: 480px){
     .nav{ flex-wrap:wrap }
-    .brand{ font-size: 22px; padding:.35rem 0; }
+    .brand{ padding:.35rem 0; }       /* keep lines snug on mobile */
     .nav-links{
         width:100%;
         justify-content:flex-end;
