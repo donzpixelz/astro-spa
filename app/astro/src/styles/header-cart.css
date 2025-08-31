@@ -72,3 +72,8 @@
        This ensures it stays confined to the clock, not the title. */
     isolation: isolate;
 }
+
+/* Extra breathing room between brand underline and nav */
+.site-header .nav-links {
+    margin-top: 0.5rem;   /* adjust to taste (0.75rem = bigger gap) */
+}
