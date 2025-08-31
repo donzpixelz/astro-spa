@@ -132,3 +132,37 @@
 }
 
 
+/* === Mobile: force specific 2-row layout (3 items per row) === */
+@media (max-width: 540px) {
+    .site-header .nav-links {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem 0.75rem;               /* row-gap / col-gap */
+    }
+
+    /* 3-up tiles per row */
+    .site-header .nav-links > * {
+        flex: 0 0 calc(33.333% - 0.75rem); /* exactly three per line */
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    /* Explicit order so wrap happens exactly after Examples */
+    .site-header .nav-links a[href="/"]         { order: 1; } /* Home */
+    .site-header .nav-links a[href="/services"] { order: 2; } /* Services */
+    .site-header .nav-links a[href="/examples"] { order: 3; } /* Examples */
+    .site-header .nav-links a[href="/about"]    { order: 4; } /* About */
+    .site-header .nav-links a[href="/contact"]  { order: 5; } /* Contact */
+    .site-header .nav-links .cart-plain         { order: 6; } /* Cart badge */
+    /* If your CartBadge uses a different class, swap .cart-plain for it. */
+
+    /* Keep the active pill from forcing an early wrap */
+    .site-header .nav-link.active {
+        padding-left: 0.9rem;
+        padding-right: 0.9rem;
+    }
+}
+
+
+
