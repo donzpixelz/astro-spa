@@ -1,9 +1,9 @@
-/* Markdown Previewer — styles that match MarkdownPreviewer.jsx exactly */
+/* Markdown Previewer — matches MarkdownPreviewer.jsx exactly */
 
-/* Safety: no page-wide horizontal scroll */
+/* === Page safety === */
 .mdp-grid { inline-size: 100%; max-inline-size: 100%; overflow-x: hidden; }
 
-/* Two panes side-by-side on desktop, stacked on mobile */
+/* === Two panes: desktop side-by-side, mobile stacked === */
 .mdp-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -12,71 +12,52 @@
     background: #fff;
     overflow: hidden;
 }
-@media (max-width: 900px) {
-    .mdp-grid { grid-template-columns: 1fr; }
-}
+@media (max-width: 900px) { .mdp-grid { grid-template-columns: 1fr; } }
 
 /* Each pane */
-.mdp-pane {
-    display: flex;
-    flex-direction: column;
-    min-width: 0; /* allow children to shrink inside grid */
-}
+.mdp-pane { display: flex; flex-direction: column; min-width: 0; }
+@media (min-width: 901px) { .mdp-pane:first-child { border-right: 1px solid var(--border); } }
 
-/* Left/right divider only on desktop */
-@media (min-width: 901px) {
-    .mdp-pane:first-child { border-right: 1px solid var(--border); }
-}
-
-/* Top bar inside each pane */
+/* === Pane toolbar (title + actions) === */
 .mdp-toolbar {
     display: grid;
-    grid-template-columns: 1fr auto; /* title left, buttons right */
+    grid-template-columns: 1fr auto;     /* title left, buttons right */
     align-items: center;
     gap: .75rem .9rem;
-    padding: .7rem .9rem;            /* ✅ real padding */
+    padding: .7rem .9rem;                 /* padding FIX */
     background: var(--bg-soft);
     border-bottom: 1px solid var(--border);
 }
-.mdp-toolbar > strong {
-    margin: 0;
-    font-size: 1.0rem;
-    line-height: 1.2;
-    min-width: 0;
-}
-@media (max-width: 640px) {
-    .mdp-toolbar { grid-template-columns: 1fr; padding: .6rem .75rem; }
-}
+.mdp-toolbar > strong { margin: 0; font-size: 1rem; line-height: 1.2; min-width: 0; }
+@media (max-width: 640px) { .mdp-toolbar { grid-template-columns: 1fr; padding: .6rem .75rem; } }
 
 /* Buttons group */
 .mdp-actions {
     justify-self: end;
     display: flex;
     align-items: center;
-    gap: .6rem;                      /* ✅ space between buttons */
+    gap: .6rem;                           /* spacing FIX */
     flex-wrap: wrap;
     min-width: 0;
 }
-@media (max-width: 640px) {
-    .mdp-actions { justify-self: start; gap: .5rem; }
-}
+@media (max-width: 640px) { .mdp-actions { justify-self: start; gap: .5rem; } }
 
-/* Buttons themselves (uses .btn in your JSX) */
+/* Buttons (uses .btn in JSX) */
 .mdp-toolbar .btn {
-    padding: .48rem .85rem;          /* ✅ comfortable click area */
+    padding: .48rem .85rem;               /* hit area FIX */
     border-radius: .55rem;
     border: 1px solid var(--border);
-    background: #000;                /* matches your dark button style */
+    background: #000;                     /* matches your dark button style */
     color: #fff;
     line-height: 1;
     cursor: pointer;
 }
 .mdp-toolbar .btn:active { transform: translateY(1px); }
 
-/* Editor textarea */
+/* === Editor textarea === */
 .mdp-input {
     width: 100%;
-    min-height: 500px;               /* ✅ taller by default */
+    min-height: 500px;                    /* taller by default FIX */
     resize: vertical;
     padding: 1rem;
     font: 0.95rem/1.5 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
@@ -85,46 +66,58 @@
     border: none;
     outline: none;
 }
-@media (max-width: 520px) {
-    .mdp-input { min-height: 420px; } /* mobile comfort */
-}
+@media (max-width: 520px) { .mdp-input { min-height: 420px; } }
 
-/* Preview area container */
+/* === Preview content === */
 .mdp-preview {
-    padding: .9rem;                  /* ✅ interior padding on preview */
-    overflow-x: hidden;              /* never widens the page */
+    padding: .9rem;                       /* inner padding */
+    overflow-x: hidden;                   /* no page bleed */
     line-height: 1.65;
     overflow-wrap: anywhere;
 }
-
-/* Headings/paragraph rhythm */
 .mdp-preview > *:first-child { margin-top: 0; }
 .mdp-preview > *:last-child  { margin-bottom: 0; }
+
 .mdp-preview h1, .mdp-preview h2, .mdp-preview h3,
 .mdp-preview h4, .mdp-preview h5, .mdp-preview h6 {
-    line-height: 1.25;
-    margin: 1em 0 .5em;
+    line-height: 1.25; margin: 1em 0 .5em;
 }
 .mdp-preview p, .mdp-preview ul, .mdp-preview ol,
-.mdp-preview blockquote, .mdp-preview pre, .mdp-preview table {
-    margin: .6rem 0;
-}
+.mdp-preview blockquote, .mdp-preview pre, .mdp-preview table { margin: .6rem 0; }
 
-/* Links */
 .mdp-preview a { color: var(--brand); text-decoration-thickness: .08em; text-underline-offset: 2px; }
 
 /* Lists */
 .mdp-preview ul, .mdp-preview ol { padding-left: 1.2em; }
 .mdp-preview li { margin: .25rem 0; }
 
+/* === GFM Task lists: bullets off; text inline with checkbox === */
+.mdp-preview li.task-list-item {
+    list-style: none;
+    display: flex;
+    align-items: flex-start;
+    gap: .5rem;
+    padding-left: 0;
+    margin: .35rem 0;
+}
+.mdp-preview li.task-list-item > p { margin: 0; }      /* keep text on same row */
+.mdp-preview li.task-list-item > input[type="checkbox"] {
+    flex: 0 0 auto;
+    inline-size: 1rem;
+    block-size: 1rem;
+    margin-top: .2rem;                                  /* aligns with first line */
+    accent-color: var(--brand);
+}
+.mdp-preview li.task-list-item > *:not(input) { flex: 1 1 auto; min-width: 0; }
+
 /* Images */
 .mdp-preview img { max-width: 100%; height: auto; border-radius: .4rem; }
 
-/* Tables: wrap cell content instead of causing horizontal scroll */
+/* Tables: wrap cell content (no horizontal scroll) */
 .mdp-preview table {
     width: 100%;
     border-collapse: collapse;
-    table-layout: fixed;             /* 🔑 cells wrap */
+    table-layout: fixed;                 /* cells wrap */
     border: 1px solid var(--border);
 }
 .mdp-preview th, .mdp-preview td {
@@ -143,14 +136,14 @@
     border: 1px solid var(--border);
 }
 
-/* Code blocks: wrap long lines; no horizontal scrollbar */
+/* Code blocks: wrap long lines; no scrollbar */
 .mdp-preview pre {
     margin: .65rem 0;
     padding: .85rem 1rem;
     border-radius: .6rem;
     background: var(--bg-soft);
     border: 1px solid var(--border);
-    white-space: pre-wrap;           /* 🔑 wrap long lines */
+    white-space: pre-wrap;
     overflow-x: hidden;
     tab-size: 2;
 }
@@ -160,34 +153,4 @@
     overflow-wrap: anywhere;
     word-break: break-word;
     font: 0.93rem/1.5 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-}
-
-
-/* --- Task list polish (GFM) --- */
-.mdp-preview ul.contains-task-list,
-.mdp-preview ol.contains-task-list {
-    list-style: none;            /* remove bullets for task lists */
-    padding-left: 0;
-    margin-left: 0;
-}
-
-.mdp-preview li.task-list-item {
-    list-style: none;
-    margin: .3rem 0;
-    padding-left: 0;             /* no hanging indent */
-    display: flex;
-    align-items: flex-start;
-    gap: .5rem;                  /* space between box and text */
-}
-
-.mdp-preview li.task-list-item > input[type="checkbox"] {
-    margin-top: .2rem;           /* align with first line of text */
-    flex: 0 0 auto;
-    inline-size: 1rem;
-    block-size: 1rem;
-    accent-color: var(--brand);  /* Chip Blue highlight when checked */
-}
-
-.mdp-preview li.task-list-item > *:not(input) {
-    flex: 1 1 auto;              /* allow text to wrap nicely */
 }
