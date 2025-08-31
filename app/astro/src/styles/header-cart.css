@@ -77,3 +77,18 @@
 .site-header .nav-links {
     margin-top: 0.5rem;   /* adjust to taste (0.75rem = bigger gap) */
 }
+
+
+/* Center nav links directly under the brand underline */
+.site-header .nav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.site-header .nav-links {
+    margin-top: 0.75rem;  /* spacing from the brand underline */
+    display: flex;
+    gap: 1.25rem;        /* control spacing between links */
+    justify-content: center;
+}
