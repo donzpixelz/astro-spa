@@ -1,6 +1,6 @@
 /* Cart page (scoped) */
 .cart-page{display:grid;gap:1rem;}
-.cart-page .cart-empty{display:grid;gap:.6rem;padding:1rem;}
+.cart-page .cart-paid.ok{color:#046a38;font-weight:700;}
 .cart-page .btn{padding:.55rem .8rem;border:none;border-radius:.6rem;background:#000;color:#fff;cursor:pointer;}
 .cart-page .btn:hover{opacity:.95}
 .cart-page .btn.ghost{background:var(--bg-soft);color:var(--text);border:1px solid var(--border);}
@@ -23,13 +23,27 @@
 .cart-page .cart-line{font-weight:700;}
 .cart-page .cart-actions{justify-self:end;}
 
-.cart-page .cart-totals{display:grid;gap:.4rem;}
-.cart-page .cart-totals > div{display:flex;align-items:center;justify-content:space-between;}
+/* RIGHT-ALIGNED SUMMARY (totals + clear + PayPal) */
+.cart-page .cart-summary{
+    display:grid;
+    gap:.75rem;
+    justify-self:end;                 /* push the whole block to the right */
+    width:min(360px, 100%);           /* compact width; PayPal fills this */
+}
+.cart-page .cart-totals{display:grid;gap:.35rem;}
+.cart-page .cart-totals > div{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;    /* label left, number right within the block */
+}
+.cart-page .cart-cta{display:flex;justify-content:flex-end;}
+.cart-page .cart-paypal{ width:100%; }   /* PayPal uses container width */
+.cart-page .paypal-host{ width:100%; }   /* ensure SDK buttons fit container */
 
-.cart-page .cart-cta{display:flex;flex-wrap:wrap;gap:.6rem;}
-
-/* mobile niceties */
-@media (max-width:520px){
-    .cart-page .cart-row{ padding:.75rem; }
-    .cart-page .cart-qty .qty{ width:3.2rem; }
+/* Mobile: summary goes full-width under list */
+@media (max-width: 720px){
+    .cart-page .cart-summary{
+        justify-self:stretch;
+        width:100%;
+    }
 }

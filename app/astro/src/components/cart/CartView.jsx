@@ -71,28 +71,29 @@ export default function CartView() {
 
             <hr />
 
-            <div className="cart-totals">
-                <div><span>Subtotal</span><strong>{money(sub)}</strong></div>
-                <div><span>Total</span><strong>{money(sub)}</strong></div>
-            </div>
+            {/* RIGHT-ALIGNED SUMMARY */}
+            <div className="cart-summary">
+                <div className="cart-totals">
+                    <div><span>Subtotal</span><strong>{money(sub)}</strong></div>
+                    <div><span>Total</span><strong>{money(sub)}</strong></div>
+                </div>
 
-            <div className="cart-cta">
-                {/* Keep a basic button if you like, or remove it */}
-                {/* <button className="btn">Checkout (mock)</button> */}
-                <button className="btn ghost" onClick={() => { clearCart(); refresh(); }}>Clear cart</button>
-            </div>
+                <div className="cart-cta">
+                    <button className="btn ghost" onClick={() => { clearCart(); refresh(); }}>Clear cart</button>
+                </div>
 
-            {/* PayPal Buttons appear ONLY when there’s something to pay */}
-            {sub > 0 && (
+                {/* Compact, right-aligned PayPal buttons */}
                 <div className="cart-paypal">
                     <PayPalCheckout
-                        clientId="test"            // ← replace with your Live Client ID later
+                        clientId="test"                 // replace with your Live client ID when ready
                         amount={sub}
                         items={items}
+                        height={38}                     // compact
+                        disableFunding={["paylater","card"]}   // show only the main PayPal button
                         onSuccess={handlePaid}
                     />
                 </div>
-            )}
+            </div>
         </div>
     );
 }

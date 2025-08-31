@@ -1,29 +1,47 @@
 import React, { useEffect, useRef } from "react";
 
 /**
- * Lightweight PayPal Buttons wrapper (no extra deps).
- * - clientId: "test" uses Sandbox; replace with your live Client ID later.
- * - amount: number (subtotal)
- * - items: [{ name, price, qty }]
- * - onSuccess(details): called after capture
+ * PayPal Smart Buttons wrapper (no extra deps).
+ * Props:
+ *  - clientId: "test" for Sandbox; replace with your Live ID to go live
+ *  - amount: number (subtotal)
+ *  - items: [{ name, price, qty }]
+ *  - onSuccess(details): called after capture
+ *  - height: 32–55 (button height); default 38 for compact
+ *  - disableFunding: e.g. ["paylater","card"] to suppress extra buttons
  */
-export default function PayPalCheckout({ clientId = "test", amount, items, onSuccess }) {
+export default function PayPalCheckout({
+                                           clientId = "test",
+                                           amount,
+                                           items,
+                                           onSuccess,
+                                           height = 38,
+                                           disableFunding = ["paylater", "card"], // default: show a single compact PayPal button
+                                       }) {
     const hostRef = useRef(null);
 
-    // Load the PayPal JS SDK only once
-    function loadSDK(id) {
+    function loadSDK({ clientId, disableFunding }) {
         return new Promise((resolve, reject) => {
             if (window.paypal) return resolve(window.paypal);
-            const existing = document.querySelector('script[data-pp="sdk"]');
+
+            const params = new URLSearchParams({
+                "client-id": clientId,
+                currency: "USD",
+                intent: "capture",
+                components: "buttons",
+            });
+            if (disableFunding?.length) params.set("disable-funding", disableFunding.join(","));
+
+            const src = `https://www.paypal.com/sdk/js?${params.toString()}`;
+            const existing = document.querySelector('script[src^="https://www.paypal.com/sdk/js"]');
             if (existing) {
                 existing.addEventListener("load", () => resolve(window.paypal));
                 existing.addEventListener("error", reject);
                 return;
             }
             const s = document.createElement("script");
-            s.src = `https://www.paypal.com/sdk/js?client-id=${encodeURIComponent(id)}&currency=USD&intent=capture`;
+            s.src = src;
             s.async = true;
-            s.dataset.pp = "sdk";
             s.onload = () => resolve(window.paypal);
             s.onerror = reject;
             document.head.appendChild(s);
@@ -31,21 +49,26 @@ export default function PayPalCheckout({ clientId = "test", amount, items, onSuc
     }
 
     useEffect(() => {
-        let btns;
+        let buttons;
         if (!hostRef.current || !amount || amount <= 0) return;
 
-        loadSDK(clientId)
+        // clean host before (re)render
+        hostRef.current.innerHTML = "";
+
+        loadSDK({ clientId, disableFunding })
             .then((paypal) => {
-                btns = paypal.Buttons({
-                    style: { layout: "vertical", label: "paypal" },
+                buttons = paypal.Buttons({
+                    style: {
+                        layout: "vertical",
+                        height: Math.max(32, Math.min(55, Number(height) || 38)),
+                        shape: "rect",
+                        label: "paypal",
+                        tagline: false,
+                    },
                     createOrder: (_data, actions) => {
-                        // Build a simple order from your cart
                         const purchase_units = [{
                             description: "Astro Services",
-                            amount: {
-                                currency_code: "USD",
-                                value: amount.toFixed(2),
-                            },
+                            amount: { currency_code: "USD", value: amount.toFixed(2) },
                             items: (items || []).map((it) => ({
                                 name: it.name,
                                 quantity: String(it.qty || 1),
@@ -63,14 +86,14 @@ export default function PayPalCheckout({ clientId = "test", amount, items, onSuc
                         alert("PayPal error. Please try again.");
                     },
                 });
-                btns.render(hostRef.current);
+                buttons.render(hostRef.current);
             })
-            .catch((e) => {
-                console.error("PayPal SDK failed to load:", e);
-            });
+            .catch((e) => console.error("PayPal SDK failed to load:", e));
 
-        return () => { try { btns && btns.close(); } catch {} };
-    }, [clientId, amount, JSON.stringify(items)]);
+        return () => {
+            try { buttons && buttons.close(); } catch {}
+        };
+    }, [clientId, amount, height, JSON.stringify(items), JSON.stringify(disableFunding)]);
 
-    return <div ref={hostRef} />;
+    return <div ref={hostRef} className="paypal-host" />;
 }
