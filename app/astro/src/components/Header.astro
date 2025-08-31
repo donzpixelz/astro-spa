@@ -1,8 +1,11 @@
 ---
-import CartBadge from "./cart/CartBadge.jsx"; // ⬅️ new
+import CartBadge from "./cart/CartBadge.jsx";
+import "../styles/header-cart.css";  // ⬅️ new: path assumes Header.astro is in src/components
 const path = Astro.url.pathname;
-const isActive = (href: string) => path === href || (href !== "/" && path.startsWith(href));
+const isActive = (href: string) =>
+    path === href || (href !== "/" && path.startsWith(href));
 ---
+
 <header class="site-header" role="banner">
     <div class="nav">
         <a class="brand" href="/"><span class="brand-lines">Astro Example</span></a>
@@ -20,8 +23,4 @@ const isActive = (href: string) => path === href || (href !== "/" && path.starts
     </div>
 </header>
 
-<style>
-    .nav-cart { display:inline-flex; margin-left:.5rem; }
-    .nav-cart .cart-link{ display:inline-flex; align-items:center; gap:.4rem; padding:.45rem .7rem; border:1px solid var(--border); border-radius:.6rem; background:#fff; }
-    .nav-cart .count{ min-width:1.35rem; padding:.05rem .35rem; border-radius:999px; background:#000; color:#fff; text-align:center; font-weight:700; font-size:.85rem; line-height:1.2; }
-</style>
+

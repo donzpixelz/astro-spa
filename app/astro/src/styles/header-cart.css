@@ -1,0 +1,57 @@
+/* header-cart.css — cart badge + nav alignment (scoped to .site-header) */
+
+.site-header .nav-links{
+    display:flex;
+    align-items:center;
+    gap:2rem;
+}
+.site-header .nav-links > .nav-link{
+    display:inline-flex;
+    align-items:center;
+}
+
+/* cart badge container */
+.site-header .nav-cart{
+    display:inline-flex;
+    align-items:center;
+    margin-left:.5rem;
+}
+
+/* pill */
+.site-header .nav-cart .cart-link{
+    display:inline-flex;
+    align-items:center;
+    gap:.5rem;
+    padding:.55rem .85rem;
+    border-radius:.6rem;
+    background:#000;           /* black to match your newspaper theme */
+    color:#fff;
+    border:1px solid #000;
+    line-height:1;
+    text-decoration:none;
+}
+.site-header .nav-cart .cart-link:hover{ opacity:.9; }
+.site-header .nav-cart .cart-link:focus-visible{
+    outline:2px solid var(--brand, #1e90ff);
+    outline-offset:2px;
+}
+
+/* bigger icon */
+.site-header .nav-cart svg{
+    width:22px;
+    height:22px;
+    flex:0 0 auto;
+}
+
+/* count chip */
+.site-header .nav-cart .count{
+    min-width:1.5rem;
+    padding:.1rem .45rem;
+    border-radius:999px;
+    background:#fff;
+    color:#000;
+    text-align:center;
+    font-weight:700;
+    font-size:.9rem;
+    line-height:1.1;
+}
