@@ -108,3 +108,27 @@
     }
 }
 
+
+/* === Mobile: 3-up nav, wraps after Examples === */
+@media (max-width: 540px) {
+    .site-header .nav-links {
+        flex-wrap: wrap;               /* allow two rows */
+        justify-content: center;
+        gap: 0.5rem 0.75rem;           /* row gap / column gap */
+    }
+
+    /* Treat each nav child (links + cart) as one equal-width tile */
+    .site-header .nav-links > * {
+        flex: 0 0 calc(33.333% - 0.75rem);  /* exactly 3 per row */
+        text-align: center;
+        white-space: nowrap;                 /* keep labels tidy */
+    }
+
+    /* Optional: shrink the active "pill" so it doesn't force wrapping */
+    .site-header .nav-link.active {
+        padding-left: 0.9rem;
+        padding-right: 0.9rem;
+    }
+}
+
+
