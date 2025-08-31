@@ -2,16 +2,32 @@ import React, { useMemo, useState } from "react";
 import { marked } from "marked";
 import DOMPurify from "dompurify";
 
-// Astro will SSR this component first, then hydrate in the browser.
-// DOMPurify.sanitize only exists in the browser build; guard for SSR.
 const IS_BROWSER = typeof window !== "undefined";
 
-// Full GFM
 marked.setOptions({
     gfm: true,
     breaks: false,
     headerIds: true,
     mangle: false,
+});
+
+// ✅ Add classes for task lists
+marked.use({
+    renderer: {
+        list(body, ordered) {
+            const type = ordered ? "ol" : "ul";
+            const className = body.includes('type="checkbox"')
+                ? ' class="contains-task-list"'
+                : "";
+            return `<${type}${className}>${body}</${type}>`;
+        },
+        listitem(text) {
+            if (/^\s*<input[^>]+type="checkbox"/.test(text)) {
+                return `<li class="task-list-item">${text}</li>`;
+            }
+            return `<li>${text}</li>`;
+        },
+    },
 });
 
 const SAMPLE = `# Markdown Previewer
@@ -48,7 +64,6 @@ export default function MarkdownPreviewer() {
 
     const html = useMemo(() => {
         const raw = marked.parse(text);
-        // Only sanitize in the browser (after hydration). During SSR, return raw.
         if (!IS_BROWSER) return raw;
         const maybeSanitize =
             (DOMPurify && DOMPurify.sanitize) ||
@@ -62,11 +77,17 @@ export default function MarkdownPreviewer() {
                 <div className="mdp-toolbar">
                     <strong>Markdown</strong>
                     <div className="mdp-actions">
-                        <button className="btn" onClick={() => setText(SAMPLE)} type="button">Reset</button>
+                        <button className="btn" onClick={() => setText(SAMPLE)} type="button">
+                            Reset
+                        </button>
                         <button
                             className="btn"
                             type="button"
-                            onClick={async () => { try { await navigator.clipboard.writeText(text); } catch {} }}
+                            onClick={async () => {
+                                try {
+                                    await navigator.clipboard.writeText(text);
+                                } catch {}
+                            }}
                             aria-label="Copy raw markdown"
                         >
                             Copy
@@ -84,7 +105,10 @@ export default function MarkdownPreviewer() {
 
             <section className="mdp-pane">
                 <div className="mdp-toolbar"><strong>Preview</strong></div>
-                <div className="mdp-preview" dangerouslySetInnerHTML={{ __html: html }} />
+                <div
+                    className="mdp-preview"
+                    dangerouslySetInnerHTML={{ __html: html }}
+                />
             </section>
         </div>
     );

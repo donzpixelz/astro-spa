@@ -1,4 +1,4 @@
-/* Markdown Previewer — final task-list fix */
+/* Markdown Previewer — with fixed task list support */
 
 /* === Page safety === */
 .mdp-grid { inline-size: 100%; max-inline-size: 100%; overflow-x: hidden; }
@@ -88,30 +88,33 @@
 
 .mdp-preview a { color: var(--brand); text-decoration-thickness: .08em; text-underline-offset: 2px; }
 
-/* === Lists === */
-.mdp-preview ul, .mdp-preview ol { padding-left: 1.2em; }
-.mdp-preview li { margin: .25rem 0; }
+/* === Task lists === */
+.mdp-preview ul.contains-task-list,
+.mdp-preview ol.contains-task-list {
+    list-style: none;
+    padding-left: 0;
+    margin-left: 0;
+}
 
-/* === Task list fix: catch ANY li with a checkbox === */
-.mdp-preview li:has(> input[type="checkbox"]) {
-    list-style: none;              /* kill the bullet */
+.mdp-preview li.task-list-item {
+    list-style: none;
     display: flex;
     align-items: center;
     gap: .5rem;
     padding-left: 0;
     margin: .35rem 0;
 }
-.mdp-preview li:has(> input[type="checkbox"]) > input[type="checkbox"] {
+.mdp-preview li.task-list-item > input[type="checkbox"] {
     flex: 0 0 auto;
     inline-size: 1rem;
     block-size: 1rem;
     accent-color: var(--brand);
 }
-.mdp-preview li:has(> input[type="checkbox"]) > p {
-    display: inline;               /* force inline text */
+.mdp-preview li.task-list-item > p {
+    display: inline;
     margin: 0;
 }
-.mdp-preview li:has(> input[type="checkbox"]) > *:not(input) {
+.mdp-preview li.task-list-item > *:not(input) {
     flex: 1 1 auto;
     min-width: 0;
 }
