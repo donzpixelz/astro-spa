@@ -1,87 +1,103 @@
 /* Grid + cards */
 .clip { display: grid; gap: 1rem; inline-size: 100%; max-inline-size: 100%; }
-.clip-wrap { inline-size: 100%; max-inline-size: 100%; overflow: hidden; }
+.clip-wrap { inline-size: 100%; max-inline-size: 100%; overflow: hidden; box-sizing: border-box; }
 
 .clip-block {
     border: 1px solid var(--border);
     border-radius: .8rem;
     background: #fff;
-    overflow: hidden;                 /* prevent inner content from widening the page */
+    overflow: hidden; /* clamp inner content */
+    box-sizing: border-box;
 }
 
+/* ---------- Header (title + toolbar) ---------- */
 .clip-head {
-    display: flex; gap: .75rem; align-items: center; justify-content: space-between;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
     padding: .6rem .8rem;
     border-bottom: 1px solid var(--border);
     background: var(--bg-soft);
+    flex-wrap: wrap;            /* allow wrapping on narrow screens */
 }
+.clip-head > * { min-width: 0; } /* allow children to shrink without overflow */
 
-.clip-titles { display: flex; align-items: center; gap: .5rem; }
-.clip-title { margin: 0; font-size: 1rem; }
+.clip-titles { display: flex; align-items: center; gap: .5rem; min-width: 0; }
+.clip-title { margin: 0; font-size: 1rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .clip-lang {
     display: inline-block; font-size: .8rem; padding: .1rem .4rem;
     border: 1px solid var(--border); border-radius: .5rem;
     background: #fff; color: var(--muted);
+    flex: 0 0 auto;
 }
 
 .clip-toolbar {
     display: flex; align-items: center; gap: .4rem;
-    flex-wrap: wrap;                   /* keep buttons from pushing width */
+    flex-wrap: wrap;           /* buttons wrap instead of pushing width */
+    min-width: 0;
 }
-
 .clip-btn {
     padding: .45rem .7rem; border: none; border-radius: .6rem;
-    background: #000; color: #fff; cursor: pointer;
+    background: #000; color: #fff; cursor: pointer; flex: 0 0 auto;
 }
 .clip-btn:hover { opacity: .95 }
 .clip-btn.ghost { background: var(--bg-soft); color: var(--text); border: 1px solid var(--border); }
-.clip-status { min-width: 6.5ch; color: var(--muted) }
+
+/* status can shrink/wrap on mobile instead of forcing width */
+.clip-status { color: var(--muted); min-width: 0; white-space: nowrap; }
 
 .clip-file {
     display: inline-block; font-size: .8rem; padding: .1rem .45rem;
     border: 1px solid var(--border); border-radius: .5rem;
-    background: #fff; color: var(--muted); cursor: pointer;
+    background: #fff; color: var(--muted); cursor: pointer; flex: 0 0 auto;
 }
 .clip-file:hover { color: var(--text); background: #fff }
 
-/* --- Code area: hardening against horizontal overflow on mobile --- */
+/* ---------- Code area: no viewport overflow, no mobile horiz scroll ---------- */
 .clip-codewrap {
     display: block;
     inline-size: 100%;
     max-inline-size: 100%;
-    overflow: auto;                    /* scroll lives here, not on body */
+    overflow: hidden;                 /* hide any accidental inner spill; we’ll wrap lines */
     -webkit-overflow-scrolling: touch;
     scrollbar-gutter: stable both-edges;
+    box-sizing: border-box;
 }
 
+/* Pre: wrap long lines so mobile doesn't show a horizontal scrollbar */
 .clip-pre {
     margin: 0;
     padding: .85rem 1rem;
-    white-space: pre;                  /* preserve indentation by default */
-    overflow: auto;                    /* allow horizontal scroll inside block */
+    background: transparent;
+    white-space: pre-wrap;            /* preserve indentation but allow wrapping */
+    overflow: hidden;                 /* no scrollbars on the box */
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
     font-size: .95rem;
     line-height: 1.45;
+    tab-size: 2;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
 }
 
-/* Let very long tokens/URLs wrap if needed so they don't widen the page */
+/* Code spans inherit wrapping; break very long tokens/URLs safely */
 .clip-code {
     display: block;
     width: 100%;
-    min-width: 0;                      /* allow shrinking within grid */
-    white-space: pre-wrap;             /* wrap long tokens/URLs */
+    min-width: 0;
+    white-space: inherit;             /* inherit pre-wrap from .clip-pre */
     overflow-wrap: anywhere;
     word-break: break-word;
 }
 
-/* When line numbers are enabled, prevent the grid from forcing overflow */
+/* Line-number layout: allow code column to shrink; keep numbers tight */
 .clip-code.has-lines {
     display: grid;
-    grid-template-columns: auto minmax(0, 1fr); /* second column can shrink */
+    grid-template-columns: auto minmax(0, 1fr);
     column-gap: .75rem;
     align-items: start;
 }
-
 .clip-lnums {
     padding: .85rem 0 .85rem .75rem;
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
@@ -90,12 +106,16 @@
     text-align: right;
     color: var(--muted);
     user-select: none;
+    white-space: pre;                 /* keep numbers aligned */
 }
 .clip-lnums > span { display: block; height: 1.45em }
 
-/* Accessibility niceties on narrow viewports */
-@media (max-width: 480px) {
+/* ---------- Small-screen refinements ---------- */
+@media (max-width: 520px) {
+    /* Put toolbar on its own row and keep everything inside the safe width */
+    .clip-titles, .clip-toolbar { flex: 1 1 100%; }
+    .clip-toolbar { justify-content: flex-start; }
+    .clip-status { white-space: normal; } /* allow wrap if needed */
     .clip-pre { padding: .75rem .85rem; }
     .clip-head { padding: .55rem .75rem; }
-    .clip-toolbar { gap: .35rem; }
 }
