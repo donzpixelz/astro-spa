@@ -158,3 +158,29 @@
     .us .card .us-table td { display: block; width: 100%; }
 }
 
+/* ==== Saved links: contain the inner table inside the rounded card ==== */
+
+/* 1) Re-enable clipping on the nested card & fix iOS border-radius clipping */
+.us .card{
+    overflow: hidden !important;                 /* keep contents inside the rounded box */
+    border-radius: inherit;
+    -webkit-mask-image: -webkit-radial-gradient(white, black); /* iOS paints correctly */
+}
+
+/* 2) Keep the table and rows strictly within the card */
+.us .card .us-table{ width:100% !important; max-width:100% !important; table-layout: fixed; border-collapse: collapse; }
+.us .card .us-table tr{ box-sizing: border-box; }
+.us .card .us-table td, .us .card .us-table th{
+    box-sizing: border-box; width:100%; max-width:100%;
+    overflow-wrap:anywhere; word-break:break-word;
+    padding-inline: .9rem;   /* pulls text away from edge so it doesn’t look clipped */
+}
+
+/* 3) If you’re using the stacked “cards” view on small screens, keep each row inside too */
+@media (max-width:520px){
+    .us .card .us-table{ display:block; border-collapse: separate; border-spacing:0; }
+    .us .card .us-table tr{ display:block; width:100%; border:1px solid var(--border); border-radius:.7rem; overflow:hidden; margin:.6rem 0; }
+    .us .card .us-table td{ display:block; width:100%; }
+}
+
+
