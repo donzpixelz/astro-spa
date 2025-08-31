@@ -40,3 +40,7 @@
     outline:2px solid var(--brand, #1e90ff);
     outline-offset:3px;
 }
+
+/* PayPal area spacing + success message */
+.cart-page .cart-paypal { margin-top: .5rem; }
+.cart-page .cart-paid.ok { color:#046a38; font-weight:700; }
