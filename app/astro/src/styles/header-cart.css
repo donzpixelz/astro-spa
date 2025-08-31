@@ -1,8 +1,18 @@
-/* header-cart.css — cart badge + nav alignment (scoped to .site-header) */
+/* header-cart.css — compact cart badge to match nav buttons */
+
+.site-header {
+    /* tweak these if you want it a hair smaller/larger */
+    --cart-pill-py: .45rem;
+    --cart-pill-px: .75rem;
+    --cart-icon: 18px;
+    --cart-chip-fs: .8rem;
+    --cart-chip-min: 1.25rem;
+    --cart-radius: .6rem;
+}
 
 .site-header .nav-links{
     display:flex;
-    align-items:center;
+    align-items:center;           /* align baseline with links */
     gap:2rem;
 }
 .site-header .nav-links > .nav-link{
@@ -21,10 +31,10 @@
 .site-header .nav-cart .cart-link{
     display:inline-flex;
     align-items:center;
-    gap:.5rem;
-    padding:.55rem .85rem;
-    border-radius:.6rem;
-    background:#000;           /* black to match your newspaper theme */
+    gap:.4rem;                    /* tighter than before */
+    padding:var(--cart-pill-py) var(--cart-pill-px);
+    border-radius:var(--cart-radius);
+    background:#000;
     color:#fff;
     border:1px solid #000;
     line-height:1;
@@ -36,22 +46,22 @@
     outline-offset:2px;
 }
 
-/* bigger icon */
+/* icon */
 .site-header .nav-cart svg{
-    width:22px;
-    height:22px;
+    width:var(--cart-icon);
+    height:var(--cart-icon);
     flex:0 0 auto;
 }
 
 /* count chip */
 .site-header .nav-cart .count{
-    min-width:1.5rem;
-    padding:.1rem .45rem;
+    min-width:var(--cart-chip-min);
+    padding:.06rem .35rem;
     border-radius:999px;
     background:#fff;
     color:#000;
     text-align:center;
     font-weight:700;
-    font-size:.9rem;
-    line-height:1.1;
+    font-size:var(--cart-chip-fs);
+    line-height:1.05;
 }
