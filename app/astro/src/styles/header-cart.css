@@ -52,29 +52,51 @@
 /* ---------- Clock placed inside the header ---------- */
 
 .site-header {
-    border-bottom: 0 !important;
+    border-bottom: 0 !important;   /* no divider under header */
     text-align: center;
 }
 
+/* Keep the halo confined AND ensure it never reaches the overline */
 .site-clock {
-    margin: .25rem 0 .35rem;
     position: relative;
-    max-width: 720px;          /* halo cutoff — keeps powder neat */
+    margin: .25rem 0 .35rem;
+    max-width: 720px;              /* halo cutoff width (centered) */
     margin-left: auto;
     margin-right: auto;
+    padding-top: 8px;              /* tiny gap under the overline */
+    overflow: visible;             /* halo still shows below */
 }
 
-/* The single line ABOVE the clock — full width */
-.site-clock .clock-line {
-    border: 0;
+/* Hide the old <hr> line; we’ll draw a full-width one via ::after */
+.site-clock .clock-line { display: none; }
+
+/* Mask strip just below the line so halo can’t “invade” it */
+.site-clock::before {
+    content: "";
+    position: absolute;
+    left: 0; right: 0;
+    top: 0;
+    height: 8px;                   /* matches padding-top; creates clean gap */
+    background: var(--bg, #fff);   /* same as header background */
+    z-index: 1;                    /* below the line, above the halo */
+}
+
+/* Full-width overline across the viewport */
+.site-clock::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+    width: 100vw;                  /* edge-to-edge */
     border-top: 2px solid var(--border);
-    display: block;
-    width: 100%;               /* spans edge-to-edge */
-    margin: 0 0 .35rem 0;
+    z-index: 2;                    /* above mask & halo */
 }
 
 .site-clock :where(.clock, .digital-clock) {
-    isolation: isolate;
+    isolation: isolate;            /* halo stays behind the clock only */
+    position: relative;
+    z-index: 0;                    /* below the mask/line */
 }
 
 /* ---------- Mobile: two independently centered rows (<=540px) ---------- */
@@ -94,7 +116,7 @@
     /* Force the wrap after "Examples" with a pseudo flex item */
     .site-header .nav-links::after {
         content: "";
-        flex-basis: 100%;
+        flex-basis: 100%;             /* acts like a line break */
         order: 3;
     }
 
