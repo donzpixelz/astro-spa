@@ -70,20 +70,35 @@
 
 .site-clock :where(.clock, .digital-clock) { isolation: isolate; }
 
-/* ---------- Mobile layout: true 2-row centered grid ---------- */
+/* ---------- Mobile: two independently centered rows (<=540px) ---------- */
 /* Row 1: Home, Services, Examples
    Row 2: About, Contact, Cart
+   Each row centers on its own.
 */
 @media (max-width: 540px) {
     .site-header .nav-links {
-        display: grid;
-        grid-template-columns: repeat(3, auto); /* 3 centered items per row */
-        justify-content: center;                /* center the whole grid */
-        gap: 0.75rem 2rem;                      /* row-gap, col-gap */
-        margin-top: 0.75rem;
+        display: flex;
+        flex-wrap: wrap;              /* allow two lines */
+        justify-content: center;      /* center EACH line’s contents */
+        row-gap: 0.75rem;
+        column-gap: 1.25rem;
     }
 
-    /* Explicit order so items go exactly where you want */
+    /* Force the wrap after "Examples" with a pseudo flex item */
+    .site-header .nav-links::after {
+        content: "";
+        flex-basis: 100%;             /* acts like a line break */
+        order: 3;                     /* placed right after Examples (order 3) */
+    }
+
+    /* Natural widths so rows can center independently */
+    .site-header .nav-links > * {
+        flex: 0 0 auto;
+        white-space: nowrap;
+        text-align: center;
+    }
+
+    /* Explicit order for predictable placement */
     .site-header .nav-links a[href="/"]         { order: 1; } /* Home */
     .site-header .nav-links a[href="/services"] { order: 2; } /* Services */
     .site-header .nav-links a[href="/examples"] { order: 3; } /* Examples */
@@ -91,7 +106,7 @@
     .site-header .nav-links a[href="/contact"]  { order: 5; } /* Contact */
     .site-header .nav-links .cart-plain         { order: 6; } /* Cart badge */
 
-    /* Prevent the active pill from forcing a wrap */
+    /* Keep the active pill from forcing an early wrap */
     .site-header .nav-link.active {
         padding-left: 0.9rem;
         padding-right: 0.9rem;
