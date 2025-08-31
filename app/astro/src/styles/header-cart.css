@@ -59,14 +59,17 @@
 .site-clock {
     margin: .25rem 0 .35rem;
     position: relative;
+    max-width: 720px;          /* halo cutoff — keeps powder neat */
+    margin-left: auto;
+    margin-right: auto;
 }
 
-/* The single line ABOVE the clock — restored + full width */
+/* The single line ABOVE the clock — full width */
 .site-clock .clock-line {
     border: 0;
     border-top: 2px solid var(--border);
     display: block;
-    width: 100vw;             /* full viewport width */
+    width: 100%;               /* spans edge-to-edge */
     margin: 0 0 .35rem 0;
 }
 
