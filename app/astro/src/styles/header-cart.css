@@ -13,7 +13,7 @@
     align-items: center;
     justify-content: center;  /* center the whole row under the title */
     gap: 1.25rem;
-    margin-top: 0.75rem;      /* breathing room below the title underline */
+    margin-top: 1.25rem;      /* MORE breathing room below the title underline */
 }
 
 /* ---------- Cart: plain icon + count ---------- */
@@ -80,7 +80,7 @@
         display: flex;
         flex-wrap: wrap;              /* allow two lines */
         justify-content: center;      /* center EACH line’s contents */
-        row-gap: 0.75rem;
+        row-gap: 0.35rem;             /* LESS vertical gap between row 1 & row 2 */
         column-gap: 1.25rem;
     }
 
