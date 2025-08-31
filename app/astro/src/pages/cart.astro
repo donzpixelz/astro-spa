@@ -1,0 +1,13 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import CartView from "../components/cart/CartView.jsx";
+import "../styles/cart-page.css"; // ← NEW name, won’t clash with your example
+---
+<BaseLayout title="Your Cart" description="Review items and checkout">
+    <section class="stack">
+        <h1>Your Cart</h1>
+        <div class="card">
+            <CartView client:load />
+        </div>
+    </section>
+</BaseLayout>

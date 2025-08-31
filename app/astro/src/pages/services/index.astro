@@ -1,0 +1,14 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ServicePicker from "../../components/services/ServicePicker.jsx";
+import "../../styles/services.css";
+---
+<BaseLayout title="Services" description="Choose a service and add a plan to your cart">
+    <section class="stack">
+        <h1>Services</h1>
+        <p class="muted">Pick a service and plan; add it to your cart. The cart persists across visits.</p>
+        <div class="card">
+            <ServicePicker client:load />
+        </div>
+    </section>
+</BaseLayout>

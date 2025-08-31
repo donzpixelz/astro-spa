@@ -1,36 +1,27 @@
 ---
-/* Header.astro — site header with brand + nav (no clock) */
+import CartBadge from "./cart/CartBadge.jsx"; // ⬅️ new
 const path = Astro.url.pathname;
-const isActive = (href: string) =>
-    path === href || (href !== "/" && path.startsWith(href));
+const isActive = (href: string) => path === href || (href !== "/" && path.startsWith(href));
 ---
 <header class="site-header" role="banner">
     <div class="nav">
-        <a class="brand" href="/">
-            <span class="brand-lines">Astro Example</span>
-        </a>
+        <a class="brand" href="/"><span class="brand-lines">Astro Example</span></a>
 
         <nav class="nav-links" aria-label="Primary">
-            <a
-                    class={`nav-link ${isActive("/") ? "active" : ""}`}
-                    href="/"
-                    aria-current={isActive("/") ? "page" : undefined}
-            >Home</a>
-            <a
-                    class={`nav-link ${isActive("/examples") ? "active" : ""}`}
-                    href="/examples"
-                    aria-current={isActive("/examples") ? "page" : undefined}
-            >Examples</a>
-            <a
-                    class={`nav-link ${isActive("/about") ? "active" : ""}`}
-                    href="/about"
-                    aria-current={isActive("/about") ? "page" : undefined}
-            >About</a>
-            <a
-                    class={`nav-link ${isActive("/contact") ? "active" : ""}`}
-                    href="/contact"
-                    aria-current={isActive("/contact") ? "page" : undefined}
-            >Contact</a>
+            <a class={`nav-link ${isActive("/") ? "active" : ""}`} href="/" aria-current={isActive("/") ? "page" : undefined}>Home</a>
+            <a class={`nav-link ${isActive("/examples") ? "active" : ""}`} href="/examples" aria-current={isActive("/examples") ? "page" : undefined}>Examples</a>
+            <a class={`nav-link ${isActive("/about") ? "active" : ""}`} href="/about" aria-current={isActive("/about") ? "page" : undefined}>About</a>
+            <a class={`nav-link ${isActive("/services") ? "active" : ""}`} href="/services" aria-current={isActive("/services") ? "page" : undefined}>Services</a>
+            <a class={`nav-link ${isActive("/contact") ? "active" : ""}`} href="/contact" aria-current={isActive("/contact") ? "page" : undefined}>Contact</a>
+
+            <!-- Cart badge to the right of Contact -->
+            <span class="nav-cart"><CartBadge client:load /></span>
         </nav>
     </div>
 </header>
+
+<style>
+    .nav-cart { display:inline-flex; margin-left:.5rem; }
+    .nav-cart .cart-link{ display:inline-flex; align-items:center; gap:.4rem; padding:.45rem .7rem; border:1px solid var(--border); border-radius:.6rem; background:#fff; }
+    .nav-cart .count{ min-width:1.35rem; padding:.05rem .35rem; border-radius:999px; background:#000; color:#fff; text-align:center; font-weight:700; font-size:.85rem; line-height:1.2; }
+</style>
