@@ -1,44 +1,37 @@
-/* header-cart.css — make the cart adopt nav-link sizing exactly,
-   only add minimal alignment + icon/count tweaks. */
+/* header-cart.css — cart inherits exact .nav-link sizing; only minimal tweaks */
 
-.site-header .nav-links{
-    display:flex;
-    align-items:center;
-    gap:2rem;
+/* Keep nav items baseline-aligned */
+.site-header .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
 }
 
-.site-header .nav-cart{
-    display:inline-flex;
-    align-items:center;
-    margin-left:.5rem;
+/* Cart link: DIRECT child of .nav-links and already has .nav-link class.
+   Do NOT set padding here so it matches the other buttons 1:1. */
+.site-header .cart-link {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;                 /* small space between icon and count */
+    text-decoration: none;
 }
 
-/* Cart link inherits ALL sizing from .nav-link (+ .active for black pill) */
-.site-header .nav-cart .cart-link{
-    display:inline-flex;          /* so icon + count sit inline */
-    align-items:center;
-    gap:.35rem;                   /* small space between icon and count */
-    text-decoration:none;
+/* Icon scales with text (matches button height automatically) */
+.site-header .cart-link .icon {
+    width: 1em;
+    height: 1em;
+    flex: 0 0 auto;
 }
 
-/* Icon scales with text line-height; no hard-coded height */
-.site-header .nav-cart .cart-link .icon{
-    width:1em;
-    height:1em;
-    flex:0 0 auto;
-}
-
-/* Count chip — small and unobtrusive */
-.site-header .nav-cart .cart-link .count{
-    display:inline-block;
-    min-width:1.15em;
-    padding:0 .35em;
-    border-radius:999px;
-    font-weight:700;
-    font-size:.85em;
-    line-height:1.1;
-
-    /* Always readable on the black active pill */
-    background:#fff;
-    color:#000;
+/* Count chip — readable on the black .nav-link.active pill */
+.site-header .cart-link .count {
+    display: inline-block;
+    min-width: 1.2em;
+    padding: 0 .35em;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: .85em;
+    line-height: 1.1;
+    background: #fff;
+    color: #000;
 }
