@@ -1,0 +1,3 @@
+.examples-subnav ul{list-style:none;margin:0 0 1rem 0;padding:0;display:flex;gap:.75rem;flex-wrap:wrap;}
+.examples-subnav a{display:inline-block;padding:.45rem .7rem;border-radius:.6rem;text-decoration:none;color:var(--text);background:var(--bg-soft);border:1px solid var(--border);}
+.examples-subnav a:hover{background:#fff}
