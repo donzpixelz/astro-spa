@@ -154,3 +154,32 @@
     word-break: break-word;
     font: 0.93rem/1.5 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
 }
+
+
+/* --- GFM Task list fix: checkbox + text inline --- */
+.mdp-preview li.task-list-item {
+    list-style: none;               /* remove extra bullet */
+    display: flex;
+    align-items: center;            /* vertical alignment */
+    gap: .5rem;                     /* space between box and text */
+    padding-left: 0;
+    margin: .35rem 0;
+}
+
+.mdp-preview li.task-list-item > input[type="checkbox"] {
+    flex: 0 0 auto;
+    inline-size: 1rem;
+    block-size: 1rem;
+    accent-color: var(--brand);
+}
+
+/* Force any <p> inside to sit inline next to the box */
+.mdp-preview li.task-list-item > p {
+    display: inline;                /* ✅ behave like inline text */
+    margin: 0;
+}
+
+.mdp-preview li.task-list-item > *:not(input) {
+    flex: 1 1 auto;                 /* let text wrap beside box */
+    min-width: 0;
+}
