@@ -1,0 +1,20 @@
+:root{
+  --brand:#000000;
+  --text:#111111;
+  --muted:#666666;
+  --bg:#ffffff;
+  --bg-soft:#f5f5f5;
+  --border:#e5e5e5;
+
+  --title-face: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --clock-led: black;
+
+  --powder: rgba(52,102,203,.10);
+  --clock-glow: rgba(52,102,203,.12);
+  --powder-strong: rgba(52,102,203,.32);
+  --clock-glow-strong: rgba(52,102,203,.36);
+}
+
+html[data-theme="light"] { --brand:#000; --text:#111; --muted:#666; --bg:#fff; --bg-soft:#f5f5f5; --border:#e5e5e5; --powder:#0000000F; --clock-glow:rgba(0,0,0,.12);}
+html[data-theme="dark"] { --brand:#fff; --text:#e5e7eb; --muted:#9aa4b2; --bg:#0b0e11; --bg-soft:#11161d; --border:#2a2f3a; --powder:#00000080; --clock-glow:rgba(255,255,255,.06);}
+html[data-theme="sepia"] { --brand:#1f1408; --text:#2c1e10; --muted:#6b5b4d; --bg:#f9f5e7; --bg-soft:#f3ebd4; --border:#e0d5bf; --powder:rgba(31,20,8,.12); --clock-glow:rgba(31,20,8,.12);}

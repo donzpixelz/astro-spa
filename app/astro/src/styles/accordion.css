@@ -1,0 +1,9 @@
+.accordion{ display:grid; gap:.5rem }
+.acc-item{ border:1px solid var(--border); border-radius:.6rem; background:#fff }
+.acc-header{ margin:0 }
+.acc-trigger{ width:100%; text-align:left; display:flex; justify-content:space-between; align-items:center; gap:.75rem; padding:.75rem 1rem; border:0; background:transparent; cursor:pointer; font:inherit; color:inherit;}
+.acc-trigger:hover{ background:var(--bg-soft) }
+.acc-trigger:focus-visible{ outline:2px solid #000; outline-offset:2px; border-radius:.3rem }
+.acc-indicator{ font-weight:900; }
+.acc-panel[hidden]{ display:none }
+.acc-panel-inner{ padding:.5rem 1rem 1rem }

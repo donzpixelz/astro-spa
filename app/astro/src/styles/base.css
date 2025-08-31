@@ -1,0 +1,13 @@
+*{ box-sizing:border-box }
+html,body{ height:100% }
+body{ margin:0; color:var(--text); background:var(--bg); font:16px/1.6 system-ui,-apple-system, Segoe UI, Roboto, Helvetica, Arial; }
+
+label{ display:grid; gap:.4rem }
+input, textarea{ width:100%; padding:.65rem .7rem; border:1px solid var(--border); border-radius:.6rem; background:#fff; }
+button{ padding:.6rem .9rem; border:none; border-radius:.6rem; background:#000; color:#fff; cursor:pointer; }
+button:hover{ opacity:.95 }
+
+.brand:focus-visible,.nav-link:focus-visible{ outline:2px solid #000; outline-offset:2px; border-radius:.6rem; }
+
+@media (max-width: 768px){ .brand{ font-size: clamp(20px, 6vw, 30px);} .nav-link{ padding:.35rem .6rem;} }
+@media (max-width: 480px){ .brand{ font-size:20px; padding:.35rem .5rem;} .nav-links{ gap:.5rem;} .nav-link{ padding:.3rem .55rem; font-size:13px;} }

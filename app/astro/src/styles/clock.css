@@ -1,0 +1,7 @@
+.clock-shell{ display:grid; place-items:center; margin:.2rem auto 0; position:relative;}
+.clock-shell::before{ content:""; position:absolute; left:50%; transform:translateX(-50%); bottom:-26px; width:clamp(320px,70vw,820px); height:110px; border-radius:9999px; background:radial-gradient(ellipse at center,var(--powder-strong),rgba(0,0,0,0) 72%); filter:blur(14px); z-index:0; pointer-events:none;}
+.clock-time{ position:relative; z-index:1; font-family:'Orbitron', ui-monospace, monospace !important; font-weight:700; font-size:1.25rem; letter-spacing:.08em; color:var(--clock-led); text-shadow:0 0 14px var(--clock-glow-strong),0 10px 28px var(--powder-strong);}
+.clock-line{ display:inline-flex; align-items:baseline; gap:.6ch; white-space:nowrap; max-width:100%;}
+.clock-sep{ opacity:.65 }
+.clock-date{ font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; font-weight:600; font-size:clamp(.9rem,2.6vw,1rem); line-height:1; color:var(--text);}
+@media (max-width:360px){ .clock-line{ gap:.4ch; } }
