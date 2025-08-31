@@ -183,4 +183,13 @@
     .us .card .us-table td{ display:block; width:100%; }
 }
 
+/* --- Fix clipped text inside "Saved links" table --- */
+.us .card .us-table td,
+.us .card .us-table th {
+    width: auto !important;        /* let cells size naturally */
+    max-width: none !important;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    padding-inline: 1rem;          /* a hair more room from the rounded edge */
+}
 
