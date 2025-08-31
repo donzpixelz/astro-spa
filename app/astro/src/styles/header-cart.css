@@ -10,9 +10,9 @@
 
 .site-header .nav-links{
     display: flex;
-    align-items: center;      /* baseline match with the nav buttons */
+    align-items: center;
     justify-content: center;  /* center the whole row under the title */
-    gap: 1.25rem;             /* spacing between links */
+    gap: 1.25rem;
     margin-top: 0.75rem;      /* breathing room below the title underline */
 }
 
@@ -21,7 +21,7 @@
 .site-header .cart-plain{
     display: inline-flex;
     align-items: center;
-    gap: .4rem;              /* space between icon and number */
+    gap: .4rem;
     padding: 0;
     margin: 0;
     background: none;
@@ -33,7 +33,7 @@
 }
 
 .site-header .cart-plain .icon{
-    width: 1.5em;            /* adjust to taste (1.0–1.5em) */
+    width: 1.5em;
     height: 1.5em;
     flex: 0 0 auto;
 }
@@ -52,7 +52,7 @@
 /* ---------- Clock placed inside the header ---------- */
 
 .site-header {
-    border-bottom: 0 !important; /* no divider under header */
+    border-bottom: 0 !important;
     text-align: center;
 }
 
@@ -68,29 +68,22 @@
     margin: 0 auto .35rem;
 }
 
-/* Keep the halo/powder behind the clock only */
 .site-clock :where(.clock, .digital-clock) { isolation: isolate; }
 
-/* ---------- Mobile layout: force 3 items per row (<=540px) ---------- */
-/* Result:
-   Row 1: Home, Services, Examples
+/* ---------- Mobile layout: true 2-row centered grid ---------- */
+/* Row 1: Home, Services, Examples
    Row 2: About, Contact, Cart
 */
 @media (max-width: 540px) {
     .site-header .nav-links {
-        flex-wrap: wrap;               /* allow two rows */
-        justify-content: center;
-        gap: 0.5rem 0.75rem;           /* row-gap / col-gap */
+        display: grid;
+        grid-template-columns: repeat(3, auto); /* 3 centered items per row */
+        justify-content: center;                /* center the whole grid */
+        gap: 0.75rem 2rem;                      /* row-gap, col-gap */
+        margin-top: 0.75rem;
     }
 
-    /* Make every direct child (links + cart) a 1/3-width tile */
-    .site-header .nav-links > * {
-        flex: 0 0 calc(33.333% - 0.75rem);
-        text-align: center;
-        white-space: nowrap;
-    }
-
-    /* Explicit order so the wrap happens after Examples */
+    /* Explicit order so items go exactly where you want */
     .site-header .nav-links a[href="/"]         { order: 1; } /* Home */
     .site-header .nav-links a[href="/services"] { order: 2; } /* Services */
     .site-header .nav-links a[href="/examples"] { order: 3; } /* Examples */
@@ -105,6 +98,6 @@
     }
 }
 
-/* ---------- Cart/PayPal page extras (unchanged) ---------- */
+/* ---------- Cart/PayPal page extras ---------- */
 .cart-page .cart-paypal { margin-top: .5rem; }
 .cart-page .cart-paid.ok { color:#046a38; font-weight:700; }
