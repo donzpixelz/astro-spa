@@ -585,3 +585,34 @@ html[data-theme="dark"] .segmented > label.on { background:#1a2230; }
     margin:.75rem 0; padding:.5rem .75rem; border-left:3px solid var(--border);
     background:var(--bg-soft);
 }
+
+
+/* ===== Clock: one-line time + date ===== */
+.clock-line{
+    display:inline-flex;
+    align-items:baseline;
+    gap:.6ch;
+    white-space:nowrap;           /* never wrap */
+    max-width:100%;
+}
+
+.clock-sep{ opacity:.65 }
+
+.clock-time{
+    /* your existing font family/halo already apply from earlier rules */
+    font-size: clamp(1rem, 3.2vw, 1.25rem);   /* scales down on narrow screens */
+    line-height: 1;
+}
+
+.clock-date{
+    font-family: system-ui,-apple-system, Segoe UI, Roboto, Helvetica, Arial;
+    font-weight: 600;
+    font-size: clamp(.9rem, 2.6vw, 1rem);     /* slightly smaller than time */
+    line-height: 1;
+    color: var(--text);
+}
+
+/* If a very narrow phone still risks overflow, reduce the separator gap a hair */
+@media (max-width: 360px){
+    .clock-line{ gap:.4ch; }
+}
