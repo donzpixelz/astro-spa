@@ -11,25 +11,6 @@ marked.setOptions({
     mangle: false,
 });
 
-// ✅ Add classes for task lists
-marked.use({
-    renderer: {
-        list(body, ordered) {
-            const type = ordered ? "ol" : "ul";
-            const className = body.includes('type="checkbox"')
-                ? ' class="contains-task-list"'
-                : "";
-            return `<${type}${className}>${body}</${type}>`;
-        },
-        listitem(text) {
-            if (/^\s*<input[^>]+type="checkbox"/.test(text)) {
-                return `<li class="task-list-item">${text}</li>`;
-            }
-            return `<li>${text}</li>`;
-        },
-    },
-});
-
 const SAMPLE = `# Markdown Previewer
 
 Type on the left, preview on the right.
@@ -65,10 +46,18 @@ export default function MarkdownPreviewer() {
     const html = useMemo(() => {
         const raw = marked.parse(text);
         if (!IS_BROWSER) return raw;
+
         const maybeSanitize =
             (DOMPurify && DOMPurify.sanitize) ||
             (DOMPurify && DOMPurify.default && DOMPurify.default.sanitize);
-        return maybeSanitize ? maybeSanitize(raw) : raw;
+
+        return maybeSanitize
+            ? maybeSanitize(raw, {
+                ADD_ATTR: ["checked", "disabled", "type"],
+                ADD_TAGS: ["input"],
+                ADD_CLASS: ["task-list-item", "contains-task-list"],
+            })
+            : raw;
     }, [text]);
 
     return (
@@ -105,10 +94,7 @@ export default function MarkdownPreviewer() {
 
             <section className="mdp-pane">
                 <div className="mdp-toolbar"><strong>Preview</strong></div>
-                <div
-                    className="mdp-preview"
-                    dangerouslySetInnerHTML={{ __html: html }}
-                />
+                <div className="mdp-preview" dangerouslySetInnerHTML={{ __html: html }} />
             </section>
         </div>
     );
