@@ -50,43 +50,50 @@ export default function MarkdownPreviewer() {
         const purify =
             (DOMPurify && DOMPurify.sanitize) ||
             (DOMPurify && DOMPurify.default && DOMPurify.default.sanitize);
-        // Keep it simple; sanitize normally
         return purify ? purify(raw) : raw;
     }, [text]);
 
-    // Normalize task-list markup and add a stable class for CSS
+    // Normalize task-list markup produced by the renderer/sanitizer:
+    // If we ever get <li><input …></li><li>Label</li>, merge them into one.
     useEffect(() => {
         if (!IS_BROWSER) return;
         const root = document.querySelector(".mdp-preview");
         if (!root) return;
 
-        // 1) Merge patterns like: <li><input …></li><li>Write demo</li>
-        root.querySelectorAll("ul,ol").forEach((list) => {
-            const items = Array.from(list.children);
+        root.querySelectorAll("ul, ol").forEach((list) => {
+            const items = Array.from(list.children).filter((n) => n.tagName === "LI");
             for (let i = 0; i < items.length - 1; i++) {
                 const a = items[i];
                 const b = items[i + 1];
-                if (!a || !b || a.tagName !== "LI" || b.tagName !== "LI") continue;
-                const box = a.querySelector('input[type="checkbox"]');
-                const aHasOnlyBox =
-                    box &&
-                    // a has no text other than whitespace and no other elements
+                if (!a || !b) continue;
+
+                const checkbox = a.querySelector('input[type="checkbox"]');
+                if (!checkbox) continue;
+
+                // Is "a" only the checkbox (plus whitespace)?
+                const aOnlyCheckbox =
                     Array.from(a.childNodes).every((n) => {
-                        if (n === box) return true;
+                        if (n === checkbox) return true;
                         if (n.nodeType === Node.TEXT_NODE) return n.textContent.trim() === "";
                         return false;
                     });
-                if (aHasOnlyBox) {
-                    // move all children from b into a (after the checkbox)
+
+                // Is "b" a text-only or text-with-<p> item (and *not* another checkbox li)?
+                const bHasCheckbox = !!b.querySelector('input[type="checkbox"]');
+                if (aOnlyCheckbox && !bHasCheckbox) {
+                    // Move b's children after the checkbox inside a, then remove b.
                     while (b.firstChild) a.appendChild(b.firstChild);
                     b.remove();
-                    // skip over the removed item
+                    // Tag as a normalized task item for CSS
+                    a.classList.add("task-fix");
+                    // Recompute array shape
                     items.splice(i + 1, 1);
+                    i--; // re-check current index in case of chains
                 }
             }
         });
 
-        // 2) Tag every <li> that contains a checkbox
+        // Also tag any li that already contains checkbox + text in one
         root.querySelectorAll('li > input[type="checkbox"]').forEach((input) => {
             const li = input.closest("li");
             if (li) li.classList.add("task-fix");

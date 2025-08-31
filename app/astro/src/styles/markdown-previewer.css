@@ -87,14 +87,14 @@
 
 .mdp-preview a { color: var(--brand); text-decoration-thickness: .08em; text-underline-offset: 2px; }
 
-/* === Lists (generic) === */
+/* === Lists === */
 .mdp-preview ul, .mdp-preview ol { padding-left: 1.2em; }
 .mdp-preview li { margin: .25rem 0; }
 
-/* === Task lists (JS tags the <li> as .task-fix) === */
+/* === Task lists (after JS normalization adds .task-fix) === */
 .mdp-preview li.task-fix {
-    list-style: none;                 /* no bullet */
-    display: flex;                    /* box + text inline */
+    list-style: none;                 /* no bullet on task items */
+    display: flex;                    /* checkbox + text inline */
     align-items: center;
     gap: .5rem;
     margin: .35rem 0;
