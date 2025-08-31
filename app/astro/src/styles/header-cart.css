@@ -1,64 +1,66 @@
 /* header-cart.css — plain cart icon + count (no pill), aligned with nav */
 
+/* ---------- Base nav layout (desktop & up) ---------- */
+
+.site-header .nav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;      /* center brand + nav stack */
+}
+
 .site-header .nav-links{
-    display:flex;
-    align-items:center;     /* baseline match with the nav buttons */
-    gap:2rem;
+    display: flex;
+    align-items: center;      /* baseline match with the nav buttons */
+    justify-content: center;  /* center the whole row under the title */
+    gap: 1.25rem;             /* spacing between links */
+    margin-top: 0.75rem;      /* breathing room below the title underline */
 }
 
-/* Plain cart link: no padding, no background, no border */
+/* ---------- Cart: plain icon + count ---------- */
+
 .site-header .cart-plain{
-    display:inline-flex;
-    align-items:center;
-    gap:.4rem;              /* space between icon and number */
-    padding:0;
-    margin:0;
-    background:none;
-    border:none;
-    color:#000;             /* black, matches your theme */
-    text-decoration:none;
-    line-height:1;          /* keeps height aligned with nav text */
-    vertical-align:middle;
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;              /* space between icon and number */
+    padding: 0;
+    margin: 0;
+    background: none;
+    border: none;
+    color: #000;
+    text-decoration: none;
+    line-height: 1;
+    vertical-align: middle;
 }
 
-/* Icon sized relative to text so it matches the nav button height */
 .site-header .cart-plain .icon{
-    width:1.5em;           /* tweak to 1.0–1.1em if you want */
-    height:1.5em;
-    flex:0 0 auto;
+    width: 1.5em;            /* adjust to taste (1.0–1.5em) */
+    height: 1.5em;
+    flex: 0 0 auto;
 }
 
-/* Count is just bold text — no chip */
 .site-header .cart-plain .count{
-    font-weight:700;
-    font-size:1em;          /* inherit nav font-size exactly */
-    line-height:1;
+    font-weight: 700;
+    font-size: 1em;
+    line-height: 1;
 }
 
-/* Focus visibility for keyboard users (optional but recommended) */
 .site-header .cart-plain:focus-visible{
-    outline:2px solid var(--brand, #1e90ff);
-    outline-offset:3px;
+    outline: 2px solid var(--brand, #3466cb);
+    outline-offset: 3px;
 }
 
-/* PayPal area spacing + success message */
-.cart-page .cart-paypal { margin-top: .5rem; }
-.cart-page .cart-paid.ok { color:#046a38; font-weight:700; }
+/* ---------- Clock placed inside the header ---------- */
 
-
-/* === Clock-in-header overrides === */
 .site-header {
     border-bottom: 0 !important; /* no divider under header */
     text-align: center;
 }
 
-/* Container for the clock placed in header */
 .site-clock {
     margin: .25rem 0 .35rem;
     position: relative;
 }
 
-/* The single line ABOVE the clock */
 .site-clock .clock-line {
     border: 0;
     border-top: 2px solid var(--border);
@@ -66,103 +68,43 @@
     margin: 0 auto .35rem;
 }
 
-/* Optional: keep Chip's powder/halo behind the clock only */
-.site-clock :where(.clock, .digital-clock) {
-    /* if your component exposes a wrapper class, the halo should already be there.
-       This ensures it stays confined to the clock, not the title. */
-    isolation: isolate;
-}
+/* Keep the halo/powder behind the clock only */
+.site-clock :where(.clock, .digital-clock) { isolation: isolate; }
 
-/* Extra breathing room between brand underline and nav */
-.site-header .nav-links {
-    margin-top: 0.5rem;   /* adjust to taste (0.75rem = bigger gap) */
-}
-
-
-/* Center nav links directly under the brand underline */
-.site-header .nav {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.site-header .nav-links {
-    margin-top: 0.75rem;  /* spacing from the brand underline */
-    display: flex;
-    gap: 1.25rem;        /* control spacing between links */
-    justify-content: center;
-}
-
-
-/* Wrap nav links into two lines on small screens */
-@media (max-width: 540px) {
-    .site-header .nav-links {
-        flex-wrap: wrap;              /* allow wrapping */
-        justify-content: center;      /* center items per line */
-        gap: 0.75rem 1.25rem;         /* row-gap, column-gap */
-    }
-
-    .site-header .nav-links a,
-    .site-header .nav-links .cart-link {
-        flex: 1 0 auto;               /* let items shrink/grow naturally */
-    }
-}
-
-
-/* === Mobile: 3-up nav, wraps after Examples === */
+/* ---------- Mobile layout: force 3 items per row (<=540px) ---------- */
+/* Result:
+   Row 1: Home, Services, Examples
+   Row 2: About, Contact, Cart
+*/
 @media (max-width: 540px) {
     .site-header .nav-links {
         flex-wrap: wrap;               /* allow two rows */
         justify-content: center;
-        gap: 0.5rem 0.75rem;           /* row gap / column gap */
+        gap: 0.5rem 0.75rem;           /* row-gap / col-gap */
     }
 
-    /* Treat each nav child (links + cart) as one equal-width tile */
+    /* Make every direct child (links + cart) a 1/3-width tile */
     .site-header .nav-links > * {
-        flex: 0 0 calc(33.333% - 0.75rem);  /* exactly 3 per row */
-        text-align: center;
-        white-space: nowrap;                 /* keep labels tidy */
-    }
-
-    /* Optional: shrink the active "pill" so it doesn't force wrapping */
-    .site-header .nav-link.active {
-        padding-left: 0.9rem;
-        padding-right: 0.9rem;
-    }
-}
-
-
-/* === Mobile: force specific 2-row layout (3 items per row) === */
-@media (max-width: 540px) {
-    .site-header .nav-links {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 0.5rem 0.75rem;               /* row-gap / col-gap */
-    }
-
-    /* 3-up tiles per row */
-    .site-header .nav-links > * {
-        flex: 0 0 calc(33.333% - 0.75rem); /* exactly three per line */
+        flex: 0 0 calc(33.333% - 0.75rem);
         text-align: center;
         white-space: nowrap;
     }
 
-    /* Explicit order so wrap happens exactly after Examples */
+    /* Explicit order so the wrap happens after Examples */
     .site-header .nav-links a[href="/"]         { order: 1; } /* Home */
     .site-header .nav-links a[href="/services"] { order: 2; } /* Services */
     .site-header .nav-links a[href="/examples"] { order: 3; } /* Examples */
     .site-header .nav-links a[href="/about"]    { order: 4; } /* About */
     .site-header .nav-links a[href="/contact"]  { order: 5; } /* Contact */
     .site-header .nav-links .cart-plain         { order: 6; } /* Cart badge */
-    /* If your CartBadge uses a different class, swap .cart-plain for it. */
 
-    /* Keep the active pill from forcing an early wrap */
+    /* Prevent the active pill from forcing a wrap */
     .site-header .nav-link.active {
         padding-left: 0.9rem;
         padding-right: 0.9rem;
     }
 }
 
-
-
+/* ---------- Cart/PayPal page extras (unchanged) ---------- */
+.cart-page .cart-paypal { margin-top: .5rem; }
+.cart-page .cart-paid.ok { color:#046a38; font-weight:700; }
