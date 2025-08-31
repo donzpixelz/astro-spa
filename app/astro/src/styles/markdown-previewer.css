@@ -1,4 +1,4 @@
-/* Markdown Previewer — bulletproof task list fix */
+/* Markdown Previewer — stable layout + task-list normalization */
 
 /* === Page safety === */
 .mdp-grid { inline-size: 100%; max-inline-size: 100%; overflow-x: hidden; }
@@ -78,7 +78,6 @@
 .mdp-preview > *:first-child { margin-top: 0; }
 .mdp-preview > *:last-child  { margin-bottom: 0; }
 
-/* Headings & blocks */
 .mdp-preview h1, .mdp-preview h2, .mdp-preview h3,
 .mdp-preview h4, .mdp-preview h5, .mdp-preview h6 {
     line-height: 1.25; margin: 1em 0 .5em;
@@ -88,34 +87,30 @@
 
 .mdp-preview a { color: var(--brand); text-decoration-thickness: .08em; text-underline-offset: 2px; }
 
-/* === Lists === */
+/* === Lists (generic) === */
 .mdp-preview ul, .mdp-preview ol { padding-left: 1.2em; }
 .mdp-preview li { margin: .25rem 0; }
 
-/* === Task lists: no bullets, inline text === */
-.mdp-preview li > input[type="checkbox"] {
-    margin-right: .5rem;
-}
-
-/* Kill bullets on any ul/ol that contains checkboxes */
-.mdp-preview ul:has(input[type="checkbox"]),
-.mdp-preview ol:has(input[type="checkbox"]) {
-    list-style: none;
-    padding-left: 0;
-    margin-left: 0;
-}
-
-/* Align checkbox + text inline */
-.mdp-preview li:has(> input[type="checkbox"]) {
-    display: flex;
+/* === Task lists (JS tags the <li> as .task-fix) === */
+.mdp-preview li.task-fix {
+    list-style: none;                 /* no bullet */
+    display: flex;                    /* box + text inline */
     align-items: center;
     gap: .5rem;
     margin: .35rem 0;
+    padding-left: 0;
 }
-.mdp-preview li:has(> input[type="checkbox"]) > p {
-    margin: 0;
+.mdp-preview li.task-fix > input[type="checkbox"] {
+    flex: 0 0 auto;
+    inline-size: 1rem;
+    block-size: 1rem;
+    accent-color: var(--brand);
+}
+.mdp-preview li.task-fix > p {
     display: inline;
+    margin: 0;
 }
+.mdp-preview li.task-fix > *:not(input) { flex: 1 1 auto; min-width: 0; }
 
 /* === Images === */
 .mdp-preview img { max-width: 100%; height: auto; border-radius: .4rem; }
@@ -160,26 +155,4 @@
     overflow-wrap: anywhere;
     word-break: break-word;
     font: 0.93rem/1.5 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-}
-
-
-/* --- Bulletproof GFM task list fix --- */
-
-/* Remove bullets when a checkbox is inside */
-.mdp-preview li input[type="checkbox"] {
-    margin-right: .5rem;
-}
-.mdp-preview li input[type="checkbox"]::marker {
-    content: ""; /* kills the bullet marker */
-}
-
-/* Force inline layout */
-.mdp-preview li {
-    display: flex;
-    align-items: center;
-    gap: .5rem;
-}
-.mdp-preview li p {
-    margin: 0;
-    display: inline;
 }
