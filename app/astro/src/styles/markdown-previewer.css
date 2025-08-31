@@ -1,7 +1,6 @@
 /* ------------------------------------------------------------
    Markdown Previewer — responsive, no-overflow, comfy spacing
-   Assumes your global CSS defines:
-   --brand, --text, --muted, --bg, --bg-soft, --border
+   Assumes global vars: --brand, --text, --muted, --bg, --bg-soft, --border
 ------------------------------------------------------------ */
 
 /* Baseline */
@@ -24,37 +23,41 @@
     box-shadow: 0 1px 0 rgba(0,0,0,.02);
 }
 
-/* Header / toolbar */
+/* ===== Header / toolbar =====
+   Desktop: 2-col grid (title left, buttons right)
+   Mobile: stacked (title row 1, buttons row 2)
+*/
 .mdp-head {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr auto;
     align-items: center;
-    justify-content: space-between;
-    gap: .75rem;
+    gap: .75rem .9rem;
     padding: .7rem .9rem;
     border-bottom: 1px solid var(--border);
     background: var(--bg-soft);
-    flex-wrap: wrap;             /* ✅ buttons can wrap on small screens */
 }
 
 .mdp-title {
-    margin: 0;
+    margin: 0;                 /* prevent push to the right */
     font-size: 1.05rem;
     line-height: 1.2;
-    flex: 1 1 auto;
-    min-width: 220px;
+    justify-self: start;
+    min-width: 0;
 }
 
 .mdp-toolbar {
+    justify-self: end;
     display: flex;
     align-items: center;
-    gap: .45rem;
-    flex: 1 1 auto;
-    justify-content: flex-end;
-    flex-wrap: wrap;             /* ✅ no clipping */
-    min-width: 220px;
+    gap: .5rem;                 /* normalized spacing */
+    flex-wrap: wrap;            /* wrap instead of overflow */
+    min-width: 0;
 }
 
 .mdp-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
     padding: .45rem .7rem;
     border-radius: .55rem;
     border: 1px solid var(--border);
@@ -69,13 +72,23 @@
 }
 .mdp-btn:active { transform: translateY(1px); }
 
-/* Layout: Editor | Preview */
+@media (max-width: 640px) {
+    .mdp-head {
+        grid-template-columns: 1fr;     /* stack */
+        padding: .6rem .75rem;
+    }
+    .mdp-toolbar {
+        justify-self: start;            /* left-align buttons on mobile */
+        gap: .45rem;
+    }
+}
+
+/* ===== Layout: Editor | Preview ===== */
 .mdp-main {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 0;                      /* gutters are in the panes */
+    gap: 0;
 }
-
 @media (max-width: 900px) {
     .mdp-main { grid-template-columns: 1fr; }
 }
@@ -97,7 +110,7 @@
 
 .mdp-editor {
     width: 100%;
-    min-height: 360px;           /* ✅ room to type on desktop */
+    min-height: 360px;           /* roomy on desktop */
     resize: vertical;
     padding: .9rem 1rem;
     font: 0.95rem/1.5 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
@@ -111,22 +124,20 @@
     border-color: color-mix(in srgb, var(--brand) 40%, var(--border));
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand) 18%, transparent);
 }
-
 @media (max-width: 520px) {
-    .mdp-editor { min-height: 420px; } /* ✅ extra height on mobile */
+    .mdp-editor { min-height: 420px; } /* extra height on mobile */
 }
 
 /* Preview pane */
 .mdp-preview-wrap {
     padding: .9rem;
-    overflow-x: hidden;          /* ✅ preview never widens the page */
+    overflow-x: hidden;          /* preview never widens the page */
 }
 
 /* Content defaults */
 .mdp-preview {
     line-height: 1.65;
-    word-break: normal;
-    overflow-wrap: anywhere;     /* ✅ long URLs/words wrap if needed */
+    overflow-wrap: anywhere;     /* long URLs/words wrap if needed */
 }
 .mdp-preview > *:first-child { margin-top: 0; }
 .mdp-preview > *:last-child  { margin-bottom: 0; }
@@ -149,7 +160,11 @@
     margin: .6rem 0;
 }
 
-.mdp-preview a { color: var(--brand); text-decoration-thickness: .08em; text-underline-offset: 2px; }
+.mdp-preview a {
+    color: var(--brand);
+    text-decoration-thickness: .08em;
+    text-underline-offset: 2px;
+}
 
 /* Lists */
 .mdp-preview ul, .mdp-preview ol { padding-left: 1.2em; }
@@ -157,7 +172,7 @@
 
 /* Images */
 .mdp-preview img {
-    max-width: 100%;             /* ✅ images can’t overflow */
+    max-width: 100%;
     height: auto;
     border-radius: .4rem;
 }
@@ -165,7 +180,7 @@
 /* Tables */
 .mdp-preview .table-wrap {
     width: 100%;
-    overflow-x: auto;            /* ✅ table scroll lives inside preview */
+    overflow-x: auto;
     -webkit-overflow-scrolling: touch;
 }
 .mdp-preview table {
@@ -189,21 +204,21 @@
     border: 1px solid var(--border);
 }
 
-/* Code blocks — ✅ no horizontal overflow on mobile */
+/* Code blocks — no horizontal overflow on mobile */
 .mdp-preview pre {
     margin: .65rem 0;
     padding: .85rem 1rem;
     border-radius: .6rem;
     background: var(--bg-soft);
     border: 1px solid var(--border);
-    white-space: pre-wrap;       /* 🔑 wrap long lines */
+    white-space: pre-wrap;       /* wrap long lines */
     overflow-x: hidden;          /* no scrollbar on the page */
     tab-size: 2;
 }
 .mdp-preview pre code {
     display: block;
     white-space: inherit;        /* inherit pre-wrap */
-    overflow-wrap: anywhere;     /* break long tokens/URLs */
+    overflow-wrap: anywhere;
     word-break: break-word;
     font: 0.93rem/1.5 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
 }
@@ -223,11 +238,4 @@
     border: 0;
     border-top: 1px solid var(--border);
     margin: 1rem 0;
-}
-
-/* Small-screen tweaks */
-@media (max-width: 520px) {
-    .mdp-head { padding: .6rem .75rem; }
-    .mdp-toolbar { justify-content: flex-start; }
-    .mdp-preview pre { padding: .75rem .85rem; }
 }
