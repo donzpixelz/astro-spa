@@ -5,7 +5,7 @@
 .site-header .nav {
     display: flex;
     flex-direction: column;
-    align-items: center;      /* center brand + nav stack */
+    align-items: center; /* center brand + nav stack */
 }
 
 .site-header .nav-links {
@@ -52,52 +52,33 @@
 /* ---------- Clock placed inside the header ---------- */
 
 .site-header {
-    border-bottom: 0 !important;   /* no divider under header */
+    border-bottom: 0 !important; /* no divider under header */
     text-align: center;
 }
 
-/* Keep the halo confined AND ensure it never reaches the overline */
+/* Keep halo confined; clock content is narrow & centered */
 .site-clock {
     position: relative;
-    margin: .25rem 0 .35rem;
-    max-width: 720px;              /* halo cutoff width (centered) */
-    margin-left: auto;
-    margin-right: auto;
-    padding-top: 8px;              /* tiny gap under the overline */
-    overflow: visible;             /* halo still shows below */
+    margin: .25rem auto .35rem;
+    max-width: 720px;   /* halo cutoff width */
 }
 
-/* Hide the old <hr> line; we’ll draw a full-width one via ::after */
-.site-clock .clock-line { display: none; }
-
-/* Mask strip just below the line so halo can’t “invade” it */
-.site-clock::before {
-    content: "";
-    position: absolute;
-    left: 0; right: 0;
-    top: 0;
-    height: 8px;                   /* matches padding-top; creates clean gap */
-    background: var(--bg, #fff);   /* same as header background */
-    z-index: 1;                    /* below the line, above the halo */
-}
-
-/* Full-width overline across the viewport */
-.site-clock::after {
-    content: "";
-    position: absolute;
-    left: 50%;
-    top: 0;
-    transform: translateX(-50%);
-    width: 100vw;                  /* edge-to-edge */
+/* Full-width overline that does NOT affect the halo box
+   - The hr sits inside .site-clock but "bleeds" to viewport width.
+   - Halo remains confined to .site-clock (max-width: 720px) below it. */
+.site-clock .clock-line {
+    display: block;
+    height: 0;                         /* reset hr height */
+    border: 0;
     border-top: 2px solid var(--border);
-    z-index: 2;                    /* above mask & halo */
+    margin: 0 0 .35rem;                /* space under the line */
+    /* full-bleed trick: extend to viewport edges from a centered container */
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
 }
 
-.site-clock :where(.clock, .digital-clock) {
-    isolation: isolate;            /* halo stays behind the clock only */
-    position: relative;
-    z-index: 0;                    /* below the mask/line */
-}
+/* Halo stays behind the clock only (and inside the 720px box) */
+.site-clock :where(.clock, .digital-clock) { isolation: isolate; }
 
 /* ---------- Mobile: two independently centered rows (<=540px) ---------- */
 /* Row 1: Home, Services, Examples
