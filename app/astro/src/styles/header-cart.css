@@ -1,67 +1,44 @@
-/* header-cart.css — compact cart badge to match nav buttons */
-
-.site-header {
-    /* tweak these if you want it a hair smaller/larger */
-    --cart-pill-py: .45rem;
-    --cart-pill-px: .75rem;
-    --cart-icon: 18px;
-    --cart-chip-fs: .8rem;
-    --cart-chip-min: 1.25rem;
-    --cart-radius: .6rem;
-}
+/* header-cart.css — make the cart adopt nav-link sizing exactly,
+   only add minimal alignment + icon/count tweaks. */
 
 .site-header .nav-links{
     display:flex;
-    align-items:center;           /* align baseline with links */
+    align-items:center;
     gap:2rem;
 }
-.site-header .nav-links > .nav-link{
-    display:inline-flex;
-    align-items:center;
-}
 
-/* cart badge container */
 .site-header .nav-cart{
     display:inline-flex;
     align-items:center;
     margin-left:.5rem;
 }
 
-/* pill */
+/* Cart link inherits ALL sizing from .nav-link (+ .active for black pill) */
 .site-header .nav-cart .cart-link{
-    display:inline-flex;
+    display:inline-flex;          /* so icon + count sit inline */
     align-items:center;
-    gap:.4rem;                    /* tighter than before */
-    padding:var(--cart-pill-py) var(--cart-pill-px);
-    border-radius:var(--cart-radius);
-    background:#000;
-    color:#fff;
-    border:1px solid #000;
-    line-height:1;
+    gap:.35rem;                   /* small space between icon and count */
     text-decoration:none;
 }
-.site-header .nav-cart .cart-link:hover{ opacity:.9; }
-.site-header .nav-cart .cart-link:focus-visible{
-    outline:2px solid var(--brand, #1e90ff);
-    outline-offset:2px;
-}
 
-/* icon */
-.site-header .nav-cart svg{
-    width:var(--cart-icon);
-    height:var(--cart-icon);
+/* Icon scales with text line-height; no hard-coded height */
+.site-header .nav-cart .cart-link .icon{
+    width:1em;
+    height:1em;
     flex:0 0 auto;
 }
 
-/* count chip */
-.site-header .nav-cart .count{
-    min-width:var(--cart-chip-min);
-    padding:.06rem .35rem;
+/* Count chip — small and unobtrusive */
+.site-header .nav-cart .cart-link .count{
+    display:inline-block;
+    min-width:1.15em;
+    padding:0 .35em;
     border-radius:999px;
+    font-weight:700;
+    font-size:.85em;
+    line-height:1.1;
+
+    /* Always readable on the black active pill */
     background:#fff;
     color:#000;
-    text-align:center;
-    font-weight:700;
-    font-size:var(--cart-chip-fs);
-    line-height:1.05;
 }
