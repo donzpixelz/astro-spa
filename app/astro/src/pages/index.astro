@@ -1,12 +1,12 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import DigitalClock from "../components/DigitalClock.jsx";
+import DigitalClock from "../components/examples/DigitalClock.jsx";
 ---
 <BaseLayout title="Home · Astro Example" description="Clean MPA starter with About & Contact">
-	<!-- Clock centered at top of the home page (React island) -->
-	<section class="stack" style="margin-top:.5rem">
-		<DigitalClock client:load />
+	<!-- Clock centered at top of the home page -->
+	<DigitalClock client:load />
 
+	<section class="stack">
 		<h1>Welcome</h1>
 		<p class="muted">
 			Built with Astro’s multi-page approach for speed and simplicity—ready to switch to a smooth
@@ -63,11 +63,27 @@ import DigitalClock from "../components/DigitalClock.jsx";
 			<ol>
 				<li>Edit copy in <code>src/pages/about.astro</code> and <code>src/pages/contact.astro</code>.</li>
 				<li>Add a new page by creating a file under <code>src/pages/your-page.astro</code>.</li>
-				<li>Customize styles in <code>src/styles/global.css</code>.</li>
+				<li>Customize styles in <code>public/styles/global.css</code>.</li>
 			</ol>
 			<p class="muted" style="margin:0">
 				Tip: keep it MPA for stability; branch off later if you want to explore SPA transitions.
 			</p>
+		</div>
+
+		<!-- Small showcase row -->
+		<div style="display:grid; gap:1rem; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));">
+			<div class="card">
+				<h3 style="margin-top:0">Performance-first</h3>
+				<p>Minimal JavaScript by default. Fast loads, simple deployment.</p>
+			</div>
+			<div class="card">
+				<h3 style="margin-top:0">Good bones</h3>
+				<p>Shared layout + sane defaults make it easy to grow without clutter.</p>
+			</div>
+			<div class="card">
+				<h3 style="margin-top:0">Room to play</h3>
+				<p>Flip on client navigation later to explore transitions—no lock-in.</p>
+			</div>
 		</div>
 
 		<!-- Project map -->
@@ -78,13 +94,14 @@ import DigitalClock from "../components/DigitalClock.jsx";
 │   ├── components/
 │   │   ├── Header.astro
 │   │   ├── Footer.astro
-│   │   └── DigitalClock.jsx   ← used on homepage
+│   │   └── Clock.astro
 │   └── pages/
-│       ├── index.astro        ←
+│       ├── index.astro   ←
 │       ├── about.astro
 │       └── contact.astro
-└── styles/
-    └── global.css
+└── public/
+    └── styles/
+        └── global.css
 </code></pre>
 		</div>
 	</section>

@@ -1,47 +1,45 @@
+// app/astro/src/components/examples/DigitalClock.jsx
 import { useEffect, useState, useMemo } from "react";
 
+/**
+ * One-line digital clock + date.
+ * Uses your .clock-shell / .clock-time styles (blue halo),
+ * and forces nowrap so it never wraps on mobile.
+ */
 export default function DigitalClock() {
     const [now, setNow] = useState(() => new Date());
 
     useEffect(() => {
-        const id = setInterval(() => setNow(new Date()), 1000);
-        return () => clearInterval(id);
+        const t = setInterval(() => setNow(new Date()), 1000);
+        return () => clearInterval(t);
     }, []);
 
-    const { timeStr, dateStr, ariaLabel } = useMemo(() => {
-        // Time (24h vs 12h will follow user locale)
-        const time = new Intl.DateTimeFormat(undefined, {
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit"
-        }).format(now);
-
-        // Date, compact: Sat, Aug 30
-        const date = new Intl.DateTimeFormat(undefined, {
+    const line = useMemo(() => {
+        const date = now.toLocaleDateString(undefined, {
             weekday: "short",
             month: "short",
-            day: "numeric"
-        }).format(now);
-
-        const label = new Intl.DateTimeFormat(undefined, {
-            weekday: "long",
-            year: "numeric",
-            month: "long",
-            day: "numeric",
+            day: "2-digit",
+        });
+        const time = now.toLocaleTimeString(undefined, {
             hour: "numeric",
             minute: "2-digit",
-            second: "2-digit"
-        }).format(now);
-
-        return { timeStr: time, dateStr: date, ariaLabel: label };
+            second: "2-digit",
+            hour12: true,
+        });
+        return `${date} • ${time}`;
     }, [now]);
 
     return (
-        <div className="clock-shell" role="group" aria-label="Current time and date">
-            <div className="clock-line" aria-label={ariaLabel}>
-                <span className="clock-time">{timeStr}</span>
-                <span className="clock-sep" aria-hidden="true">•</span>
-                <span className="clock-date">{dateStr}</span>
+        <div className="clock-shell" aria-live="polite">
+            <div
+                className="clock-time"
+                style={{
+                    whiteSpace: "nowrap",
+                    fontSize: "clamp(14px, 5.2vw, 20px)",
+                    letterSpacing: "0.08em",
+                }}
+            >
+                {line}
             </div>
         </div>
     );
