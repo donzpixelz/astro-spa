@@ -1,37 +1,42 @@
-/* header-cart.css — cart inherits exact .nav-link sizing; only minimal tweaks */
+/* header-cart.css — plain cart icon + count (no pill), aligned with nav */
 
-/* Keep nav items baseline-aligned */
-.site-header .nav-links {
-    display: flex;
-    align-items: center;
-    gap: 2rem;
+.site-header .nav-links{
+    display:flex;
+    align-items:center;     /* baseline match with the nav buttons */
+    gap:2rem;
 }
 
-/* Cart link: DIRECT child of .nav-links and already has .nav-link class.
-   Do NOT set padding here so it matches the other buttons 1:1. */
-.site-header .cart-link {
-    display: inline-flex;
-    align-items: center;
-    gap: .35rem;                 /* small space between icon and count */
-    text-decoration: none;
+/* Plain cart link: no padding, no background, no border */
+.site-header .cart-plain{
+    display:inline-flex;
+    align-items:center;
+    gap:.4rem;              /* space between icon and number */
+    padding:0;
+    margin:0;
+    background:none;
+    border:none;
+    color:#000;             /* black, matches your theme */
+    text-decoration:none;
+    line-height:1;          /* keeps height aligned with nav text */
+    vertical-align:middle;
 }
 
-/* Icon scales with text (matches button height automatically) */
-.site-header .cart-link .icon {
-    width: 1em;
-    height: 1em;
-    flex: 0 0 auto;
+/* Icon sized relative to text so it matches the nav button height */
+.site-header .cart-plain .icon{
+    width:1.05em;           /* tweak to 1.0–1.1em if you want */
+    height:1.05em;
+    flex:0 0 auto;
 }
 
-/* Count chip — readable on the black .nav-link.active pill */
-.site-header .cart-link .count {
-    display: inline-block;
-    min-width: 1.2em;
-    padding: 0 .35em;
-    border-radius: 999px;
-    font-weight: 700;
-    font-size: .85em;
-    line-height: 1.1;
-    background: #fff;
-    color: #000;
+/* Count is just bold text — no chip */
+.site-header .cart-plain .count{
+    font-weight:700;
+    font-size:1em;          /* inherit nav font-size exactly */
+    line-height:1;
+}
+
+/* Focus visibility for keyboard users (optional but recommended) */
+.site-header .cart-plain:focus-visible{
+    outline:2px solid var(--brand, #1e90ff);
+    outline-offset:3px;
 }

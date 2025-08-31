@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { countItems } from "../../lib/cart";
 
-/**
- * CartBadge renders as an <a> with class "nav-link cart-link active"
- * so it inherits EXACT padding/radius/typography from your nav buttons.
- */
+/** Minimal cart: just icon + count in black, no background/border */
 export default function CartBadge() {
     const [count, setCount] = useState(0);
 
@@ -21,9 +18,10 @@ export default function CartBadge() {
 
     return (
         <a
-            className="nav-link cart-link active"
+            className="cart-plain"
             href="/cart"
             aria-label={`Cart with ${count} item${count === 1 ? "" : "s"}`}
+            title="Cart"
         >
             <svg className="icon" viewBox="0 0 24 24" aria-hidden="true">
                 <path

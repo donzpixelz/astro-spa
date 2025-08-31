@@ -2,7 +2,7 @@
 import CartBadge from "./cart/CartBadge.jsx";
 import "../styles/header-cart.css";
 
-/* Header.astro — site header with brand + nav + cart */
+/* Header.astro — site header with brand + nav + minimal cart */
 const path = Astro.url.pathname;
 const isActive = (href: string) =>
     path === href || (href !== "/" && path.startsWith(href));
@@ -14,37 +14,13 @@ const isActive = (href: string) =>
         </a>
 
         <nav class="nav-links" aria-label="Primary">
-            <a
-                    class={`nav-link ${isActive("/") ? "active" : ""}`}
-                    href="/"
-                    aria-current={isActive("/") ? "page" : undefined}
-            >Home</a>
+            <a class={`nav-link ${isActive("/") ? "active" : ""}`} href="/" aria-current={isActive("/") ? "page" : undefined}>Home</a>
+            <a class={`nav-link ${isActive("/examples") ? "active" : ""}`} href="/examples" aria-current={isActive("/examples") ? "page" : undefined}>Examples</a>
+            <a class={`nav-link ${isActive("/about") ? "active" : ""}`} href="/about" aria-current={isActive("/about") ? "page" : undefined}>About</a>
+            <a class={`nav-link ${isActive("/services") ? "active" : ""}`} href="/services" aria-current={isActive("/services") ? "page" : undefined}>Services</a>
+            <a class={`nav-link ${isActive("/contact") ? "active" : ""}`} href="/contact" aria-current={isActive("/contact") ? "page" : undefined}>Contact</a>
 
-            <a
-                    class={`nav-link ${isActive("/examples") ? "active" : ""}`}
-                    href="/examples"
-                    aria-current={isActive("/examples") ? "page" : undefined}
-            >Examples</a>
-
-            <a
-                    class={`nav-link ${isActive("/about") ? "active" : ""}`}
-                    href="/about"
-                    aria-current={isActive("/about") ? "page" : undefined}
-            >About</a>
-
-            <a
-                    class={`nav-link ${isActive("/services") ? "active" : ""}`}
-                    href="/services"
-                    aria-current={isActive("/services") ? "page" : undefined}
-            >Services</a>
-
-            <a
-                    class={`nav-link ${isActive("/contact") ? "active" : ""}`}
-                    href="/contact"
-                    aria-current={isActive("/contact") ? "page" : undefined}
-            >Contact</a>
-
-            <!-- Cart is a DIRECT child of .nav-links so it inherits exact .nav-link sizing -->
+            <!-- Minimal cart: plain icon + count (no pill) -->
             <CartBadge client:load />
         </nav>
     </div>
