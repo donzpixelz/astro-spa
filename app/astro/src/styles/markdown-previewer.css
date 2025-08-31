@@ -1,9 +1,9 @@
 /* ------------------------------------------------------------
-   Markdown Previewer — stable header, comfy buttons, no overflow
-   Expects: --brand, --text, --muted, --bg, --bg-soft, --border
+   Markdown Previewer — tidy editor header + comfy buttons
+   Expects global vars: --brand, --text, --muted, --bg, --bg-soft, --border
 ------------------------------------------------------------ */
 
-/* Baseline + hard stop on page overflow */
+/* Baseline + page safety */
 .mdp, .mdp * { box-sizing: border-box; }
 .mdp { inline-size: 100%; max-inline-size: 100%; color: var(--text); overflow-x: hidden; }
 
@@ -13,15 +13,12 @@
     background: #fff;
     border: 1px solid var(--border);
     border-radius: .8rem;
-    overflow: hidden; /* clamp any inner spill */
+    overflow: hidden;
     box-shadow: 0 1px 0 rgba(0,0,0,.02);
 }
 
-/* ===== Header =====
-   Desktop: 2-col grid (title left, buttons right)
-   Mobile: stacked
-   Key: min-width:0 on grid children so they can shrink (prevents right bleed)
-*/
+/* ===== Top header (page h1/toolbar if you have one) =====
+   (kept minimal – your issue is in the editor pane bar) */
 .mdp-head {
     display: grid;
     grid-template-columns: 1fr auto;
@@ -36,48 +33,102 @@
     font-size: 1.05rem;
     line-height: 1.2;
     justify-self: start;
-    min-width: 0;              /* 🔑 allow shrink inside grid */
+    min-width: 0;
 }
 .mdp-toolbar {
     justify-self: end;
     display: flex;
     align-items: center;
-    gap: .5rem;                 /* consistent button spacing */
-    flex-wrap: wrap;            /* wrap instead of pushing width */
-    min-width: 0;               /* 🔑 allow shrink */
+    gap: .55rem;                 /* consistent, roomy button spacing */
+    flex-wrap: wrap;
+    min-width: 0;
 }
 .mdp-btn {
     display: inline-flex;
     align-items: center;
     gap: .35rem;
-    padding: .44rem .7rem;
+    padding: .46rem .75rem;      /* slightly larger hit area */
     border-radius: .55rem;
     border: 1px solid var(--border);
     background: #fff;
     color: var(--text);
     cursor: pointer;
-    flex: 0 0 auto;            /* don’t stretch unevenly */
+    line-height: 1;              /* avoids odd vertical jitter */
 }
 .mdp-btn.primary { background: var(--brand); color: #fff; border-color: var(--brand); }
 .mdp-btn:active { transform: translateY(1px); }
 
 @media (max-width: 640px) {
     .mdp-head { grid-template-columns: 1fr; padding: .6rem .75rem; }
-    .mdp-toolbar { justify-self: start; gap: .45rem; }
+    .mdp-toolbar { justify-self: start; gap: .5rem; }
 }
 
-/* ===== Editor | Preview layout ===== */
+/* ===== Two-column layout for panes ===== */
 .mdp-main { display: grid; grid-template-columns: 1fr 1fr; }
 @media (max-width: 900px) { .mdp-main { grid-template-columns: 1fr; } }
 
-.mdp-editor-wrap { border-right: 1px solid var(--border); padding: .9rem; min-width: 0; }
-@media (max-width: 900px) { .mdp-editor-wrap { border-right: 0; border-bottom: 1px solid var(--border); } }
+/* ===== Editor pane (LEFT) – grid with two rows:
+   Row 1: label + buttons
+   Row 2: textarea
+   Works with your existing .mdp-editor-label, .mdp-toolbar, .mdp-editor
+*/
+.mdp-editor-wrap {
+    /* grid for label+toolbar row above textarea */
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+    "label tools"
+    "editor editor";
+    align-items: center;
+    row-gap: .6rem;              /* vertical breathing room between rows */
+    column-gap: .9rem;
+    padding: .9rem;
+    border-right: 1px solid var(--border);
+    background: var(--bg-soft);  /* match your screenshot bar look */
+    min-width: 0;
+}
+@media (max-width: 900px) {
+    .mdp-editor-wrap {
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+    }
+}
 
-.mdp-editor-label { font-size: .9rem; color: var(--muted); margin: 0 0 .5rem 0; }
+.mdp-editor-label {
+    grid-area: label;
+    font-size: .95rem;
+    font-weight: 600;
+    color: var(--text);
+    margin: 0;                   /* prevent label from stealing extra space */
+    min-width: 0;
+}
+
+.mdp-editor-wrap .mdp-toolbar {
+    grid-area: tools;
+    justify-self: end;
+    display: flex;
+    align-items: center;
+    gap: .55rem;                 /* same spacing as top toolbar */
+    flex-wrap: wrap;
+    min-width: 0;
+}
+
+@media (max-width: 640px) {
+    .mdp-editor-wrap {
+        grid-template-columns: 1fr;           /* stack on mobile */
+        grid-template-areas:
+      "label"
+      "tools"
+      "editor";
+        padding: .75rem .75rem .85rem;
+    }
+    .mdp-editor-wrap .mdp-toolbar { justify-self: start; gap: .5rem; }
+}
 
 .mdp-editor {
+    grid-area: editor;
     width: 100%;
-    min-height: 360px;
+    min-height: 360px;           /* roomy on desktop */
     resize: vertical;
     padding: .9rem 1rem;
     font: 0.95rem/1.5 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
@@ -91,11 +142,18 @@
     border-color: color-mix(in srgb, var(--brand) 40%, var(--border));
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand) 18%, transparent);
 }
-@media (max-width: 520px) { .mdp-editor { min-height: 420px; } }
+@media (max-width: 520px) {
+    .mdp-editor { min-height: 420px; }      /* extra height on mobile */
+}
 
-.mdp-preview-wrap { padding: .9rem; overflow-x: hidden; min-width: 0; }
+/* ===== Preview pane (RIGHT) ===== */
+.mdp-preview-wrap {
+    padding: .9rem;
+    overflow-x: hidden;          /* preview never widens the page */
+    min-width: 0;
+}
 
-/* ===== Preview content ===== */
+/* Content defaults */
 .mdp-preview { line-height: 1.65; overflow-wrap: anywhere; }
 .mdp-preview > *:first-child { margin-top: 0; }
 .mdp-preview > *:last-child  { margin-bottom: 0; }
@@ -116,18 +174,18 @@
 /* Images */
 .mdp-preview img { max-width: 100%; height: auto; border-radius: .4rem; }
 
-/* Tables — keep inside viewport on phones WITHOUT needing extra wrappers */
+/* Tables — wrap cell content instead of widening the page */
 .mdp-preview table {
     border-collapse: collapse;
     width: 100%;
-    table-layout: fixed;        /* 🔑 cells wrap instead of growing width */
+    table-layout: fixed;        /* cells wrap */
     border: 1px solid var(--border);
 }
 .mdp-preview th, .mdp-preview td {
     padding: .5rem .65rem;
     border: 1px solid var(--border);
     text-align: left;
-    word-break: break-word;     /* wrap long cell content */
+    word-break: break-word;
 }
 
 /* Inline code */
@@ -146,7 +204,7 @@
     border-radius: .6rem;
     background: var(--bg-soft);
     border: 1px solid var(--border);
-    white-space: pre-wrap;      /* wrap long lines */
+    white-space: pre-wrap;
     overflow-x: hidden;
     tab-size: 2;
 }
