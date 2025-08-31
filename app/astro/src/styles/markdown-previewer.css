@@ -1,4 +1,4 @@
-/* Markdown Previewer — matches MarkdownPreviewer.jsx exactly */
+/* Markdown Previewer — final task-list fix */
 
 /* === Page safety === */
 .mdp-grid { inline-size: 100%; max-inline-size: 100%; overflow-x: hidden; }
@@ -21,42 +21,33 @@
 /* === Pane toolbar (title + actions) === */
 .mdp-toolbar {
     display: grid;
-    grid-template-columns: 1fr auto;     /* title left, buttons right */
+    grid-template-columns: 1fr auto;
     align-items: center;
     gap: .75rem .9rem;
-    padding: .7rem .9rem;                 /* ✅ padding fix */
+    padding: .7rem .9rem;
     background: var(--bg-soft);
     border-bottom: 1px solid var(--border);
 }
-.mdp-toolbar > strong {
-    margin: 0;
-    font-size: 1rem;
-    line-height: 1.2;
-    min-width: 0;
-}
-@media (max-width: 640px) {
-    .mdp-toolbar { grid-template-columns: 1fr; padding: .6rem .75rem; }
-}
+.mdp-toolbar > strong { margin: 0; font-size: 1rem; line-height: 1.2; min-width: 0; }
+@media (max-width: 640px) { .mdp-toolbar { grid-template-columns: 1fr; padding: .6rem .75rem; } }
 
 /* Buttons group */
 .mdp-actions {
     justify-self: end;
     display: flex;
     align-items: center;
-    gap: .6rem;                           /* ✅ even spacing */
+    gap: .6rem;
     flex-wrap: wrap;
     min-width: 0;
 }
-@media (max-width: 640px) {
-    .mdp-actions { justify-self: start; gap: .5rem; }
-}
+@media (max-width: 640px) { .mdp-actions { justify-self: start; gap: .5rem; } }
 
-/* Buttons (uses .btn in JSX) */
+/* Buttons */
 .mdp-toolbar .btn {
-    padding: .48rem .85rem;               /* ✅ larger click area */
+    padding: .48rem .85rem;
     border-radius: .55rem;
     border: 1px solid var(--border);
-    background: #000;                     /* your dark button style */
+    background: #000;
     color: #fff;
     line-height: 1;
     cursor: pointer;
@@ -66,7 +57,7 @@
 /* === Editor textarea === */
 .mdp-input {
     width: 100%;
-    min-height: 500px;                    /* ✅ taller by default */
+    min-height: 500px;
     resize: vertical;
     padding: 1rem;
     font: 0.95rem/1.5 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
@@ -79,14 +70,15 @@
 
 /* === Preview content === */
 .mdp-preview {
-    padding: .9rem;                       /* ✅ inner padding */
-    overflow-x: hidden;                   /* no page bleed */
+    padding: .9rem;
+    overflow-x: hidden;
     line-height: 1.65;
     overflow-wrap: anywhere;
 }
 .mdp-preview > *:first-child { margin-top: 0; }
 .mdp-preview > *:last-child  { margin-bottom: 0; }
 
+/* Headings & blocks */
 .mdp-preview h1, .mdp-preview h2, .mdp-preview h3,
 .mdp-preview h4, .mdp-preview h5, .mdp-preview h6 {
     line-height: 1.25; margin: 1em 0 .5em;
@@ -94,52 +86,44 @@
 .mdp-preview p, .mdp-preview ul, .mdp-preview ol,
 .mdp-preview blockquote, .mdp-preview pre, .mdp-preview table { margin: .6rem 0; }
 
-.mdp-preview a {
-    color: var(--brand);
-    text-decoration-thickness: .08em;
-    text-underline-offset: 2px;
-}
+.mdp-preview a { color: var(--brand); text-decoration-thickness: .08em; text-underline-offset: 2px; }
 
 /* === Lists === */
 .mdp-preview ul, .mdp-preview ol { padding-left: 1.2em; }
 .mdp-preview li { margin: .25rem 0; }
 
-/* === GFM Task lists: inline fix === */
-.mdp-preview li.task-list-item {
-    list-style: none;               /* no bullet */
+/* === Task list fix: catch ANY li with a checkbox === */
+.mdp-preview li:has(> input[type="checkbox"]) {
+    list-style: none;              /* kill the bullet */
     display: flex;
-    align-items: center;            /* box + text aligned */
+    align-items: center;
     gap: .5rem;
     padding-left: 0;
     margin: .35rem 0;
 }
-.mdp-preview li.task-list-item > input[type="checkbox"] {
+.mdp-preview li:has(> input[type="checkbox"]) > input[type="checkbox"] {
     flex: 0 0 auto;
     inline-size: 1rem;
     block-size: 1rem;
     accent-color: var(--brand);
 }
-.mdp-preview li.task-list-item > p {
-    display: inline;                /* ✅ force inline text */
+.mdp-preview li:has(> input[type="checkbox"]) > p {
+    display: inline;               /* force inline text */
     margin: 0;
 }
-.mdp-preview li.task-list-item > *:not(input) {
+.mdp-preview li:has(> input[type="checkbox"]) > *:not(input) {
     flex: 1 1 auto;
     min-width: 0;
 }
 
 /* === Images === */
-.mdp-preview img {
-    max-width: 100%;
-    height: auto;
-    border-radius: .4rem;
-}
+.mdp-preview img { max-width: 100%; height: auto; border-radius: .4rem; }
 
-/* === Tables: wrap cell content === */
+/* === Tables === */
 .mdp-preview table {
     width: 100%;
     border-collapse: collapse;
-    table-layout: fixed;            /* ✅ wrap instead of scroll */
+    table-layout: fixed;
     border: 1px solid var(--border);
 }
 .mdp-preview th, .mdp-preview td {
@@ -165,7 +149,7 @@
     border-radius: .6rem;
     background: var(--bg-soft);
     border: 1px solid var(--border);
-    white-space: pre-wrap;          /* ✅ wrap long lines */
+    white-space: pre-wrap;
     overflow-x: hidden;
     tab-size: 2;
 }
