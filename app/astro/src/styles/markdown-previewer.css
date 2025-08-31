@@ -161,3 +161,33 @@
     word-break: break-word;
     font: 0.93rem/1.5 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
 }
+
+
+/* --- Task list polish (GFM) --- */
+.mdp-preview ul.contains-task-list,
+.mdp-preview ol.contains-task-list {
+    list-style: none;            /* remove bullets for task lists */
+    padding-left: 0;
+    margin-left: 0;
+}
+
+.mdp-preview li.task-list-item {
+    list-style: none;
+    margin: .3rem 0;
+    padding-left: 0;             /* no hanging indent */
+    display: flex;
+    align-items: flex-start;
+    gap: .5rem;                  /* space between box and text */
+}
+
+.mdp-preview li.task-list-item > input[type="checkbox"] {
+    margin-top: .2rem;           /* align with first line of text */
+    flex: 0 0 auto;
+    inline-size: 1rem;
+    block-size: 1rem;
+    accent-color: var(--brand);  /* Chip Blue highlight when checked */
+}
+
+.mdp-preview li.task-list-item > *:not(input) {
+    flex: 1 1 auto;              /* allow text to wrap nicely */
+}
