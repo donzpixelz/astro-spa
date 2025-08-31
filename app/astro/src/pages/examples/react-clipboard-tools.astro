@@ -49,7 +49,11 @@ const snippets = [
             Toggle line numbers per snippet via <code>lineNumbers: true</code>.
         </p>
 
-        <div class="card">
+        {/*
+      NOTE: The extra wrapper class `clip-wrap` prevents any internal element
+      from widening the page on small screens. It pairs with rules in clipboard.css.
+    */}
+        <div class="card clip-wrap">
             <ClipboardTools client:load snippets={snippets} />
         </div>
     </section>
