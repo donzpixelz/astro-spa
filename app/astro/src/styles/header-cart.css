@@ -23,8 +23,8 @@
 
 /* Icon sized relative to text so it matches the nav button height */
 .site-header .cart-plain .icon{
-    width:1.16em;           /* tweak to 1.0–1.1em if you want */
-    height:1.16em;
+    width:1.25em;           /* tweak to 1.0–1.1em if you want */
+    height:1.25em;
     flex:0 0 auto;
 }
 
