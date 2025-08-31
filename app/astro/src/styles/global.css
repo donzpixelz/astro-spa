@@ -53,7 +53,7 @@ body{
     display:flex;
     flex-direction:column;
     align-items:center;
-    gap:1.5rem;
+    gap:.5rem; /* keep small; .brand adds its own bottom margin */
 }
 
 /* Brand (site title link) — NO POWDER/GLOW */
@@ -71,6 +71,9 @@ body{
 
     padding:.45rem .6rem;
     text-shadow:none; /* remove powder/glow explicitly */
+
+    /* KEY: create real space beneath the underline */
+    margin-bottom:1.35rem;
 }
 
 /* Title lines — exact behavior:
@@ -89,9 +92,9 @@ body{
 .brand::after{
     content:"";
     position:absolute;
-    bottom:-0.35em;
-    left:0;        /* flush left */
-    right:-2.5em;  /* overhang right */
+    bottom:-0.42em; /* sits a touch below text for extra visual air */
+    left:0;         /* flush left */
+    right:-2.5em;   /* overhang right */
     height:3px;
     background:#000;
 }
@@ -595,35 +598,18 @@ html[data-theme="dark"] .segmented > label.on { background:#1a2230; }
     white-space:nowrap;           /* never wrap */
     max-width:100%;
 }
-
 .clock-sep{ opacity:.65 }
-
 .clock-time{
-    /* your existing font family/halo already apply from earlier rules */
-    font-size: clamp(1rem, 3.2vw, 1.25rem);   /* scales down on narrow screens */
+    font-size: clamp(1rem, 3.2vw, 1.25rem);
     line-height: 1;
 }
-
 .clock-date{
     font-family: system-ui,-apple-system, Segoe UI, Roboto, Helvetica, Arial;
     font-weight: 600;
-    font-size: clamp(.9rem, 2.6vw, 1rem);     /* slightly smaller than time */
+    font-size: clamp(.9rem, 2.6vw, 1rem);
     line-height: 1;
     color: var(--text);
 }
-
-/* If a very narrow phone still risks overflow, reduce the separator gap a hair */
 @media (max-width: 360px){
     .clock-line{ gap:.4ch; }
-}
-
-/* Nav container now vertical, centered */
-.nav{
-    max-width:900px;
-    margin:0 auto;
-    padding:1.25rem 1rem 1rem; /* increased top padding */
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:1.5rem;
 }
