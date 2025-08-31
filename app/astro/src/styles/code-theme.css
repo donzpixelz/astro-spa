@@ -1,0 +1,47 @@
+/* code-theme.css - optional Prism token overrides */
+
+/* Base code block */
+pre[class*="language-"],
+code[class*="language-"] {
+    font-family: "Share Tech Mono", Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    background: var(--bg-soft);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    overflow-x: auto;
+}
+
+/* Keywords (if, else, return) */
+.token.keyword {
+    color: #3466cb; /* Chip Blue */
+    font-weight: 600;
+}
+
+/* Strings */
+.token.string {
+    color: #22863a;
+}
+
+/* Functions */
+.token.function {
+    color: #8250df;
+}
+
+/* Numbers, booleans */
+.token.number,
+.token.boolean {
+    color: #e36209;
+}
+
+/* Comments */
+.token.comment {
+    color: var(--muted);
+    font-style: italic;
+}
+
+/* Attributes, selectors, tags */
+.token.attr-name,
+.token.tag {
+    color: #d73a49;
+}
