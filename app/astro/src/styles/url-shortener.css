@@ -60,3 +60,54 @@
 /* If action buttons live in a cell, allow wrapping on mobile */
 .us-actions-cell{display:flex;flex-wrap:wrap;gap:.35rem;}
 .us-table code{background:transparent;}
+
+
+/* ============ Mobile comfort pack (append) ============ */
+@media (max-width: 520px) {
+    /* a little breathing room overall */
+    .us { gap: 1.1rem; }
+    .us-field { gap: .5rem; }
+    .us-field input,
+    .us-field select,
+    .us-field textarea {
+        padding: .7rem .85rem;
+        font-size: 1rem;
+    }
+
+    /* slug preview row: put domain on its own line; slug + copy beneath */
+    .us-slugwrap {
+        grid-template-columns: 1fr auto;
+        grid-template-areas:
+      "base base"
+      "slug copy";
+        gap: .5rem;
+    }
+    .us-base { grid-area: base; }
+    .us-slug { grid-area: slug; }
+    .us-slugwrap .us-btn { grid-area: copy; }
+
+    /* actions: don’t feel crammed; allow wrapping into two columns */
+    .us-actions { gap: .6rem; }
+    .us-actions .us-btn { flex: 1 1 48%; }
+
+    /* table -> stacked cards for readability */
+    .us-table { display: block; border-collapse: separate; border-spacing: 0; }
+    .us-table thead { display: none; }
+    .us-table tr {
+        display: block;
+        border: 1px solid var(--border);
+        border-radius: .6rem;
+        margin: .65rem 0;
+        overflow: hidden;
+        background: #fff;
+    }
+    .us-table td {
+        display: block;
+        border-top: 1px solid var(--border);
+        padding: .7rem .8rem;
+        word-break: break-word;
+        overflow-wrap: anywhere;
+    }
+    .us-table td:first-child { border-top: 0; }
+    .us-actions-cell { display: flex; flex-wrap: wrap; gap: .4rem; }
+}
