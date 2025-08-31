@@ -23,8 +23,15 @@
 }
 .clip-head > * { min-width: 0; } /* allow children to shrink without overflow */
 
-.clip-titles { display: flex; align-items: center; gap: .5rem; min-width: 0; }
-.clip-title { margin: 0; font-size: 1rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.clip-titles { display: flex; align-items: center; gap: .5rem; min-width: 0; flex: 1 1 auto; }
+.clip-title {
+    margin: 0;
+    font-size: 1rem;
+    overflow: visible;        /* let text show fully */
+    text-overflow: initial;   /* disable ellipsis */
+    white-space: normal;      /* allow natural wrapping */
+    line-height: 1.3;
+}
 .clip-lang {
     display: inline-block; font-size: .8rem; padding: .1rem .4rem;
     border: 1px solid var(--border); border-radius: .5rem;
@@ -65,7 +72,6 @@
     box-sizing: border-box;
 }
 
-/* Pre: wrap long lines so mobile doesn't show a horizontal scrollbar */
 .clip-pre {
     margin: 0;
     padding: .85rem 1rem;
