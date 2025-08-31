@@ -1,18 +1,48 @@
-.us{display:grid;gap:1rem;}
+/* URL Shortener — mobile-safe, no right-side bleed */
+
+/* Layout */
+.us{display:grid;gap:1rem;max-inline-size:100%;overflow-x:hidden;}
 .us-form{display:grid;gap:.75rem;}
-.us-row{display:grid;gap:.75rem;grid-template-columns:1fr;}
-@media(min-width:760px){.us-row{grid-template-columns:1.4fr 1fr;}}
-.us-field{display:grid;gap:.35rem;}
+.us-row{
+    display:grid;gap:.75rem;
+    grid-template-columns:1fr;
+}
+@media(min-width:760px){
+    .us-row{
+        /* prevent child overflow from forcing horizontal scroll */
+        grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);
+    }
+}
+
+/* Fields */
+.us-field{display:grid;gap:.35rem;min-width:0;}
 .us-label{font-weight:600;}
-.us-slugwrap{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:.4rem;}
-.us-base{padding:.55rem .6rem;border:1px solid var(--border);border-radius:.6rem;background:#fff;color:var(--muted);}
-.us-slug{width:100%;}
+.us-field input,.us-field select,.us-field textarea{width:100%;max-width:100%;}
+
+/* Slug preview row (domain + slug + copy) */
+.us-slugwrap{
+    display:grid;align-items:center;gap:.4rem;min-width:0;
+    grid-template-columns:minmax(0,auto) minmax(0,1fr) auto; /* domain can shrink, slug fills, copy stays */
+}
+.us-base{
+    padding:.55rem .6rem;border:1px solid var(--border);border-radius:.6rem;
+    background:#fff;color:var(--muted);
+    min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; /* no bleed */
+}
+.us-slug{width:100%;min-width:0;}
+
+/* Actions */
 .us-actions{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;}
 .us-status{min-height:1.25rem;}
 .us-err{color:#b00020;font-weight:600;}
 .us-ok{color:#046a38;font-weight:600;}
-.us-listhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem;}
-.us-ellipsize{max-width:460px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+
+/* List header */
+.us-listhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem;gap:.5rem;}
+/* Was 460px which caused mobile overflow */
+.us-ellipsize{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+
+/* Buttons */
 .us-btn{padding:.55rem .8rem;border:none;border-radius:.6rem;background:#000;color:#fff;cursor:pointer;}
 .us-btn:hover{opacity:.95}
 .us-btn.ghost{background:var(--bg-soft);color:var(--text);border:1px solid var(--border);}
@@ -20,4 +50,13 @@
 .us-btn.ghost.danger{color:#b00020;border-color:#e6b0b8;}
 .us-btn.tiny{padding:.35rem .55rem;font-size:.9em;}
 .us-actions-cell .us-btn + .us-btn{margin-left:.35rem;}
+
+/* Table of saved links */
+.us-table{width:100%;border-collapse:collapse;table-layout:fixed;} /* fixed layout prevents column blowout */
+.us-table th,.us-table td{
+    padding:.55rem .65rem;border-top:1px solid var(--border);text-align:left;vertical-align:top;
+    word-break:break-word;overflow-wrap:anywhere; /* wrap very long urls/slugs */
+}
+/* If action buttons live in a cell, allow wrapping on mobile */
+.us-actions-cell{display:flex;flex-wrap:wrap;gap:.35rem;}
 .us-table code{background:transparent;}

@@ -1,6 +1,9 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import UrlShortener from "../../components/examples/UrlShortener.jsx";
+// If you normally import page styles here, keep this line;
+// otherwise your existing global import is fine.
+import "../../styles/url-shortener.css";
 ---
 <BaseLayout title="URL Shortener (Mock) · Examples" description="Local-only URL shortener UI with validation and clipboard">
     <section class="stack">
