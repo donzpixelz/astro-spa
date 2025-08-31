@@ -22,7 +22,6 @@
     --clock-glow-strong: rgba(52,102,203,.36);
 }
 
-
 *{ box-sizing:border-box }
 html,body{ height:100% }
 body{
@@ -57,7 +56,7 @@ body{
     gap:1.5rem;
 }
 
-/* Brand (site title link) */
+/* Brand (site title link) — NO POWDER/GLOW */
 .brand{
     display:inline-block;
     position:relative;
@@ -70,12 +69,8 @@ body{
     font-size: clamp(24px, 4vw, 38px);
     line-height:1.1;
 
-    /* Prominent glow around the letters (no background pill) */
     padding:.45rem .6rem;
-    text-shadow:
-            0 3px 10px var(--powder-strong),
-            0 10px 26px var(--powder-strong),
-            0 22px 44px var(--powder-strong);
+    text-shadow:none; /* remove powder/glow explicitly */
 }
 /* Extend decorative lines far past the text so they never clip */
 .brand::before{
