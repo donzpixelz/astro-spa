@@ -616,3 +616,14 @@ html[data-theme="dark"] .segmented > label.on { background:#1a2230; }
 @media (max-width: 360px){
     .clock-line{ gap:.4ch; }
 }
+
+/* Nav container now vertical, centered */
+.nav{
+    max-width:900px;
+    margin:0 auto;
+    padding:1.25rem 1rem 1rem; /* increased top padding */
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:1.5rem;
+}
