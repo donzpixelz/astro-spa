@@ -132,3 +132,29 @@
     .us-table td { padding-inline: .9rem; }
     .us-table { max-width: 100%; }
 }
+
+
+/* ===== Fix clipped right edge inside the Saved links card ===== */
+
+/* The shortener renders a nested .card; don't clip its contents */
+.us .card { overflow: visible; }
+
+/* Make sure the table can't exceed its container and can wrap */
+.us .card .us-table { width: 100%; max-width: 100%; }
+
+/* Defensive: allow text to wrap and prevent subtle clipping on iOS */
+.us .card .us-table td,
+.us .card .us-table th {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    box-sizing: border-box;
+    padding-inline: .9rem;  /* nudges text away from the rounded edge */
+}
+
+/* If you're using the mobile stacked cards style, keep rows inside the radius */
+@media (max-width: 520px) {
+    .us .card .us-table { display: block; border-collapse: separate; border-spacing: 0; }
+    .us .card .us-table tr { display: block; width: 100%; border: 1px solid var(--border); border-radius: .7rem; overflow: hidden; }
+    .us .card .us-table td { display: block; width: 100%; }
+}
+
