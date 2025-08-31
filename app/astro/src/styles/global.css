@@ -72,13 +72,17 @@ body{
     padding:.45rem .6rem;
     text-shadow:none; /* remove powder/glow explicitly */
 }
-/* Extend decorative lines far past the text so they never clip */
+
+/* Title lines — exact behavior:
+   - Overline: overhangs LEFT, flush on RIGHT
+   - Underline: flush on LEFT, overhangs RIGHT
+*/
 .brand::before{
     content:"";
     position:absolute;
     top:-0.35em;
-    left:-2.5em;
-    width:calc(100% + 5em);
+    left:-2.5em;   /* overhang left */
+    right:0;       /* flush right */
     height:3px;
     background:#000;
 }
@@ -86,8 +90,8 @@ body{
     content:"";
     position:absolute;
     bottom:-0.35em;
-    left:-2.5em;
-    width:calc(100% + 5em);
+    left:0;        /* flush left */
+    right:-2.5em;  /* overhang right */
     height:3px;
     background:#000;
 }
@@ -564,7 +568,7 @@ html[data-theme="dark"] .segmented > label.on { background:#1a2230; }
 .mdp-input{
     width:100%; min-height:360px; resize:vertical;
     padding:.75rem; border:1px solid var(--border); border-radius:.75rem;
-    font:14px/1.45 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+    font:14px/1.45 ui-monospace,SFMono-Regular,Menlo, Monaco, Consolas,monospace;
     background:var(--bg); color:var(--text);
 }
 .mdp-preview{
