@@ -111,3 +111,24 @@
     .us-table td:first-child { border-top: 0; }
     .us-actions-cell { display: flex; flex-wrap: wrap; gap: .4rem; }
 }
+
+/* ==== Cutoff fix (append to end of url-shortener.css) ==== */
+
+/* 1) Never clip inside the card that contains the shortener */
+.card .us { overflow: visible; }
+
+/* 2) Allow all grid/flex children to actually shrink instead of clipping */
+.us, .us * { min-width: 0; }
+
+/* 3) Make sure text can wrap everywhere inside the module */
+.us p, .us a, .us code, .us td, .us th {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+/* 4) On small screens, give the stacked rows a bit more inner room so
+      borders don’t visually “slice” characters at the edge */
+@media (max-width: 520px) {
+    .us-table td { padding-inline: .9rem; }
+    .us-table { max-width: 100%; }
+}
