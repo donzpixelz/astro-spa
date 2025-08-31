@@ -44,3 +44,31 @@
 /* PayPal area spacing + success message */
 .cart-page .cart-paypal { margin-top: .5rem; }
 .cart-page .cart-paid.ok { color:#046a38; font-weight:700; }
+
+
+/* === Clock-in-header overrides === */
+.site-header {
+    border-bottom: 0 !important; /* no divider under header */
+    text-align: center;
+}
+
+/* Container for the clock placed in header */
+.site-clock {
+    margin: .25rem 0 .35rem;
+    position: relative;
+}
+
+/* The single line ABOVE the clock */
+.site-clock .clock-line {
+    border: 0;
+    border-top: 2px solid var(--border);
+    width: min(80%, 720px);
+    margin: 0 auto .35rem;
+}
+
+/* Optional: keep Chip's powder/halo behind the clock only */
+.site-clock :where(.clock, .digital-clock) {
+    /* if your component exposes a wrapper class, the halo should already be there.
+       This ensures it stays confined to the clock, not the title. */
+    isolation: isolate;
+}
