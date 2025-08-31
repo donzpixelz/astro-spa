@@ -161,3 +161,25 @@
     word-break: break-word;
     font: 0.93rem/1.5 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
 }
+
+
+/* --- Bulletproof GFM task list fix --- */
+
+/* Remove bullets when a checkbox is inside */
+.mdp-preview li input[type="checkbox"] {
+    margin-right: .5rem;
+}
+.mdp-preview li input[type="checkbox"]::marker {
+    content: ""; /* kills the bullet marker */
+}
+
+/* Force inline layout */
+.mdp-preview li {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+.mdp-preview li p {
+    margin: 0;
+    display: inline;
+}
