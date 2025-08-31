@@ -1,10 +1,9 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState } from "react";
 import { marked } from "marked";
 import DOMPurify from "dompurify";
 
 const IS_BROWSER = typeof window !== "undefined";
 
-// GFM on
 marked.setOptions({
     gfm: true,
     breaks: false,
@@ -45,7 +44,23 @@ export default function MarkdownPreviewer() {
     const [text, setText] = useState(SAMPLE);
 
     const html = useMemo(() => {
-        const raw = marked.parse(text);
+        // 1) Render to HTML
+        let raw = marked.parse(text);
+
+        // 2) Normalize task list markup IN THE STRING
+        // Case A: renderer split into two <li>s:
+        //   <li><input …></li><li>Label…</li>  ->  <li class="task-fix"><input …><span>Label…</span></li>
+        raw = raw.replace(
+            /<li>\s*(<input[^>]*type="checkbox"[^>]*>)\s*<\/li>\s*<li>([\s\S]*?)<\/li>/g,
+            '<li class="task-fix">$1<span>$2</span></li>'
+        );
+        // Case B: checkbox + label already in one <li> (ensure class & span wrapper)
+        raw = raw.replace(
+            /<li>\s*(<input[^>]*type="checkbox"[^>]*>)([\s\S]*?)<\/li>/g,
+            '<li class="task-fix">$1<span>$2</span></li>'
+        );
+
+        // 3) Sanitize for the browser
         if (!IS_BROWSER) return raw;
         const purify =
             (DOMPurify && DOMPurify.sanitize) ||
@@ -53,68 +68,17 @@ export default function MarkdownPreviewer() {
         return purify ? purify(raw) : raw;
     }, [text]);
 
-    // Normalize task-list markup produced by the renderer/sanitizer:
-    // If we ever get <li><input …></li><li>Label</li>, merge them into one.
-    useEffect(() => {
-        if (!IS_BROWSER) return;
-        const root = document.querySelector(".mdp-preview");
-        if (!root) return;
-
-        root.querySelectorAll("ul, ol").forEach((list) => {
-            const items = Array.from(list.children).filter((n) => n.tagName === "LI");
-            for (let i = 0; i < items.length - 1; i++) {
-                const a = items[i];
-                const b = items[i + 1];
-                if (!a || !b) continue;
-
-                const checkbox = a.querySelector('input[type="checkbox"]');
-                if (!checkbox) continue;
-
-                // Is "a" only the checkbox (plus whitespace)?
-                const aOnlyCheckbox =
-                    Array.from(a.childNodes).every((n) => {
-                        if (n === checkbox) return true;
-                        if (n.nodeType === Node.TEXT_NODE) return n.textContent.trim() === "";
-                        return false;
-                    });
-
-                // Is "b" a text-only or text-with-<p> item (and *not* another checkbox li)?
-                const bHasCheckbox = !!b.querySelector('input[type="checkbox"]');
-                if (aOnlyCheckbox && !bHasCheckbox) {
-                    // Move b's children after the checkbox inside a, then remove b.
-                    while (b.firstChild) a.appendChild(b.firstChild);
-                    b.remove();
-                    // Tag as a normalized task item for CSS
-                    a.classList.add("task-fix");
-                    // Recompute array shape
-                    items.splice(i + 1, 1);
-                    i--; // re-check current index in case of chains
-                }
-            }
-        });
-
-        // Also tag any li that already contains checkbox + text in one
-        root.querySelectorAll('li > input[type="checkbox"]').forEach((input) => {
-            const li = input.closest("li");
-            if (li) li.classList.add("task-fix");
-        });
-    }, [html]);
-
     return (
         <div className="mdp-grid">
             <section className="mdp-pane">
                 <div className="mdp-toolbar">
                     <strong>Markdown</strong>
                     <div className="mdp-actions">
-                        <button className="btn" onClick={() => setText(SAMPLE)} type="button">
-                            Reset
-                        </button>
+                        <button className="btn" onClick={() => setText(SAMPLE)} type="button">Reset</button>
                         <button
                             className="btn"
                             type="button"
-                            onClick={async () => {
-                                try { await navigator.clipboard.writeText(text); } catch {}
-                            }}
+                            onClick={async () => { try { await navigator.clipboard.writeText(text); } catch {} }}
                             aria-label="Copy raw markdown"
                         >
                             Copy
