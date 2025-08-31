@@ -6,20 +6,22 @@
     --bg-soft:#f5f5f5;
     --border:#e5e5e5;
 
-    /* Title font: Playfair Display Black */
+    /* Title font */
     --title-face: 'Playfair Display', Georgia, 'Times New Roman', serif;
 
-    /* Clock theme */
-    --clock-led: black;        /* e.g. #ff8a00 for amber */
-    --clock-glow: rgba(0,0,0,.12);
+    /* Clock digits color (leave black if you like) */
+    --clock-led: black;
 
-    /* Powder tint (subtle default) */
-    --powder: rgba(0,0,0,.06);
+    /* ==== POWDER = #3466cb (blue) ==== */
+    /* subtle defaults (used in a few places) */
+    --powder: rgba(52,102,203,.10);        /* #3466cb @ 10% */
+    --clock-glow: rgba(52,102,203,.12);
 
-    /* === PROMINENT TEST VALUES (dial these later) === */
-    --powder-strong: rgba(0,0,0,.26);       /* make this smaller to tone down */
-    --clock-glow-strong: rgba(0,0,0,.28);   /* make this smaller to tone down */
+    /* strong versions used for the big effects (title/clock) */
+    --powder-strong: rgba(52,102,203,.32); /* bump up/down to taste */
+    --clock-glow-strong: rgba(52,102,203,.36);
 }
+
 
 *{ box-sizing:border-box }
 html,body{ height:100% }
