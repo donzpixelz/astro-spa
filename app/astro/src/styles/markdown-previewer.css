@@ -24,30 +24,39 @@
     grid-template-columns: 1fr auto;     /* title left, buttons right */
     align-items: center;
     gap: .75rem .9rem;
-    padding: .7rem .9rem;                 /* padding FIX */
+    padding: .7rem .9rem;                 /* ✅ padding fix */
     background: var(--bg-soft);
     border-bottom: 1px solid var(--border);
 }
-.mdp-toolbar > strong { margin: 0; font-size: 1rem; line-height: 1.2; min-width: 0; }
-@media (max-width: 640px) { .mdp-toolbar { grid-template-columns: 1fr; padding: .6rem .75rem; } }
+.mdp-toolbar > strong {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.2;
+    min-width: 0;
+}
+@media (max-width: 640px) {
+    .mdp-toolbar { grid-template-columns: 1fr; padding: .6rem .75rem; }
+}
 
 /* Buttons group */
 .mdp-actions {
     justify-self: end;
     display: flex;
     align-items: center;
-    gap: .6rem;                           /* spacing FIX */
+    gap: .6rem;                           /* ✅ even spacing */
     flex-wrap: wrap;
     min-width: 0;
 }
-@media (max-width: 640px) { .mdp-actions { justify-self: start; gap: .5rem; } }
+@media (max-width: 640px) {
+    .mdp-actions { justify-self: start; gap: .5rem; }
+}
 
 /* Buttons (uses .btn in JSX) */
 .mdp-toolbar .btn {
-    padding: .48rem .85rem;               /* hit area FIX */
+    padding: .48rem .85rem;               /* ✅ larger click area */
     border-radius: .55rem;
     border: 1px solid var(--border);
-    background: #000;                     /* matches your dark button style */
+    background: #000;                     /* your dark button style */
     color: #fff;
     line-height: 1;
     cursor: pointer;
@@ -57,7 +66,7 @@
 /* === Editor textarea === */
 .mdp-input {
     width: 100%;
-    min-height: 500px;                    /* taller by default FIX */
+    min-height: 500px;                    /* ✅ taller by default */
     resize: vertical;
     padding: 1rem;
     font: 0.95rem/1.5 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
@@ -70,7 +79,7 @@
 
 /* === Preview content === */
 .mdp-preview {
-    padding: .9rem;                       /* inner padding */
+    padding: .9rem;                       /* ✅ inner padding */
     overflow-x: hidden;                   /* no page bleed */
     line-height: 1.65;
     overflow-wrap: anywhere;
@@ -85,39 +94,52 @@
 .mdp-preview p, .mdp-preview ul, .mdp-preview ol,
 .mdp-preview blockquote, .mdp-preview pre, .mdp-preview table { margin: .6rem 0; }
 
-.mdp-preview a { color: var(--brand); text-decoration-thickness: .08em; text-underline-offset: 2px; }
+.mdp-preview a {
+    color: var(--brand);
+    text-decoration-thickness: .08em;
+    text-underline-offset: 2px;
+}
 
-/* Lists */
+/* === Lists === */
 .mdp-preview ul, .mdp-preview ol { padding-left: 1.2em; }
 .mdp-preview li { margin: .25rem 0; }
 
-/* === GFM Task lists: bullets off; text inline with checkbox === */
+/* === GFM Task lists: inline fix === */
 .mdp-preview li.task-list-item {
-    list-style: none;
+    list-style: none;               /* no bullet */
     display: flex;
-    align-items: flex-start;
+    align-items: center;            /* box + text aligned */
     gap: .5rem;
     padding-left: 0;
     margin: .35rem 0;
 }
-.mdp-preview li.task-list-item > p { margin: 0; }      /* keep text on same row */
 .mdp-preview li.task-list-item > input[type="checkbox"] {
     flex: 0 0 auto;
     inline-size: 1rem;
     block-size: 1rem;
-    margin-top: .2rem;                                  /* aligns with first line */
     accent-color: var(--brand);
 }
-.mdp-preview li.task-list-item > *:not(input) { flex: 1 1 auto; min-width: 0; }
+.mdp-preview li.task-list-item > p {
+    display: inline;                /* ✅ force inline text */
+    margin: 0;
+}
+.mdp-preview li.task-list-item > *:not(input) {
+    flex: 1 1 auto;
+    min-width: 0;
+}
 
-/* Images */
-.mdp-preview img { max-width: 100%; height: auto; border-radius: .4rem; }
+/* === Images === */
+.mdp-preview img {
+    max-width: 100%;
+    height: auto;
+    border-radius: .4rem;
+}
 
-/* Tables: wrap cell content (no horizontal scroll) */
+/* === Tables: wrap cell content === */
 .mdp-preview table {
     width: 100%;
     border-collapse: collapse;
-    table-layout: fixed;                 /* cells wrap */
+    table-layout: fixed;            /* ✅ wrap instead of scroll */
     border: 1px solid var(--border);
 }
 .mdp-preview th, .mdp-preview td {
@@ -127,7 +149,7 @@
     word-break: break-word;
 }
 
-/* Inline code */
+/* === Inline code === */
 .mdp-preview code:not(pre code) {
     font: 0.93rem/1.45 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
     background: var(--bg-soft);
@@ -136,14 +158,14 @@
     border: 1px solid var(--border);
 }
 
-/* Code blocks: wrap long lines; no scrollbar */
+/* === Code blocks === */
 .mdp-preview pre {
     margin: .65rem 0;
     padding: .85rem 1rem;
     border-radius: .6rem;
     background: var(--bg-soft);
     border: 1px solid var(--border);
-    white-space: pre-wrap;
+    white-space: pre-wrap;          /* ✅ wrap long lines */
     overflow-x: hidden;
     tab-size: 2;
 }
@@ -153,33 +175,4 @@
     overflow-wrap: anywhere;
     word-break: break-word;
     font: 0.93rem/1.5 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-}
-
-
-/* --- GFM Task list fix: checkbox + text inline --- */
-.mdp-preview li.task-list-item {
-    list-style: none;               /* remove extra bullet */
-    display: flex;
-    align-items: center;            /* vertical alignment */
-    gap: .5rem;                     /* space between box and text */
-    padding-left: 0;
-    margin: .35rem 0;
-}
-
-.mdp-preview li.task-list-item > input[type="checkbox"] {
-    flex: 0 0 auto;
-    inline-size: 1rem;
-    block-size: 1rem;
-    accent-color: var(--brand);
-}
-
-/* Force any <p> inside to sit inline next to the box */
-.mdp-preview li.task-list-item > p {
-    display: inline;                /* ✅ behave like inline text */
-    margin: 0;
-}
-
-.mdp-preview li.task-list-item > *:not(input) {
-    flex: 1 1 auto;                 /* let text wrap beside box */
-    min-width: 0;
 }
