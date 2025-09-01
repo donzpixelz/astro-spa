@@ -49,29 +49,37 @@
     outline-offset: 3px;
 }
 
-/* ---------- Clock placed inside the header (REVERTED/WORKING) ---------- */
+/* ---------- Clock placed inside the header (LOCKED) ---------- */
 
 .site-header {
     border-bottom: 0 !important; /* no divider under header */
     text-align: center;
 }
 
+/* The wrapper is the SAME width as the line and clips any side/top bleed.
+   Extra bottom padding leaves space for the glow to show naturally. */
 .site-clock {
-    margin: .25rem 0 .35rem;
+    width: min(80%, 720px);       /* hard cap = same as line */
+    margin: .25rem auto .35rem;   /* centered */
+    padding-top: 6px;             /* tiny gap below the line */
+    padding-bottom: 2rem;         /* room for glow inside the clip */
+    overflow: hidden;             /* block halo/powder from crossing the line edges */
     position: relative;
-    /* no max-width/pseudo masking needed in the reverted version */
 }
 
-/* Centered, NOT full-width — halo respects this boundary */
+/* Centered line ABOVE the clock — this defines the visual width boundary */
 .site-clock .clock-line {
     border: 0;
     border-top: 2px solid var(--border);
-    width: min(80%, 720px);           /* ← back to the original working width */
-    margin: 0 auto .35rem;            /* centered, with space below */
+    width: 100%;                  /* exactly matches wrapper width */
+    margin: 0 0 .35rem;           /* space below the line */
 }
 
+/* Keep any halo strictly behind the clock and inside the clipped box */
 .site-clock :where(.clock, .digital-clock) {
-    isolation: isolate;               /* keep halo behind the clock only */
+    isolation: isolate;
+    position: relative;
+    z-index: 0;
 }
 
 /* ---------- Mobile: two independently centered rows (<=540px) ---------- */
