@@ -1,6 +1,8 @@
 import { useEffect, useState, useMemo } from "react";
 
-/** DigitalClock — simple; halo handled by CSS (::before on .clock-shell). */
+/**
+ * DigitalClock — simple; halo is handled by CSS on .clock-shell.
+ */
 export default function DigitalClock() {
     const [now, setNow] = useState(() => new Date());
 
