@@ -49,35 +49,29 @@
     outline-offset: 3px;
 }
 
-/* ---------- Clock inside the header (centered line; halo clipped) ---------- */
+/* ---------- Clock inside the header (line = border; halo clipped) ---------- */
 
 .site-header {
     border-bottom: 0 !important; /* no divider under header */
     text-align: center;
 }
 
-/* Container matches the line width and centers the block */
+/* Centered container = same width as before.
+   Its TOP BORDER is the line. It also CLIPS the halo. */
 .site-clock {
-    width: min(80%, 720px);       /* same width the line had when it worked */
+    width: min(80%, 720px);
     margin: .25rem auto .35rem;
     position: relative;
+    border-top: 2px solid var(--border); /* ← the line */
+    padding-top: 10px;                   /* small gap under the line */
+    overflow: hidden;                    /* ← clips any powder/halo */
+    background: var(--bg, #fff);         /* ensure clean edge against page */
 }
 
-/* The line ABOVE the clock — centered */
-.site-clock .clock-line {
-    border: 0;
-    border-top: 2px solid var(--border);
-    width: 100%;
-    margin: 0 0 .25rem;          /* small space under the line */
-}
+/* Hide any old <hr> that may still be in the markup */
+.site-clock .clock-line { display: none !important; }
 
-/* This wrapper CLIPS any powder/halo so it cannot cross into the line */
-.site-clock .clock-clip {
-    overflow: hidden;            /* hard clip */
-    padding-top: 8px;            /* tiny gutter so the clip line is below the hr */
-}
-
-/* Keep any halo behind the clock only */
+/* Keep any halo behind the clock only (and inside the clipped box) */
 .site-clock :where(.clock, .digital-clock) {
     isolation: isolate;
     position: relative;
