@@ -1,16 +1,16 @@
 /* =========================================================
-   header-cart.css — header clock (centered) with contained halo
+   header-cart.css — centered clock + soft powder kept below the line
    ========================================================= */
 
-/* --- Clock wrapper: centered line + clock --- */
+/* Wrapper so line and clock share the same centered width */
 .site-clock {
     display: flex;
     flex-direction: column;
-    align-items: center;           /* centers both line & clock */
+    align-items: center;
     margin: .25rem 0 .35rem;
 }
 
-/* Divider line (centered, same width as clock) */
+/* The overline above the clock */
 .site-clock .clock-line {
     border: 0;
     border-top: 2px solid var(--border);
@@ -18,34 +18,31 @@
     margin: 0 auto;
 }
 
-/* Clock container: same centered width as the line */
+/* Clock box (no background, no radius — just a clipping box) */
 .site-clock .clock-shell {
     position: relative;
-    width: min(80%, 720px);        /* match the line width exactly */
-    margin-top: .35rem;            /* gap under the line */
-    padding: .2rem .75rem;
-    border-radius: 6px;
-    overflow: hidden;              /* will clip the internal halo layer */
-    background: transparent;       /* no fill here; halo drawn by ::before */
-    box-shadow: none;              /* avoid un-clippable outer shadows */
+    width: min(80%, 720px);       /* match line width exactly */
+    margin-top: .35rem;           /* space under the line */
+    overflow: hidden;             /* clips internal glow */
+    /* no background, no border-radius, no box-shadow */
 }
 
-/* Internal “powder” halo drawn inside the box so it can be clipped */
+/* Internal soft halo — starts BELOW the line and stays clipped */
 .site-clock .clock-shell::before {
     content: "";
     position: absolute;
-    /* leave a clean strip directly under the line so nothing can touch it */
-    top: 10px;                     /* adjust 8–12px to taste */
-    left: -40px;                   /* slight overscan for soft falloff */
-    right: -40px;
-    bottom: -40px;
-    z-index: 0;
+    top: 12px;                    /* distance from the line; adjust 8–14px */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 140%;                  /* overscan so edges feather out */
+    height: 220px;                /* vertical reach of glow */
     pointer-events: none;
+    z-index: 0;
     background:
-            radial-gradient(120% 80% at 50% 40%,
-            rgba(52,102,203,.42),
-            rgba(52,102,203,.22) 45%,
-            rgba(52,102,203,0) 75%);
+            radial-gradient(ellipse at 50% 20%,
+            rgba(52,102,203,.38),
+            rgba(52,102,203,.20) 45%,
+            rgba(52,102,203,0) 72%);
     filter: blur(10px);
 }
 
@@ -58,4 +55,5 @@
     letter-spacing: 0.08em;
     font-weight: 700;
     text-align: center;
+    padding: 0 12px;              /* avoids AM/PM clipping on mobile */
 }
