@@ -3,8 +3,7 @@ import { useEffect, useState, useMemo } from "react";
 
 /**
  * One-line digital clock + date.
- * Uses your .clock-shell / .clock-time styles (blue halo),
- * and forces nowrap so it never wraps on mobile.
+ * Wrapped in .clock-guard so any halo/powder can't creep above.
  */
 export default function DigitalClock() {
     const [now, setNow] = useState(() => new Date());
@@ -30,16 +29,18 @@ export default function DigitalClock() {
     }, [now]);
 
     return (
-        <div className="clock-shell" aria-live="polite">
-            <div
-                className="clock-time"
-                style={{
-                    whiteSpace: "nowrap",
-                    fontSize: "clamp(14px, 5.2vw, 20px)",
-                    letterSpacing: "0.08em",
-                }}
-            >
-                {line}
+        <div className="clock-guard" aria-live="polite">
+            <div className="clock-shell">
+                <div
+                    className="clock-time"
+                    style={{
+                        whiteSpace: "nowrap",
+                        fontSize: "clamp(14px, 5.2vw, 20px)",
+                        letterSpacing: "0.08em",
+                    }}
+                >
+                    {line}
+                </div>
             </div>
         </div>
     );

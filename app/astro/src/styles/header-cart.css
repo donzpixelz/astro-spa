@@ -117,3 +117,6 @@
 /* ---------- Cart/PayPal page extras ---------- */
 .cart-page .cart-paypal { margin-top: .5rem; }
 .cart-page .cart-paid.ok { color:#046a38; font-weight:700; }
+
+/* Local guard so the powder/halo can’t invade the overline */
+.site-clock .clock-guard { overflow: hidden; padding-top: 8px; }
