@@ -5,7 +5,7 @@
 .site-header .nav {
     display: flex;
     flex-direction: column;
-    align-items: center;      /* center brand + nav stack */
+    align-items: center; /* center brand + nav stack */
 }
 
 .site-header .nav-links {
@@ -49,37 +49,47 @@
     outline-offset: 3px;
 }
 
-/* ---------- Clock placed inside the header (line centered; halo clipped) ---------- */
+/* ---------- Clock placed inside the header (reverted width + halo hard stop) ---------- */
 
 .site-header {
     border-bottom: 0 !important; /* no divider under header */
     text-align: center;
 }
 
-/* The wrapper matches the line width; content is centered. */
+/* Container is same width as the line and centered */
 .site-clock {
     width: min(80%, 720px);
     margin: .25rem auto .35rem;
     position: relative;
 }
 
-/* Centered line ABOVE the clock; defines the visual width boundary. */
+/* The line ABOVE the clock — centered (original behavior) */
 .site-clock .clock-line {
     border: 0;
     border-top: 2px solid var(--border);
     width: 100%;
     margin: 0 0 .35rem;
+    position: relative;
+    z-index: 2; /* sits above the cover strip */
 }
 
-/* HALO CLIP:
-   Add a tiny top gutter + mask the first 8px so the powder can't reach the line.
-   This does not change layout height noticeably, just prevents bleed. */
+/* Cover strip: hides any halo that wants to creep up into the line area */
+.site-clock::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0;
+    top: 0;                      /* exactly under the line */
+    height: 10px;                /* tweak 8–12px to taste */
+    background: var(--bg, #fff); /* your header/page background color */
+    z-index: 1;                  /* above halo, below the line */
+    pointer-events: none;
+}
+
+/* Keep halo behind clock contents */
 .site-clock :where(.clock, .digital-clock) {
+    isolation: isolate;
     position: relative;
-    padding-top: 8px;                              /* gutter under the line */
-    isolation: isolate;                            /* halo stays behind text */
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0, transparent 8px, #000 8px);
-    mask-image: linear-gradient(to bottom, transparent 0, transparent 8px, #000 8px);
+    z-index: 0;                  /* under the cover strip + line */
 }
 
 /* ---------- Mobile: two independently centered rows (<=540px) ---------- */
