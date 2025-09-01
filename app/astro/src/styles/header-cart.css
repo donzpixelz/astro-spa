@@ -40,14 +40,14 @@
 }
 
 .site-header .cart-plain .icon,
-.site-header .cart-link  .icon {
+.site-header .cart-link .icon {
     width: 1.5em;
     height: 1.5em;
     flex: 0 0 auto;
 }
 
 .site-header .cart-plain .count,
-.site-header .cart-link  .count {
+.site-header .cart-link .count {
     font-weight: 700;
     font-size: 1em;
     line-height: 1;
@@ -110,9 +110,9 @@
 /* Box that contains the clock + halo */
 .site-clock .clock-shell {
     position: relative !important;
-    width: min(80%, 720px);  /* matches the overline width */
-    margin-top: .35rem !important; /* space under the line */
-    overflow: hidden !important;    /* we hard-block the top */
+    width: min(80%, 720px);               /* matches the overline width */
+    margin-top: .35rem !important;        /* space under the line */
+    overflow: hidden !important;          /* hard-block the top */
     z-index: 1 !important;
 }
 
@@ -120,12 +120,12 @@
 .site-clock .clock-shell::after {
     content: "" !important;
     position: absolute !important;
-    top: -2px !important;         /* tucks under the overline edge */
+    top: -2px !important;                 /* tucks under the overline edge */
     left: 0 !important;
     right: 0 !important;
-    height: 22px !important;      /* thicker = safer across devices */
+    height: 22px !important;              /* thicker = safer across devices */
     background: var(--bg, #fff) !important;
-    z-index: 3 !important;        /* above glow, below text */
+    z-index: 3 !important;                /* above glow, below text */
     pointer-events: none !important;
 }
 
@@ -133,7 +133,7 @@
 .site-clock .clock-shell::before {
     content: "" !important;
     position: absolute !important;
-    top: 16px !important;          /* starts below the guard */
+    top: 16px !important;                 /* starts below the guard */
     left: 50% !important;
     transform: translateX(-50%) !important;
 
@@ -162,13 +162,13 @@
 /* Clock text above halo & guard */
 .site-clock .clock-time {
     position: relative !important;
-    z-index: 5 !important;           /* top-most so it stays crisp */
+    z-index: 5 !important;                /* top-most so it stays crisp */
     white-space: nowrap !important;
     font-size: clamp(14px, 5.2vw, 20px);
     letter-spacing: 0.08em;
     font-weight: 700;
     text-align: center;
-    padding: 0 12px !important;      /* avoids AM/PM clipping on phones */
+    padding: 0 12px !important;           /* avoids AM/PM clipping on phones */
 }
 
 /* --- One-line-only: nuke any bottom rules here and nearby --- */

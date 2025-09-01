@@ -9,7 +9,10 @@
 @import "./accordion.css";
 @import "./image-gallery.css";
 @import "./clipboard.css";
-@import "./cart.css";
+
+/* Nav + Cart + Clock (stable combined styles) */
+@import "./header-cart.css";
+
 @import "./command-palette.css";
 @import "./url-shortener.css";
 @import "./markdown-previewer.css";

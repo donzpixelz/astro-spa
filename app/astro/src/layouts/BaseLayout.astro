@@ -5,8 +5,10 @@ const { title = "Astro MPA/SPA Demo", description = "Just enough layout & nav" }
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 
-/* Import global CSS so Vite bundles it (if using src/styles/global.css) */
+/* Load base styles first… */
 import "../styles/index.css";
+/* …then load header/clock styles LAST so they win the cascade */
+import "../styles/header-cart.css";
 ---
 <html lang="en">
 <head>
@@ -23,21 +25,17 @@ import "../styles/index.css";
     <link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;700&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet" />
 
-    <!-- <link href="https://fonts.googleapis.com/css2?family=Playball&display=swap" rel="stylesheet" /> -->
     <script
             src="https://www.paypal.com/sdk/js?client-id=ASrkcLLY2_J5zbYK1SHFVxdosWRvwcwG2qWkNgA4C_PsrP5Qvs2UcbQH8V53OkicaVFzljp1QqoRIfpb&components=buttons&currency=USD"
             data-sdk-integration-source="astro-demo"
             defer
     ></script>
-
 </head>
 <body>
 <Header />
-
 <main class="site-main" role="main">
     <slot />
 </main>
-
 <Footer />
 </body>
 </html>
