@@ -1,9 +1,9 @@
 ---
 import CartBadge from "./cart/CartBadge.jsx";
-import DigitalClock from "./examples/DigitalClock.jsx"; // ⟵ move clock into header
+import DigitalClock from "../components/examples/DigitalClock.jsx";
 import "../styles/header-cart.css";
 
-/* Header.astro — site header with brand + nav + minimal cart */
+/* Header.astro — site header with brand + nav + clock */
 const path = Astro.url.pathname;
 const isActive = (href: string) =>
     path === href || (href !== "/" && path.startsWith(href));
@@ -24,9 +24,11 @@ const isActive = (href: string) =>
         </nav>
     </div>
 
-    {/* Clock inside header with its own top rule */}
-    <div class="site-clock" aria-label="Current time">
+    <!-- Clock block (line above, halo clipped below) -->
+    <div class="site-clock">
         <hr class="clock-line" />
-        <DigitalClock client:load />
+        <div class="clock-clip">
+            <DigitalClock client:load />
+        </div>
     </div>
 </header>

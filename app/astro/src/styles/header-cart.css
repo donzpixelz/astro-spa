@@ -49,54 +49,45 @@
     outline-offset: 3px;
 }
 
-/* ---------- Clock placed inside the header (reverted width + halo hard stop) ---------- */
+/* ---------- Clock inside the header (centered line; halo clipped) ---------- */
 
 .site-header {
     border-bottom: 0 !important; /* no divider under header */
     text-align: center;
 }
 
-/* Container is same width as the line and centered */
+/* Container matches the line width and centers the block */
 .site-clock {
-    width: min(80%, 720px);
+    width: min(80%, 720px);       /* same width the line had when it worked */
     margin: .25rem auto .35rem;
     position: relative;
 }
 
-/* The line ABOVE the clock — centered (original behavior) */
+/* The line ABOVE the clock — centered */
 .site-clock .clock-line {
     border: 0;
     border-top: 2px solid var(--border);
     width: 100%;
-    margin: 0 0 .35rem;
-    position: relative;
-    z-index: 2; /* sits above the cover strip */
+    margin: 0 0 .25rem;          /* small space under the line */
 }
 
-/* Cover strip: hides any halo that wants to creep up into the line area */
-.site-clock::after {
-    content: "";
-    position: absolute;
-    left: 0; right: 0;
-    top: 0;                      /* exactly under the line */
-    height: 10px;                /* tweak 8–12px to taste */
-    background: var(--bg, #fff); /* your header/page background color */
-    z-index: 1;                  /* above halo, below the line */
-    pointer-events: none;
+/* This wrapper CLIPS any powder/halo so it cannot cross into the line */
+.site-clock .clock-clip {
+    overflow: hidden;            /* hard clip */
+    padding-top: 8px;            /* tiny gutter so the clip line is below the hr */
 }
 
-/* Keep halo behind clock contents */
+/* Keep any halo behind the clock only */
 .site-clock :where(.clock, .digital-clock) {
     isolation: isolate;
     position: relative;
-    z-index: 0;                  /* under the cover strip + line */
+    z-index: 0;
 }
 
 /* ---------- Mobile: two independently centered rows (<=540px) ---------- */
 /* Row 1: Home, Services, Examples
    Row 2: About, Contact, Cart
-   Each row centers on its own.
-*/
+   Each row centers on its own. */
 @media (max-width: 540px) {
     .site-header .nav-links {
         display: flex;
