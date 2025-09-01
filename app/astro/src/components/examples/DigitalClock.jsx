@@ -1,9 +1,9 @@
-// app/astro/src/components/examples/DigitalClock.jsx
 import { useEffect, useState, useMemo } from "react";
 
 /**
  * One-line digital clock + date.
- * Wrapped in .clock-guard so any halo/powder can't creep above.
+ * Top 10px are masked so the "powder" (halo) cannot creep into the overline.
+ * Side padding prevents AM/PM clipping on small screens.
  */
 export default function DigitalClock() {
     const [now, setNow] = useState(() => new Date());
@@ -29,18 +29,29 @@ export default function DigitalClock() {
     }, [now]);
 
     return (
-        <div className="clock-guard" aria-live="polite">
-            <div className="clock-shell">
-                <div
-                    className="clock-time"
-                    style={{
-                        whiteSpace: "nowrap",
-                        fontSize: "clamp(14px, 5.2vw, 20px)",
-                        letterSpacing: "0.08em",
-                    }}
-                >
-                    {line}
-                </div>
+        <div
+            className="clock-shell"
+            aria-live="polite"
+            /* HARD STOP for halo in the top 10px */
+            style={{
+                WebkitMaskImage:
+                    "linear-gradient(to bottom, transparent 0, transparent 10px, #000 10px)",
+                maskImage:
+                    "linear-gradient(to bottom, transparent 0, transparent 10px, #000 10px)",
+                paddingTop: "10px",        // match the mask step for a tiny gutter
+                paddingInline: "12px",     // avoid AM/PM clipping on mobile
+                display: "block",
+            }}
+        >
+            <div
+                className="clock-time"
+                style={{
+                    whiteSpace: "nowrap",
+                    fontSize: "clamp(14px, 5.2vw, 20px)",
+                    letterSpacing: "0.08em",
+                }}
+            >
+                {line}
             </div>
         </div>
     );
