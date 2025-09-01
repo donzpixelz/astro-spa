@@ -1,5 +1,5 @@
 /* =========================================================
-   header-cart.css — NAV + CART stable, Clock with halo (livable state)
+   header-cart.css — NAV stable + Clock halo contained below line
    ========================================================= */
 
 /* ---------- NAV LAYOUT (desktop/up) ---------- */
@@ -15,7 +15,7 @@
     align-items: center;
     justify-content: center;            /* center the row under the title */
     gap: 1.25rem;
-    margin-top: 1.25rem;                /* space under the title underline */
+    margin-top: 1.2rem;                 /* breathing room below title underline */
 }
 
 .site-header .nav-link.active {
@@ -65,10 +65,11 @@
         display: flex;
         flex-wrap: wrap;                  /* allow two lines */
         justify-content: center;          /* center EACH line’s items */
-        row-gap: 0.35rem;
-        column-gap: 1.25rem;
+        row-gap: 0.38rem;
+        column-gap: 1.2rem;
     }
 
+    /* Force wrap after “Examples” with a 100% break element */
     .site-header .nav-links::after {
         content: "";
         flex-basis: 100%;
@@ -81,12 +82,12 @@
         text-align: center;
     }
 
-    .site-header .nav-links a[href="/"]         { order: 1; }
-    .site-header .nav-links a[href="/services"] { order: 2; }
-    .site-header .nav-links a[href="/examples"] { order: 3; }
-    .site-header .nav-links a[href="/about"]    { order: 4; }
-    .site-header .nav-links a[href="/contact"]  { order: 5; }
-    .site-header .nav-links .cart-plain         { order: 6; }
+    .site-header .nav-links a[href="/"]         { order: 1; } /* Home */
+    .site-header .nav-links a[href="/services"] { order: 2; } /* Services */
+    .site-header .nav-links a[href="/examples"] { order: 3; } /* Examples */
+    .site-header .nav-links a[href="/about"]    { order: 4; } /* About */
+    .site-header .nav-links a[href="/contact"]  { order: 5; } /* Contact */
+    .site-header .nav-links .cart-plain         { order: 6; } /* Cart */
 
     .site-header .nav-link.active {
         padding-left: 0.9rem;
@@ -99,41 +100,60 @@
 .cart-page .cart-paid.ok { color:#046a38; font-weight:700; }
 
 /* =========================================================
-   CLOCK — centered line + halo (livable state)
+   CLOCK — centered line + soft halo contained below
    ========================================================= */
 
 .site-clock {
-    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;                /* centers both line & clock */
     margin: .25rem 0 .35rem;
 }
 
-/* Divider line */
+/* Overline above the clock (centered width) */
 .site-clock .clock-line {
     border: 0;
     border-top: 2px solid var(--border);
     width: min(80%, 720px);
     margin: 0 auto;
-    position: relative;
-    z-index: 2;
 }
 
-/* Halo container */
+/* Clock box matching the line width; acts as the clipping box */
 .site-clock .clock-shell {
     position: relative;
-    margin-top: .35rem;
-    z-index: 1;
-    overflow: hidden;
-    padding: .2rem .75rem;
-    border-radius: 6px;
-    background: rgba(52,102,203,0.08); /* subtle powder fill */
-    box-shadow: 0 0 30px rgba(52,102,203,0.35);
+    width: min(80%, 720px);             /* match the line width exactly */
+    margin-top: .35rem;                 /* space under the line */
+    overflow: hidden;                   /* clips the internal glow */
+    /* no background, no border-radius, no outer box-shadow */
 }
 
-/* Clock text */
+/* Internal halo — begins BELOW the line and stays clipped inside the box */
+.site-clock .clock-shell::before {
+    content: "";
+    position: absolute;
+    top: 12px;                          /* distance from the line; tweak 8–14px */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 150%;                        /* overscan so edges feather out */
+    height: 220px;                      /* vertical reach of glow */
+    pointer-events: none;
+    z-index: 0;
+    background:
+            radial-gradient(ellipse at 50% 22%,
+            rgba(52,102,203,.38),
+            rgba(52,102,203,.20) 46%,
+            rgba(52,102,203,0) 73%);
+    filter: blur(10px);
+}
+
+/* Clock text sits above the halo */
 .site-clock .clock-time {
+    position: relative;
+    z-index: 1;
     white-space: nowrap;
     font-size: clamp(14px, 5.2vw, 20px);
     letter-spacing: 0.08em;
     font-weight: 700;
     text-align: center;
+    padding: 0 12px;                    /* prevents AM/PM clipping on small screens */
 }

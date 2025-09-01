@@ -3,7 +3,7 @@ import CartBadge from "./cart/CartBadge.jsx";
 import DigitalClock from "../components/examples/DigitalClock.jsx";
 import "../styles/header-cart.css";
 
-/* Header.astro — site header with brand + nav + clock */
+/* Header.astro — brand + nav + clock */
 const path = Astro.url.pathname;
 const isActive = (href: string) =>
     path === href || (href !== "/" && path.startsWith(href));
@@ -20,13 +20,15 @@ const isActive = (href: string) =>
             <a class={`nav-link ${isActive("/examples") ? "active" : ""}`} href="/examples" aria-current={isActive("/examples") ? "page" : undefined}>Examples</a>
             <a class={`nav-link ${isActive("/about") ? "active" : ""}`} href="/about" aria-current={isActive("/about") ? "page" : undefined}>About</a>
             <a class={`nav-link ${isActive("/contact") ? "active" : ""}`} href="/contact" aria-current={isActive("/contact") ? "page" : undefined}>Contact</a>
-            <CartBadge client:load />
+            <CartBadge class="cart-plain" client:load />
         </nav>
     </div>
 
-    <!-- Clock block (centered line; halo below) -->
+    <!-- Clock block -->
     <div class="site-clock">
         <hr class="clock-line" />
-        <DigitalClock client:load />
+        <div class="clock-shell">
+            <DigitalClock client:load />
+        </div>
     </div>
 </header>
