@@ -1,131 +1,36 @@
-/* header-cart.css — plain cart icon + count (no pill), aligned with nav */
-
-/* ---------- Base nav layout (desktop & up) ---------- */
-
-.site-header .nav {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* center brand + nav stack */
-}
-
-.site-header .nav-links {
-    display: flex;
-    align-items: center;
-    justify-content: center;  /* center the whole row under the title */
-    gap: 1.25rem;
-    margin-top: 1.25rem;      /* breathing room below the title underline */
-}
-
-/* ---------- Cart: plain icon + count ---------- */
-
-.site-header .cart-plain {
-    display: inline-flex;
-    align-items: center;
-    gap: .4rem;
-    padding: 0;
-    margin: 0;
-    background: none;
-    border: none;
-    color: #000;
-    text-decoration: none;
-    line-height: 1;
-    vertical-align: middle;
-}
-
-.site-header .cart-plain .icon {
-    width: 1.5em;
-    height: 1.5em;
-    flex: 0 0 auto;
-}
-
-.site-header .cart-plain .count {
-    font-weight: 700;
-    font-size: 1em;
-    line-height: 1;
-}
-
-.site-header .cart-plain:focus-visible {
-    outline: 2px solid var(--brand, #3466cb);
-    outline-offset: 3px;
-}
-
-/* ---------- Clock inside the header (centered line; halo below) ---------- */
-
-.site-header {
-    border-bottom: 0 !important; /* no divider under header */
-    text-align: center;
-}
-
+/* --- Clock wrapper: isolate halo below the line --- */
 .site-clock {
-    margin: .25rem 0 .35rem;
     position: relative;
+    margin: .25rem 0 .35rem;
 }
 
-/* Centered line ABOVE the clock — original behavior */
+/* Divider line */
 .site-clock .clock-line {
     border: 0;
     border-top: 2px solid var(--border);
     width: min(80%, 720px);
-    margin: 0 auto .35rem;  /* centered, with space below */
+    margin: 0 auto;
+    position: relative;
+    z-index: 2; /* sits on top of the glow */
 }
 
-/* Keep the halo neatly inside; add tiny side padding for mobile so text never clips */
-.site-clock :where(.clock, .digital-clock) {
-    isolation: isolate;
-    padding: 0 .75rem;      /* prevents AM/PM cutoff on small screens */
+/* Halo container — confined under the line */
+.site-clock .clock-shell {
+    position: relative;
+    margin-top: .35rem;
+    z-index: 1;
+    overflow: hidden;           /* keep halo from rising up */
+    padding: .2rem .75rem;
+    border-radius: 6px;
+    background: rgba(52,102,203,0.08); /* subtle powder fill */
+    box-shadow: 0 0 30px rgba(52,102,203,0.35);
 }
 
-/* ---------- Mobile: two independently centered rows (<=540px) ---------- */
-/* Row 1: Home, Services, Examples
-   Row 2: About, Contact, Cart
-   Each row centers on its own. */
-@media (max-width: 540px) {
-    .site-header .nav-links {
-        display: flex;
-        flex-wrap: wrap;              /* allow two lines */
-        justify-content: center;      /* center EACH line’s contents */
-        row-gap: 0.35rem;             /* tighter vertical gap */
-        column-gap: 1.25rem;
-    }
-
-    /* Force the wrap after "Examples" with a pseudo flex item */
-    .site-header .nav-links::after {
-        content: "";
-        flex-basis: 100%;             /* acts like a line break */
-        order: 3;
-    }
-
-    .site-header .nav-links > * {
-        flex: 0 0 auto;
-        white-space: nowrap;
-        text-align: center;
-    }
-
-    .site-header .nav-links a[href="/"]         { order: 1; } /* Home */
-    .site-header .nav-links a[href="/services"] { order: 2; } /* Services */
-    .site-header .nav-links a[href="/examples"] { order: 3; } /* Examples */
-    .site-header .nav-links a[href="/about"]    { order: 4; } /* About */
-    .site-header .nav-links a[href="/contact"]  { order: 5; } /* Contact */
-    .site-header .nav-links .cart-plain         { order: 6; } /* Cart badge */
-
-    .site-header .nav-link.active {
-        padding-left: 0.9rem;
-        padding-right: 0.9rem;
-    }
-}
-
-/* ---------- Cart/PayPal page extras ---------- */
-.cart-page .cart-paypal { margin-top: .5rem; }
-.cart-page .cart-paid.ok { color:#046a38; font-weight:700; }
-
-/* Local guard so the powder/halo can’t invade the overline */
-.site-clock .clock-guard { overflow: hidden; padding-top: 8px; }
-
-/* --- Emergency hotfix: remove the blue halo completely --- */
-.site-clock .clock-shell,
+/* Clock text */
 .site-clock .clock-time {
-    background: transparent !important;
-    box-shadow: none !important;
-    filter: none !important;
+    white-space: nowrap;
+    font-size: clamp(14px, 5.2vw, 20px);
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    text-align: center;
 }
-
