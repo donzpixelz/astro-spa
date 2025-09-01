@@ -1,7 +1,102 @@
-.clock-shell{ display:grid; place-items:center; margin:.2rem auto 0; position:relative;}
-.clock-shell::before{ content:""; position:absolute; left:50%; transform:translateX(-50%); bottom:-26px; width:clamp(320px,70vw,820px); height:110px; border-radius:9999px; background:radial-gradient(ellipse at center,var(--powder-strong),rgba(0,0,0,0) 72%); filter:blur(14px); z-index:0; pointer-events:none;}
-.clock-time{ position:relative; z-index:1; font-family:'Orbitron', ui-monospace, monospace !important; font-weight:700; font-size:1.25rem; letter-spacing:.08em; color:var(--clock-led); text-shadow:0 0 14px var(--clock-glow-strong),0 10px 28px var(--powder-strong);}
-.clock-line{ display:inline-flex; align-items:baseline; gap:.6ch; white-space:nowrap; max-width:100%;}
+/* =========================================================
+   clock.css — narrow, powdery halo that never hits the overline
+   (keeps your existing class names)
+   ========================================================= */
+
+.clock-shell{
+    display:grid;
+    place-items:center;
+    margin:.2rem auto 0;
+    position:relative;
+
+    /* keep it visually aligned with the title rule above */
+    width:min(80%, 720px);
+
+    /* absolutely block anything from creeping up into the line */
+    overflow:hidden;
+    padding-top:16px;                 /* space for the guard */
+
+    /* nuke any older “blue bar” attempts */
+    background:transparent !important;
+    box-shadow:none !important;
+    border:0 !important;
+}
+
+/* Top guard that hides any glow under the overline */
+.clock-shell::after{
+    content:"";
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    height:20px;                      /* guard thickness */
+    background:var(--bg, #fff);       /* page background */
+    z-index:2;                        /* above glow, below text */
+    pointer-events:none;
+}
+
+/* Powder halo — a soft, centered bloom (NOT a full-row bar) */
+.clock-shell::before{
+    content:"";
+    position:absolute;
+    top:14px;                         /* starts below the guard */
+    left:50%;
+    transform:translateX(-50%);
+
+    /* KEEP THIS NARROW so it never reads like a strip */
+    width:clamp(240px, 42%, 420px);
+    height:120px;
+
+    z-index:0;
+    pointer-events:none;
+
+    /* soft center, quick falloff */
+    background:
+            radial-gradient(ellipse at 50% 32%,
+            rgba(52,102,203,.35) 0%,
+            rgba(52,102,203,.18) 30%,
+            rgba(52,102,203,.08) 55%,
+            rgba(52,102,203,0) 75%);
+    filter:blur(26px);
+
+    /* trim sides/top so it can’t look like a hard bar */
+    -webkit-mask-image: radial-gradient(60% 70% at 50% 36%, #000 48%, transparent 80%);
+    mask-image: radial-gradient(60% 70% at 50% 36%, #000 48%, transparent 80%);
+}
+
+/* Clock text sits above the guard & glow */
+.clock-time{
+    position:relative;
+    z-index:3;
+    font-family:'Orbitron', ui-monospace, monospace !important;
+    font-weight:700;
+    font-size:1.25rem;
+    letter-spacing:.08em;
+    color:var(--clock-led);
+    text-shadow:0 0 14px var(--clock-glow-strong), 0 10px 28px rgba(52,102,203,.25);
+
+    /* avoid AM/PM clipping on phones */
+    padding:0 12px;
+}
+
+/* Your existing inline date/time layout classes */
+.clock-line{
+    display:inline-flex;
+    align-items:baseline;
+    gap:.6ch;
+    white-space:nowrap;
+    max-width:100%;
+}
 .clock-sep{ opacity:.65 }
-.clock-date{ font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; font-weight:600; font-size:clamp(.9rem,2.6vw,1rem); line-height:1; color:var(--text);}
-@media (max-width:360px){ .clock-line{ gap:.4ch; } }
+.clock-date{
+    font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+    font-weight:600;
+    font-size:clamp(.9rem,2.6vw,1rem);
+    line-height:1;
+    color:var(--text);
+}
+
+/* tighter gaps on very small screens */
+@media (max-width:360px){
+    .clock-line{ gap:.4ch; }
+}
