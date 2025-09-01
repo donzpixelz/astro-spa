@@ -108,3 +108,27 @@
 @media (max-width:360px){
     .clock-line{ gap:.4ch; }
 }
+
+
+/* --- Mobile cut-off hot-fix (safe, desktop unchanged) --- */
+@media (max-width: 430px) {
+    .clock-shell{
+        /* let the clock use the full viewport width and keep inner padding */
+        width: 100vw;
+        padding-inline: 14px;
+        box-sizing: border-box;
+    }
+
+    .clock-time{
+        /* slightly more flexible sizing + a touch less tracking */
+        font-size: clamp(14px, 6vw, 20px);
+        letter-spacing: .06em;
+        padding-inline: 12px;   /* ensures AM/PM never kisses the edge */
+        overflow: visible;      /* belt & suspenders */
+    }
+
+    /* keep the halo narrower so it never suggests a hard bar on small screens */
+    .clock-shell::before{
+        width: min(92%, 360px);
+    }
+}
