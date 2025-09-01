@@ -49,37 +49,37 @@
     outline-offset: 3px;
 }
 
-/* ---------- Clock placed inside the header (LOCKED) ---------- */
+/* ---------- Clock placed inside the header (line centered; halo clipped) ---------- */
 
 .site-header {
     border-bottom: 0 !important; /* no divider under header */
     text-align: center;
 }
 
-/* The wrapper is the SAME width as the line and clips any side/top bleed.
-   Extra bottom padding leaves space for the glow to show naturally. */
+/* The wrapper matches the line width; content is centered. */
 .site-clock {
-    width: min(80%, 720px);       /* hard cap = same as line */
-    margin: .25rem auto .35rem;   /* centered */
-    padding-top: 6px;             /* tiny gap below the line */
-    padding-bottom: 2rem;         /* room for glow inside the clip */
-    overflow: hidden;             /* block halo/powder from crossing the line edges */
+    width: min(80%, 720px);
+    margin: .25rem auto .35rem;
     position: relative;
 }
 
-/* Centered line ABOVE the clock — this defines the visual width boundary */
+/* Centered line ABOVE the clock; defines the visual width boundary. */
 .site-clock .clock-line {
     border: 0;
     border-top: 2px solid var(--border);
-    width: 100%;                  /* exactly matches wrapper width */
-    margin: 0 0 .35rem;           /* space below the line */
+    width: 100%;
+    margin: 0 0 .35rem;
 }
 
-/* Keep any halo strictly behind the clock and inside the clipped box */
+/* HALO CLIP:
+   Add a tiny top gutter + mask the first 8px so the powder can't reach the line.
+   This does not change layout height noticeably, just prevents bleed. */
 .site-clock :where(.clock, .digital-clock) {
-    isolation: isolate;
     position: relative;
-    z-index: 0;
+    padding-top: 8px;                              /* gutter under the line */
+    isolation: isolate;                            /* halo stays behind text */
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0, transparent 8px, #000 8px);
+    mask-image: linear-gradient(to bottom, transparent 0, transparent 8px, #000 8px);
 }
 
 /* ---------- Mobile: two independently centered rows (<=540px) ---------- */
