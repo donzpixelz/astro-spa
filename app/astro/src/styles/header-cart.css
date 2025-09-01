@@ -1,33 +1,58 @@
-/* --- Clock wrapper: isolate halo below the line --- */
+/* =========================================================
+   header-cart.css — header clock (centered) with contained halo
+   ========================================================= */
+
+/* --- Clock wrapper: centered line + clock --- */
 .site-clock {
-    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;           /* centers both line & clock */
     margin: .25rem 0 .35rem;
 }
 
-/* Divider line */
+/* Divider line (centered, same width as clock) */
 .site-clock .clock-line {
     border: 0;
     border-top: 2px solid var(--border);
     width: min(80%, 720px);
     margin: 0 auto;
-    position: relative;
-    z-index: 2; /* sits on top of the glow */
 }
 
-/* Halo container — confined under the line */
+/* Clock container: same centered width as the line */
 .site-clock .clock-shell {
     position: relative;
-    margin-top: .35rem;
-    z-index: 1;
-    overflow: hidden;           /* keep halo from rising up */
+    width: min(80%, 720px);        /* match the line width exactly */
+    margin-top: .35rem;            /* gap under the line */
     padding: .2rem .75rem;
     border-radius: 6px;
-    background: rgba(52,102,203,0.08); /* subtle powder fill */
-    box-shadow: 0 0 30px rgba(52,102,203,0.35);
+    overflow: hidden;              /* will clip the internal halo layer */
+    background: transparent;       /* no fill here; halo drawn by ::before */
+    box-shadow: none;              /* avoid un-clippable outer shadows */
 }
 
-/* Clock text */
+/* Internal “powder” halo drawn inside the box so it can be clipped */
+.site-clock .clock-shell::before {
+    content: "";
+    position: absolute;
+    /* leave a clean strip directly under the line so nothing can touch it */
+    top: 10px;                     /* adjust 8–12px to taste */
+    left: -40px;                   /* slight overscan for soft falloff */
+    right: -40px;
+    bottom: -40px;
+    z-index: 0;
+    pointer-events: none;
+    background:
+            radial-gradient(120% 80% at 50% 40%,
+            rgba(52,102,203,.42),
+            rgba(52,102,203,.22) 45%,
+            rgba(52,102,203,0) 75%);
+    filter: blur(10px);
+}
+
+/* Clock text sits above the halo */
 .site-clock .clock-time {
+    position: relative;
+    z-index: 1;
     white-space: nowrap;
     font-size: clamp(14px, 5.2vw, 20px);
     letter-spacing: 0.08em;
