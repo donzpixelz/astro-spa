@@ -5,7 +5,7 @@
 .site-header .nav {
     display: flex;
     flex-direction: column;
-    align-items: center; /* center brand + nav stack */
+    align-items: center;      /* center brand + nav stack */
 }
 
 .site-header .nav-links {
@@ -49,56 +49,29 @@
     outline-offset: 3px;
 }
 
-/* ---------- Clock placed inside the header ---------- */
+/* ---------- Clock placed inside the header (REVERTED/WORKING) ---------- */
 
 .site-header {
     border-bottom: 0 !important; /* no divider under header */
     text-align: center;
 }
 
-/* Narrow, centered clock/halo box */
 .site-clock {
+    margin: .25rem 0 .35rem;
     position: relative;
-    margin: .25rem auto .35rem;
-    max-width: 720px;     /* halo cutoff width */
-    padding-top: 8px;     /* gap under the overline so halo never touches it */
+    /* no max-width/pseudo masking needed in the reverted version */
 }
 
-/* Hide the original <hr>; we draw a full-width one via ::before */
-.site-clock .clock-line { display: none; }
-
-/* Full-width overline (edge-to-edge) */
-.site-clock::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100vw;                 /* full viewport width */
+/* Centered, NOT full-width — halo respects this boundary */
+.site-clock .clock-line {
+    border: 0;
     border-top: 2px solid var(--border);
-    z-index: 3;
-    pointer-events: none;
+    width: min(80%, 720px);           /* ← back to the original working width */
+    margin: 0 auto .35rem;            /* centered, with space below */
 }
 
-/* Full-width mask strip below the line to block any halo bleed */
-.site-clock::after {
-    content: "";
-    position: absolute;
-    top: 0;                        /* starts right under the line */
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100vw;
-    height: 8px;                   /* must match .site-clock { padding-top } */
-    background: var(--bg, #fff);   /* same as header/page background */
-    z-index: 2;                    /* above halo, below the line */
-    pointer-events: none;
-}
-
-/* Keep the halo behind the clock only (and beneath the mask) */
 .site-clock :where(.clock, .digital-clock) {
-    isolation: isolate;
-    position: relative;
-    z-index: 0;                    /* below ::after (mask) and ::before (line) */
+    isolation: isolate;               /* keep halo behind the clock only */
 }
 
 /* ---------- Mobile: two independently centered rows (<=540px) ---------- */
