@@ -159,3 +159,38 @@
     text-align: center;
     padding: 0 12px;
 }
+
+/* === FINAL OVERRIDE: powder glow, centered & clipped === */
+.site-clock .clock-line { z-index: 3 !important; }
+
+.site-clock .clock-shell {
+    position: relative !important;
+    margin-top: .35rem !important;      /* space under the line */
+    overflow: hidden !important;        /* clip anything that rises */
+    z-index: 1 !important;
+}
+
+.site-clock .clock-shell::before {
+    content: "" !important;
+    position: absolute !important;
+    top: 14px !important;               /* starts below the line */
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: 60% !important;              /* narrow so it’s not a bar */
+    max-width: 460px !important;
+    height: 150px !important;
+    pointer-events: none !important;
+    z-index: 0 !important;
+
+    /* soft, powdery falloff */
+    background: radial-gradient(ellipse at 50% 28%,
+    rgba(52,102,203,.45) 0%,
+    rgba(52,102,203,.20) 42%,
+    rgba(52,102,203,0) 70%) !important;
+
+    filter: blur(16px) !important;
+
+    /* hard-stop the edges so it never becomes a strip */
+    -webkit-mask-image: radial-gradient(65% 70% at 50% 35%, #000 55%, transparent 85%) !important;
+    mask-image: radial-gradient(65% 70% at 50% 35%, #000 55%, transparent 85%) !important;
+}
