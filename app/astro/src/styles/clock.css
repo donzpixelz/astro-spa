@@ -1,9 +1,8 @@
 /* =========================================================
-   clock.css — narrow powder halo, no extra rules
-   (drop-in replacement)
+   clock.css — visible time, narrow powder halo, no extra rules
    ========================================================= */
 
-/* Wrap + alignment */
+/* Container for the clock block */
 .site-clock{
     display:flex;
     flex-direction:column;
@@ -12,88 +11,77 @@
     position:relative;
 }
 
-/* If any hr/line was injected for the clock area, hide it.
-   (We keep the title’s underline; we just don’t want a second rule here.) */
+/* We do NOT want a second rule under the nav here. */
 .site-clock .clock-line{ display:none !important; }
 
-/* The shell that carries the halo and the text */
+/* Shell that carries the halo + text */
 .clock-shell{
     position:relative;
     display:grid;
     place-items:center;
 
-    /* Keep the clock visually centered and limited in width */
     width:min(80%, 720px);
     margin:.20rem auto 0;
 
-    /* Hard guard so no blue can ever touch the area above */
-    overflow:hidden;
-    padding-top:16px;
+    /* give breathing room so text is never clipped */
+    padding: 8px 0 14px;
 
-    /* Nuke any legacy backgrounds/box-shadows that made a “bar” */
+    /* make sure nothing “sticks up” above the top edge */
+    overflow:hidden;
+
+    /* kill any legacy bar/box-shadow */
     background:transparent !important;
     box-shadow:none !important;
     border:0 !important;
 }
 
-/* Hard top guard (white strip) that lives INSIDE the clock area */
-.clock-shell::after{
-    content:"";
-    position:absolute;
-    top:0;
-    left:0;
-    right:0;
-    height:20px;                    /* guard thickness */
-    background:var(--bg, #fff);     /* page background color */
-    z-index:2;                      /* above halo, below text */
-    pointer-events:none;
-}
-
-/* Powder halo — soft, centered bloom (never full width) */
+/* Powder halo — a soft, NARROW bloom (not a wide strip).
+   It starts lower, so it can’t reach the overline above. */
 .clock-shell::before{
     content:"";
     position:absolute;
-    top:14px;                       /* below the guard */
+    /* push the bloom down enough to never touch the top edge */
+    top:18px;
     left:50%;
     transform:translateX(-50%);
 
-    /* Make it narrow so it reads like a bloom, not a strip */
-    width:clamp(240px, 42%, 420px);
+    width:clamp(260px, 44%, 460px);
     height:120px;
 
     z-index:0;
     pointer-events:none;
 
-    /* soft center → quick falloff */
     background:
             radial-gradient(ellipse at 50% 32%,
             rgba(52,102,203,.35) 0%,
             rgba(52,102,203,.18) 30%,
             rgba(52,102,203,.08) 55%,
             rgba(52,102,203,0) 75%);
-    filter:blur(26px);
+    filter:blur(24px);
 
-    /* Trim sides/top so the shape never looks like a hard bar */
+    /* Trim so it never reads like a hard bar across */
     -webkit-mask-image: radial-gradient(60% 70% at 50% 36%, #000 48%, transparent 80%);
     mask-image: radial-gradient(60% 70% at 50% 36%, #000 48%, transparent 80%);
 }
 
-/* Clock text (stays crisp over bloom) */
+/* The actual time text — make sure it’s always on top & legible */
 .clock-time{
     position:relative;
-    z-index:3;
+    z-index:2;                           /* above halo */
     font-family:'Orbitron', ui-monospace, monospace !important;
     font-weight:700;
-    font-size:1.25rem;
+    font-size:1.35rem;                   /* slightly larger for readability */
     letter-spacing:.08em;
-    color:var(--clock-led);
-    text-shadow:0 0 14px var(--clock-glow-strong), 0 10px 28px rgba(52,102,203,.25);
-    padding:0 12px;                 /* avoids AM/PM clipping on phones */
+    color:var(--clock-led, #000);        /* falls back to black if var missing */
+    text-shadow:
+            0 0 14px var(--clock-glow-strong, rgba(52,102,203,.35)),
+            0 10px 28px rgba(52,102,203,.25);
+    padding:0 12px;                      /* avoid AM/PM clipping on phones */
     white-space:nowrap;
     text-align:center;
 }
 
-/* If you render date/time pieces inline these stay as-is */
+/* Optional inline date/time line pieces (kept for compatibility) */
 .clock-line{
     display:inline-flex;
     align-items:baseline;
@@ -107,16 +95,16 @@
     font-weight:600;
     font-size:clamp(.9rem,2.6vw,1rem);
     line-height:1;
-    color:var(--text);
+    color:var(--text, #111);
 }
 
-/* Kill any stray borders that a layout file might inject here */
+/* Kill any stray borders a layout might inject around here */
 .site-clock,
 .clock-shell,
 .clock-time{ border:0 !important; }
 .site-clock + *{ border-top:0 !important; }
 
-/* tighter gaps on tiny screens */
+/* tiny screens: slightly tighter gaps if you render date pieces */
 @media (max-width:360px){
     .clock-line{ gap:.4ch; }
 }
