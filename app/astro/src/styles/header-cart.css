@@ -231,3 +231,27 @@
     padding: 0 12px !important;   /* avoids AM/PM clipping on phones */
     white-space: nowrap !important;
 }
+
+
+/* === ONE-LINE-ONLY FIX (append at end) === */
+
+/* Keep the intended overline above the clock */
+.site-clock .clock-line {
+    border-top: 2px solid var(--border) !important;
+}
+
+/* Nuke any unintended bottom rule around the clock area */
+.site-clock,
+.site-clock .clock-shell,
+.site-clock .clock-time {
+    border-bottom: 0 !important;
+}
+
+/* If any global layout adds a top divider right after the clock, remove it */
+.site-clock + * {
+    border-top: 0 !important;
+}
+
+/* Also ensure the page frame doesn’t inject a divider here */
+.site-header { border-bottom: 0 !important; }
+.site-main   { border-top: 0 !important; }
