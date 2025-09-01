@@ -1,9 +1,8 @@
 /* =========================================================
-   header-cart.css — stable nav + powdery clock halo (fixed)
+   header-cart.css — stable nav + single overline + powder halo
    ========================================================= */
 
 /* ---------- NAV (unchanged) ---------- */
-
 .site-header .nav {
     display: flex;
     flex-direction: column;
@@ -71,13 +70,13 @@
     .site-header .nav-links::after { content: ""; flex-basis: 100%; order: 3; }
     .site-header .nav-links > * { flex: 0 0 auto; white-space: nowrap; text-align: center; }
 
-    .site-header .nav-links a[href="/"]         { order: 1; } /* Home */
-    .site-header .nav-links a[href="/services"] { order: 2; } /* Services */
-    .site-header .nav-links a[href="/examples"] { order: 3; } /* Examples */
-    .site-header .nav-links a[href="/about"]    { order: 4; } /* About */
-    .site-header .nav-links a[href="/contact"]  { order: 5; } /* Contact */
+    .site-header .nav-links a[href="/"]         { order: 1; }
+    .site-header .nav-links a[href="/services"] { order: 2; }
+    .site-header .nav-links a[href="/examples"] { order: 3; }
+    .site-header .nav-links a[href="/about"]    { order: 4; }
+    .site-header .nav-links a[href="/contact"]  { order: 5; }
     .site-header .nav-links .cart-plain,
-    .site-header .nav-links .cart-link          { order: 6; } /* Cart */
+    .site-header .nav-links .cart-link          { order: 6; }
 
     .site-header .nav-link.active { padding-left: .9rem; padding-right: .9rem; }
 }
@@ -87,96 +86,87 @@
 .cart-page .cart-paid.ok { color:#046a38; font-weight:700; }
 
 /* =========================================================
-   CLOCK — powder halo centered, narrow, and blocked under the line
+   CLOCK — single overline + true “powder” that hugs the text
    ========================================================= */
 
+/* Wrapper */
 .site-clock {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: .25rem 0 .35rem;
+    position: relative;
+    margin: .25rem 0 .40rem;
 }
 
-/* Overline above clock (only line we keep) */
+/* The ONLY line (above the clock) */
 .site-clock .clock-line {
     border: 0;
     border-top: 2px solid var(--border);
     width: min(80%, 720px);
     margin: 0 auto;
     position: relative;
-    z-index: 4; /* sits above halo */
+    z-index: 3;
 }
 
-/* Box that contains the clock + halo */
+/* Shell: neutral container that clips the top zone */
 .site-clock .clock-shell {
-    position: relative !important;
-    width: min(80%, 720px);               /* matches the overline width */
-    margin-top: .35rem !important;        /* space under the line */
-    overflow: hidden !important;          /* hard-block the top */
-    z-index: 1 !important;
+    position: relative;
+    margin-top: .40rem;      /* space from the overline */
+    padding: 0 .75rem;       /* room so AM/PM doesn't clip on phones */
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    overflow: hidden;        /* clip anything that might rise into the line */
 }
 
-/* HARD TOP GUARD: prevents any halo from reaching the overline */
-.site-clock .clock-shell::after {
-    content: "" !important;
-    position: absolute !important;
-    top: -2px !important;                 /* tucks under the overline edge */
-    left: 0 !important;
-    right: 0 !important;
-    height: 22px !important;              /* thicker = safer across devices */
-    background: var(--bg, #fff) !important;
-    z-index: 3 !important;                /* above glow, below text */
-    pointer-events: none !important;
+/* Ensure no bottom rule is ever drawn by globals */
+.site-clock,
+.site-clock .clock-shell { border-bottom: 0 !important; }
+
+/* Text + powder that scales to the text width (not the whole row) */
+.site-clock .clock-time-wrap {
+    display: flex;
+    justify-content: center;
 }
 
-/* POWDER HALO: narrow, centered, soft falloff (NOT a bar) */
-.site-clock .clock-shell::before {
-    content: "" !important;
-    position: absolute !important;
-    top: 16px !important;                 /* starts below the guard */
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-
-    /* Width is a fraction of the line so it never looks like a slab */
-    width: clamp(220px, 42%, 380px) !important;
-    height: 120px !important;
-
-    pointer-events: none !important;
-    z-index: 0 !important;
-
-    /* soft center, quick falloff—true “powder” */
-    background:
-            radial-gradient(ellipse at 50% 32%,
-            rgba(52,102,203,.35) 0%,
-            rgba(52,102,203,.18) 30%,
-            rgba(52,102,203,.08) 55%,
-            rgba(52,102,203,0) 75%) !important;
-
-    filter: blur(26px) !important;
-
-    /* Trim sides/top so it can never present as a bar */
-    -webkit-mask-image: radial-gradient(60% 70% at 50% 36%, #000 48%, transparent 80%) !important;
-    mask-image: radial-gradient(60% 70% at 50% 36%, #000 48%, transparent 80%) !important;
-}
-
-/* Clock text above halo & guard */
 .site-clock .clock-time {
-    position: relative !important;
-    z-index: 5 !important;                /* top-most so it stays crisp */
-    white-space: nowrap !important;
+    position: relative;
+    display: inline-block;   /* << Halo sizes to text */
+    white-space: nowrap;
     font-size: clamp(14px, 5.2vw, 20px);
     letter-spacing: 0.08em;
     font-weight: 700;
     text-align: center;
-    padding: 0 12px !important;           /* avoids AM/PM clipping on phones */
+    padding: 0 12px;
+    z-index: 2;
+
+    /* gentle text glow */
+    text-shadow:
+            0 0 10px rgba(52,102,203,.16),
+            0 0 22px rgba(52,102,203,.16);
 }
 
-/* --- One-line-only: nuke any bottom rules here and nearby --- */
-.site-clock,
-.site-clock .clock-shell,
-.site-clock .clock-time { border-bottom: 0 !important; }
+/* Powder cloud: soft, centered, and clipped BELOW the line */
+.site-clock .clock-time::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 38%;
+    width: 120%;             /* slightly wider than the text itself */
+    height: 160%;
+    z-index: -1;
+    pointer-events: none;
 
+    background:
+            radial-gradient(ellipse at 50% 55%,
+            rgba(52,102,203,.26) 0%,
+            rgba(52,102,203,.14) 35%,
+            rgba(52,102,203,.06) 60%,
+            rgba(52,102,203,0) 78%);
+    filter: blur(20px);
+
+    /* Mask fades out toward the top so it never touches the overline */
+    -webkit-mask-image: linear-gradient(to top, #000 62%, rgba(0,0,0,0) 96%);
+    mask-image: linear-gradient(to top, #000 62%, rgba(0,0,0,0) 96%);
+}
+
+/* Prevent any unintended top/bottom borders around the clock area */
 .site-clock + * { border-top: 0 !important; }
-
-.site-header { border-bottom: 0 !important; }
-.site-main   { border-top: 0 !important; }

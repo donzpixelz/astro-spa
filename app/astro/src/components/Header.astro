@@ -1,7 +1,9 @@
 ---
 import CartBadge from "./cart/CartBadge.jsx";
-import DigitalClock from "../components/examples/DigitalClock.jsx";
-/* Do NOT import header-cart.css here — it's loaded in BaseLayout.astro */
+/* 👉 Correct relative path from src/components/Header.astro */
+import DigitalClock from "./examples/DigitalClock.jsx";
+
+/* Header.astro — site header with brand + nav + clock */
 const path = Astro.url.pathname;
 const isActive = (href: string) =>
     path === href || (href !== "/" && path.startsWith(href));
@@ -22,11 +24,13 @@ const isActive = (href: string) =>
         </nav>
     </div>
 
-    <!-- Clock: required structure to match your CSS selectors -->
+    <!-- Clock block -->
     <div class="site-clock">
         <hr class="clock-line" />
         <div class="clock-shell">
-            <DigitalClock client:load />
+            <div class="clock-time-wrap">
+                <DigitalClock client:load />
+            </div>
         </div>
     </div>
 </header>
