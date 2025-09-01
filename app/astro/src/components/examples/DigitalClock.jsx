@@ -1,9 +1,10 @@
 import { useEffect, useState, useMemo } from "react";
 
 /**
- * One-line digital clock + date.
- * Top 10px are masked so the "powder" (halo) cannot creep into the overline.
- * Side padding prevents AM/PM clipping on small screens.
+ * DigitalClock — self-contained; prevents halo from reaching the overline.
+ * - A top cover strip hides any glow that would creep upward.
+ * - Small side padding avoids AM/PM clipping on mobile.
+ * - No external CSS changes required.
  */
 export default function DigitalClock() {
     const [now, setNow] = useState(() => new Date());
@@ -28,30 +29,47 @@ export default function DigitalClock() {
         return `${date} • ${time}`;
     }, [now]);
 
+    // Tweak these if you want a slightly bigger/smaller guard.
+    const GUARD = 10;        // px of protected area under the overline
+    const SIDE_PAD = 12;     // px to avoid AM/PM clipping
+    const BG = "var(--bg, #fff)";
+
     return (
-        <div
-            className="clock-shell"
-            aria-live="polite"
-            /* HARD STOP for halo in the top 10px */
-            style={{
-                WebkitMaskImage:
-                    "linear-gradient(to bottom, transparent 0, transparent 10px, #000 10px)",
-                maskImage:
-                    "linear-gradient(to bottom, transparent 0, transparent 10px, #000 10px)",
-                paddingTop: "10px",        // match the mask step for a tiny gutter
-                paddingInline: "12px",     // avoid AM/PM clipping on mobile
-                display: "block",
-            }}
-        >
+        <div style={{ position: "relative", display: "block" }} aria-live="polite">
+            {/* Top cover strip: blocks any halo from reaching the overline */}
             <div
-                className="clock-time"
+                aria-hidden
                 style={{
-                    whiteSpace: "nowrap",
-                    fontSize: "clamp(14px, 5.2vw, 20px)",
-                    letterSpacing: "0.08em",
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: GUARD,
+                    background: BG,
+                    zIndex: 2,
+                    pointerEvents: "none",
+                }}
+            />
+            {/* Clock with a tiny top gap + side padding; all halo stays below the strip */}
+            <div
+                className="clock-shell"
+                style={{
+                    position: "relative",
+                    zIndex: 1,
+                    paddingTop: GUARD,
+                    paddingInline: SIDE_PAD,
                 }}
             >
-                {line}
+                <div
+                    className="clock-time"
+                    style={{
+                        whiteSpace: "nowrap",
+                        fontSize: "clamp(14px, 5.2vw, 20px)",
+                        letterSpacing: "0.08em",
+                    }}
+                >
+                    {line}
+                </div>
             </div>
         </div>
     );
