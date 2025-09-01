@@ -1,5 +1,5 @@
 /* =========================================================
-   header-cart.css — NAV + CART restored, Clock halo contained
+   header-cart.css — NAV + CART stable, Clock halo contained
    ========================================================= */
 
 /* ---------- NAV LAYOUT (desktop/up) ---------- */
@@ -18,9 +18,16 @@
     margin-top: 1.1rem;                 /* space under the title underline */
 }
 
-/* ---------- CART: plain icon + count ---------- */
+.site-header .nav-link.active {
+    /* keep the active pill from causing wrap jitter */
+    padding-left: 0.95rem;
+    padding-right: 0.95rem;
+}
 
-.site-header .cart-plain {
+/* ---------- CART: plain icon + count (supports .cart-plain or .cart-link) ---------- */
+
+.site-header .cart-plain,
+.site-header .cart-link {
     display: inline-flex;
     align-items: center;
     gap: .4rem;
@@ -34,19 +41,22 @@
     vertical-align: middle;
 }
 
-.site-header .cart-plain .icon {
+.site-header .cart-plain .icon,
+.site-header .cart-link  .icon {
     width: 1.5em;
     height: 1.5em;
     flex: 0 0 auto;
 }
 
-.site-header .cart-plain .count {
+.site-header .cart-plain .count,
+.site-header .cart-link  .count {
     font-weight: 700;
     font-size: 1em;
     line-height: 1;
 }
 
-.site-header .cart-plain:focus-visible {
+.site-header .cart-plain:focus-visible,
+.site-header .cart-link:focus-visible {
     outline: 2px solid var(--brand, #3466cb);
     outline-offset: 3px;
 }
@@ -60,8 +70,8 @@
         display: flex;
         flex-wrap: wrap;                  /* allow two lines */
         justify-content: center;          /* center EACH line’s items */
-        row-gap: 0.35rem;
-        column-gap: 1.25rem;
+        row-gap: 0.40rem;
+        column-gap: 1.1rem;
     }
 
     /* Force wrap after “Examples” with a 100% break element */
@@ -82,13 +92,8 @@
     .site-header .nav-links a[href="/examples"] { order: 3; } /* Examples */
     .site-header .nav-links a[href="/about"]    { order: 4; } /* About */
     .site-header .nav-links a[href="/contact"]  { order: 5; } /* Contact */
-    .site-header .nav-links .cart-plain         { order: 6; } /* Cart */
-
-    /* Don’t let the active pill force early wraps */
-    .site-header .nav-link.active {
-        padding-left: 0.9rem;
-        padding-right: 0.9rem;
-    }
+    .site-header .nav-links .cart-plain,
+    .site-header .nav-links .cart-link          { order: 6; } /* Cart */
 }
 
 /* ---------- Cart/PayPal page extras ---------- */
@@ -106,7 +111,7 @@
     margin: .25rem 0 .35rem;
 }
 
-/* The overline above the clock */
+/* Overline above the clock (centered width) */
 .site-clock .clock-line {
     border: 0;
     border-top: 2px solid var(--border);
@@ -114,7 +119,7 @@
     margin: 0 auto;
 }
 
-/* Clock box (no background “bar”, just a clipping box) */
+/* Clock box (no “bar”: just a clipping box matching the line width) */
 .site-clock .clock-shell {
     position: relative;
     width: min(80%, 720px);             /* match the line width exactly */
@@ -130,15 +135,15 @@
     top: 12px;                          /* distance from the line; tweak 8–14px */
     left: 50%;
     transform: translateX(-50%);
-    width: 140%;                        /* overscan so edges feather out */
+    width: 150%;                        /* overscan so edges feather out */
     height: 220px;                      /* vertical reach of glow */
     pointer-events: none;
     z-index: 0;
     background:
-            radial-gradient(ellipse at 50% 20%,
+            radial-gradient(ellipse at 50% 22%,
             rgba(52,102,203,.38),
-            rgba(52,102,203,.20) 45%,
-            rgba(52,102,203,0) 72%);
+            rgba(52,102,203,.20) 46%,
+            rgba(52,102,203,0) 73%);
     filter: blur(10px);
 }
 
