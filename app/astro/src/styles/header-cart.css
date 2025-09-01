@@ -1,98 +1,257 @@
-/* === CLOCK — one overline only + true powder glow around text === */
+/* =========================================================
+   header-cart.css — stable nav + powdery clock halo (fixed)
+   ========================================================= */
 
-/* Wrapper */
+/* ---------- NAV (unchanged) ---------- */
+
+.site-header .nav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.site-header .nav-links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+    margin-top: 1.2rem;
+}
+
+.site-header .nav-link.active {
+    padding-left: 0.95rem;
+    padding-right: 0.95rem;
+}
+
+/* Cart (plain icon + count) */
+.site-header .cart-plain,
+.site-header .cart-link {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    padding: 0;
+    margin: 0;
+    background: none;
+    border: none;
+    color: #000;
+    text-decoration: none;
+    line-height: 1;
+    vertical-align: middle;
+}
+
+.site-header .cart-plain .icon,
+.site-header .cart-link  .icon {
+    width: 1.5em;
+    height: 1.5em;
+    flex: 0 0 auto;
+}
+
+.site-header .cart-plain .count,
+.site-header .cart-link  .count {
+    font-weight: 700;
+    font-size: 1em;
+    line-height: 1;
+}
+
+.site-header .cart-plain:focus-visible,
+.site-header .cart-link:focus-visible {
+    outline: 2px solid var(--brand, #3466cb);
+    outline-offset: 3px;
+}
+
+/* Mobile: two rows centered (wrap after Examples) */
+@media (max-width: 540px) {
+    .site-header .nav-links {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        row-gap: 0.38rem;
+        column-gap: 1.2rem;
+    }
+    .site-header .nav-links::after { content: ""; flex-basis: 100%; order: 3; }
+    .site-header .nav-links > * { flex: 0 0 auto; white-space: nowrap; text-align: center; }
+
+    .site-header .nav-links a[href="/"]         { order: 1; } /* Home */
+    .site-header .nav-links a[href="/services"] { order: 2; } /* Services */
+    .site-header .nav-links a[href="/examples"] { order: 3; } /* Examples */
+    .site-header .nav-links a[href="/about"]    { order: 4; } /* About */
+    .site-header .nav-links a[href="/contact"]  { order: 5; } /* Contact */
+    .site-header .nav-links .cart-plain,
+    .site-header .nav-links .cart-link          { order: 6; } /* Cart */
+
+    .site-header .nav-link.active { padding-left: .9rem; padding-right: .9rem; }
+}
+
+/* Cart/PayPal page extras */
+.cart-page .cart-paypal { margin-top: .5rem; }
+.cart-page .cart-paid.ok { color:#046a38; font-weight:700; }
+
+/* =========================================================
+   CLOCK — powder halo centered, narrow, and hard-blocked below the line
+   ========================================================= */
+
 .site-clock {
-    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     margin: .25rem 0 .35rem;
 }
 
-/* The single line ABOVE the clock */
+/* Overline above clock */
 .site-clock .clock-line {
     border: 0;
     border-top: 2px solid var(--border);
     width: min(80%, 720px);
     margin: 0 auto;
     position: relative;
-    z-index: 4; /* sits above any glow */
+    z-index: 3; /* stays above halo */
 }
 
-/* Shell holds the text + a small top guard that blocks glow from rising */
+/* Box that contains the clock + halo */
 .site-clock .clock-shell {
     position: relative;
-    margin-top: .35rem;
+    width: min(80%, 720px);       /* match overline width */
+    margin-top: .35rem;           /* space under the line */
+    overflow: visible;            /* we’ll block the top explicitly */
     z-index: 1;
-    overflow: hidden; /* ensures nothing crosses into the overline zone */
-    padding: .25rem .75rem; /* light breathing room */
-    border-radius: 6px;     /* gentle rounding under the text only */
-    background: transparent; /* no slab background */
-    box-shadow: none;        /* remove any previous bar look */
 }
 
-/* top guard (white strip) so the powder never touches the overline */
+/* HARD TOP GUARD: prevents any halo from ever reaching the overline */
 .site-clock .clock-shell::after {
     content: "";
     position: absolute;
-    top: -2px;               /* tucks just under the line */
+    top: -2px;                    /* slightly overlaps under the line */
     left: 0;
     right: 0;
-    height: 18px;            /* blocks upward glow */
-    background: var(--bg, #fff);
-    z-index: 2;
+    height: 18px;                 /* guard thickness */
+    background: var(--bg, #fff);  /* page background */
+    z-index: 2;                   /* above halo, below text */
     pointer-events: none;
 }
 
-/* Ensure any older wide-glow implementation is neutralized */
+/* POWDER HALO: narrow, centered, soft falloff (NOT a bar) */
 .site-clock .clock-shell::before {
-    content: none !important;
+    content: "";
+    position: absolute;
+    top: 14px;                    /* starts below the guard + line */
+    left: 50%;
+    transform: translateX(-50%);
+    width: clamp(260px, 58%, 520px);   /* narrow -> won’t hit edges */
+    height: 150px;
+    z-index: 0;
+    pointer-events: none;
+
+    /* soft powdery bloom */
+    background: radial-gradient(
+            ellipse at 50% 30%,
+            rgba(52,102,203,.45) 0%,
+            rgba(52,102,203,.20) 40%,
+            rgba(52,102,203,0) 70%
+    );
+    filter: blur(16px);
+
+    /* mask trims sides/top so it can’t look like a strip */
+    -webkit-mask-image: radial-gradient(70% 75% at 50% 35%, #000 55%, transparent 85%);
+    mask-image: radial-gradient(70% 75% at 50% 35%, #000 55%, transparent 85%);
 }
 
-/* Clock text + “powder” that hugs the text itself */
+/* Clock text above the halo & guard */
 .site-clock .clock-time {
     position: relative;
-    z-index: 3;              /* above the guard and glow */
-    display: inline-block;   /* lets the glow size to the text, not the row */
+    z-index: 4;                   /* above everything */
     white-space: nowrap;
     font-size: clamp(14px, 5.2vw, 20px);
     letter-spacing: 0.08em;
     font-weight: 700;
     text-align: center;
-    padding: 0 12px;         /* avoids AM/PM clipping on phones */
-
-    /* soft text halo (subtle, layered) */
-    text-shadow:
-            0 0 10px rgba(52,102,203,.18),
-            0 0 22px rgba(52,102,203,.18),
-            0 2px 34px rgba(52,102,203,.16);
+    padding: 0 12px;              /* prevent AM/PM clipping on small screens */
 }
 
-/* extra “powder cloud” under the text, sized to the text width (not the row) */
-.site-clock .clock-time::before {
-    content: "";
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    top: 38%;
-    width: 120%;             /* a bit wider than the text itself */
-    height: 160%;
-    pointer-events: none;
-    z-index: -1;
 
-    /* soft center, fast falloff — looks like dust, not a bar */
+/* === POWDER FIX (final override) === */
+
+.site-clock .clock-line { z-index: 4 !important; }
+
+/* keep the halo boxed and the top hard-blocked under the line */
+.site-clock .clock-shell {
+    position: relative !important;
+    margin-top: .35rem !important;
+    overflow: hidden !important;
+    z-index: 1 !important;
+}
+
+/* top guard that prevents any blue from touching the overline */
+.site-clock .clock-shell::after {
+    content: "" !important;
+    position: absolute !important;
+    top: -2px !important;         /* tuck under the line */
+    left: 0 !important;
+    right: 0 !important;
+    height: 22px !important;      /* slightly taller than before */
+    background: var(--bg, #fff) !important;
+    z-index: 3 !important;        /* above glow, below text */
+    pointer-events: none !important;
+}
+
+/* much narrower, softer, truly "powder" — not a bar */
+.site-clock .clock-shell::before {
+    content: "" !important;
+    position: absolute !important;
+    top: 16px !important;         /* starts below the guard */
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+
+    /* ↓↓↓ TUNE HERE IF YOU WANT ↓↓↓ */
+    width: clamp(220px, 42%, 380px) !important;  /* narrower blob */
+    height: 120px !important;
+    /* ↑↑↑ TUNE HERE IF YOU WANT ↑↑↑ */
+
+    pointer-events: none !important;
+    z-index: 0 !important;
+
+    /* softer center, quick falloff toward edges */
     background:
-            radial-gradient(ellipse at 50% 55%,
-            rgba(52,102,203,.28) 0%,
-            rgba(52,102,203,.14) 35%,
-            rgba(52,102,203,.06) 60%,
-            rgba(52,102,203,0) 78%);
-    filter: blur(20px);
+            radial-gradient(ellipse at 50% 32%,
+            rgba(52,102,203,.35) 0%,
+            rgba(52,102,203,.18) 30%,
+            rgba(52,102,203,.08) 55%,
+            rgba(52,102,203,0) 75%) !important;
 
-    /* fade horizontally so edges disappear naturally */
-    -webkit-mask-image: radial-gradient(85% 75% at 50% 50%, #000 55%, transparent 88%);
-    mask-image: radial-gradient(85% 75% at 50% 50%, #000 55%, transparent 88%);
+    filter: blur(26px) !important;  /* feather more so it feels like dust */
+
+    /* trim sides/top so it can never read as a hard strip */
+    -webkit-mask-image: radial-gradient(60% 70% at 50% 36%, #000 48%, transparent 80%) !important;
+    mask-image: radial-gradient(60% 70% at 50% 36%, #000 48%, transparent 80%) !important;
 }
 
-/* hard stop on any lower borders/dividers that might be injected elsewhere */
+/* text above everything so it stays crisp */
+.site-clock .clock-time {
+    position: relative !important;
+    z-index: 5 !important;
+    padding: 0 12px !important;   /* avoids AM/PM clipping on phones */
+    white-space: nowrap !important;
+}
+
+
+/* === ONE-LINE-ONLY FIX (append at end) === */
+
+/* Keep the intended overline above the clock */
+.site-clock .clock-line {
+    border-top: 2px solid var(--border) !important;
+}
+
+/* Nuke any unintended bottom rule around the clock area */
 .site-clock,
 .site-clock .clock-shell,
-.site-clock .clock-time { border-bottom: 0 !important; }
-.site-clock + * { border-top: 0 !important; }
+.site-clock .clock-time {
+    border-bottom: 0 !important;
+}
+
+/* If any global layout adds a top divider right after the clock, remove it */
+.site-clock + * {
+    border-top: 0 !important;
+}
+
+/* Also ensure the page frame doesn’t inject a divider here */
+.site-header { border-bottom: 0 !important; }
+.site-main   { border-top: 0 !important; }
