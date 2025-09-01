@@ -1,8 +1,9 @@
 /* =========================================================
-   header-cart.css — Stable nav + restored powdery clock glow
+   header-cart.css — stable nav + powdery clock halo (fixed)
    ========================================================= */
 
-/* ---------- NAV LAYOUT (desktop/up) ---------- */
+/* ---------- NAV (unchanged) ---------- */
+
 .site-header .nav {
     display: flex;
     flex-direction: column;
@@ -22,7 +23,7 @@
     padding-right: 0.95rem;
 }
 
-/* ---------- CART: plain icon + count ---------- */
+/* Cart (plain icon + count) */
 .site-header .cart-plain,
 .site-header .cart-link {
     display: inline-flex;
@@ -58,7 +59,7 @@
     outline-offset: 3px;
 }
 
-/* ---------- MOBILE (<=540px) two-row nav ---------- */
+/* Mobile: two rows centered (wrap after Examples) */
 @media (max-width: 540px) {
     .site-header .nav-links {
         display: flex;
@@ -67,39 +68,26 @@
         row-gap: 0.38rem;
         column-gap: 1.2rem;
     }
+    .site-header .nav-links::after { content: ""; flex-basis: 100%; order: 3; }
+    .site-header .nav-links > * { flex: 0 0 auto; white-space: nowrap; text-align: center; }
 
-    .site-header .nav-links::after {
-        content: "";
-        flex-basis: 100%;
-        order: 3;
-    }
-
-    .site-header .nav-links > * {
-        flex: 0 0 auto;
-        white-space: nowrap;
-        text-align: center;
-    }
-
-    .site-header .nav-links a[href="/"]         { order: 1; }
-    .site-header .nav-links a[href="/services"] { order: 2; }
-    .site-header .nav-links a[href="/examples"] { order: 3; }
-    .site-header .nav-links a[href="/about"]    { order: 4; }
-    .site-header .nav-links a[href="/contact"]  { order: 5; }
+    .site-header .nav-links a[href="/"]         { order: 1; } /* Home */
+    .site-header .nav-links a[href="/services"] { order: 2; } /* Services */
+    .site-header .nav-links a[href="/examples"] { order: 3; } /* Examples */
+    .site-header .nav-links a[href="/about"]    { order: 4; } /* About */
+    .site-header .nav-links a[href="/contact"]  { order: 5; } /* Contact */
     .site-header .nav-links .cart-plain,
-    .site-header .nav-links .cart-link          { order: 6; }
+    .site-header .nav-links .cart-link          { order: 6; } /* Cart */
 
-    .site-header .nav-link.active {
-        padding-left: 0.9rem;
-        padding-right: 0.9rem;
-    }
+    .site-header .nav-link.active { padding-left: .9rem; padding-right: .9rem; }
 }
 
-/* ---------- Cart/PayPal page extras ---------- */
+/* Cart/PayPal page extras */
 .cart-page .cart-paypal { margin-top: .5rem; }
 .cart-page .cart-paid.ok { color:#046a38; font-weight:700; }
 
 /* =========================================================
-   CLOCK — powder glow properly contained
+   CLOCK — powder halo centered, narrow, and hard-blocked below the line
    ========================================================= */
 
 .site-clock {
@@ -109,88 +97,72 @@
     margin: .25rem 0 .35rem;
 }
 
-/* Centered line above the clock */
+/* Overline above clock */
 .site-clock .clock-line {
     border: 0;
     border-top: 2px solid var(--border);
     width: min(80%, 720px);
     margin: 0 auto;
     position: relative;
-    z-index: 2;
+    z-index: 3; /* stays above halo */
 }
 
-/* Clock container */
+/* Box that contains the clock + halo */
 .site-clock .clock-shell {
     position: relative;
-    width: min(80%, 720px);
-    margin-top: .35rem;
-    overflow: hidden; /* keeps glow from rising up */
+    width: min(80%, 720px);       /* match overline width */
+    margin-top: .35rem;           /* space under the line */
+    overflow: visible;            /* we’ll block the top explicitly */
+    z-index: 1;
 }
 
-/* Powder halo: narrower, softer, fading quickly */
+/* HARD TOP GUARD: prevents any halo from ever reaching the overline */
+.site-clock .clock-shell::after {
+    content: "";
+    position: absolute;
+    top: -2px;                    /* slightly overlaps under the line */
+    left: 0;
+    right: 0;
+    height: 18px;                 /* guard thickness */
+    background: var(--bg, #fff);  /* page background */
+    z-index: 2;                   /* above halo, below text */
+    pointer-events: none;
+}
+
+/* POWDER HALO: narrow, centered, soft falloff (NOT a bar) */
 .site-clock .clock-shell::before {
     content: "";
     position: absolute;
-    top: 16px; /* start glow below the line */
+    top: 14px;                    /* starts below the guard + line */
     left: 50%;
     transform: translateX(-50%);
-    width: 60%;            /* <<< narrower so it doesn't look like a bar */
-    max-width: 420px;      /* tighter max width */
-    height: 140px;
-    pointer-events: none;
+    width: clamp(260px, 58%, 520px);   /* narrow -> won’t hit edges */
+    height: 150px;
     z-index: 0;
+    pointer-events: none;
+
+    /* soft powdery bloom */
     background: radial-gradient(
             ellipse at 50% 30%,
             rgba(52,102,203,.45) 0%,
             rgba(52,102,203,.20) 40%,
             rgba(52,102,203,0) 70%
     );
-    filter: blur(18px); /* feather out edges */
+    filter: blur(16px);
+
+    /* mask trims sides/top so it can’t look like a strip */
+    -webkit-mask-image: radial-gradient(70% 75% at 50% 35%, #000 55%, transparent 85%);
+    mask-image: radial-gradient(70% 75% at 50% 35%, #000 55%, transparent 85%);
 }
 
-/* Clock text above the halo */
+/* Clock text above the halo & guard */
 .site-clock .clock-time {
     position: relative;
-    z-index: 1;
+    z-index: 4;                   /* above everything */
     white-space: nowrap;
     font-size: clamp(14px, 5.2vw, 20px);
     letter-spacing: 0.08em;
     font-weight: 700;
     text-align: center;
-    padding: 0 12px;
-}
-
-/* === FINAL OVERRIDE: powder glow, centered & clipped === */
-.site-clock .clock-line { z-index: 3 !important; }
-
-.site-clock .clock-shell {
-    position: relative !important;
-    margin-top: .35rem !important;      /* space under the line */
-    overflow: hidden !important;        /* clip anything that rises */
-    z-index: 1 !important;
-}
-
-.site-clock .clock-shell::before {
-    content: "" !important;
-    position: absolute !important;
-    top: 14px !important;               /* starts below the line */
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    width: 60% !important;              /* narrow so it’s not a bar */
-    max-width: 460px !important;
-    height: 150px !important;
-    pointer-events: none !important;
-    z-index: 0 !important;
-
-    /* soft, powdery falloff */
-    background: radial-gradient(ellipse at 50% 28%,
-    rgba(52,102,203,.45) 0%,
-    rgba(52,102,203,.20) 42%,
-    rgba(52,102,203,0) 70%) !important;
-
-    filter: blur(16px) !important;
-
-    /* hard-stop the edges so it never becomes a strip */
-    -webkit-mask-image: radial-gradient(65% 70% at 50% 35%, #000 55%, transparent 85%) !important;
-    mask-image: radial-gradient(65% 70% at 50% 35%, #000 55%, transparent 85%) !important;
+    padding: 0 12px;              /* prevent AM/PM clipping on small screens */
 }
