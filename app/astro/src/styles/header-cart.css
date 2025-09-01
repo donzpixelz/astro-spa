@@ -1,21 +1,20 @@
 /* =========================================================
-   header-cart.css — NAV stable + centered clock with soft, contained halo
+   header-cart.css — Stable nav + restored powdery clock glow
    ========================================================= */
 
 /* ---------- NAV LAYOUT (desktop/up) ---------- */
-
 .site-header .nav {
     display: flex;
     flex-direction: column;
-    align-items: center;                /* brand & nav centered stack */
+    align-items: center;
 }
 
 .site-header .nav-links {
     display: flex;
     align-items: center;
-    justify-content: center;            /* center the row under the title */
+    justify-content: center;
     gap: 1.25rem;
-    margin-top: 1.2rem;                 /* breathing room below title underline */
+    margin-top: 1.2rem;
 }
 
 .site-header .nav-link.active {
@@ -24,7 +23,6 @@
 }
 
 /* ---------- CART: plain icon + count ---------- */
-
 .site-header .cart-plain,
 .site-header .cart-link {
     display: inline-flex;
@@ -60,20 +58,16 @@
     outline-offset: 3px;
 }
 
-/* ---------- MOBILE (<=540px): two rows, each centered independently ---------- */
-/* Row 1: Home, Services, Examples
-   Row 2: About, Contact, Cart  */
-
+/* ---------- MOBILE (<=540px) two-row nav ---------- */
 @media (max-width: 540px) {
     .site-header .nav-links {
         display: flex;
-        flex-wrap: wrap;                  /* allow two lines */
-        justify-content: center;          /* center EACH line’s items */
+        flex-wrap: wrap;
+        justify-content: center;
         row-gap: 0.38rem;
         column-gap: 1.2rem;
     }
 
-    /* Force wrap after “Examples” with a 100% break element */
     .site-header .nav-links::after {
         content: "";
         flex-basis: 100%;
@@ -86,13 +80,13 @@
         text-align: center;
     }
 
-    .site-header .nav-links a[href="/"]         { order: 1; } /* Home */
-    .site-header .nav-links a[href="/services"] { order: 2; } /* Services */
-    .site-header .nav-links a[href="/examples"] { order: 3; } /* Examples */
-    .site-header .nav-links a[href="/about"]    { order: 4; } /* About */
-    .site-header .nav-links a[href="/contact"]  { order: 5; } /* Contact */
+    .site-header .nav-links a[href="/"]         { order: 1; }
+    .site-header .nav-links a[href="/services"] { order: 2; }
+    .site-header .nav-links a[href="/examples"] { order: 3; }
+    .site-header .nav-links a[href="/about"]    { order: 4; }
+    .site-header .nav-links a[href="/contact"]  { order: 5; }
     .site-header .nav-links .cart-plain,
-    .site-header .nav-links .cart-link          { order: 6; } /* Cart */
+    .site-header .nav-links .cart-link          { order: 6; }
 
     .site-header .nav-link.active {
         padding-left: 0.9rem;
@@ -105,55 +99,56 @@
 .cart-page .cart-paid.ok { color:#046a38; font-weight:700; }
 
 /* =========================================================
-   CLOCK — centered line + SOFT, NARROW halo contained below
+   CLOCK — powder glow properly contained
    ========================================================= */
 
 .site-clock {
     display: flex;
     flex-direction: column;
-    align-items: center;                /* centers both line & clock */
+    align-items: center;
     margin: .25rem 0 .35rem;
 }
 
-/* Overline above the clock (centered width) */
+/* Centered line above the clock */
 .site-clock .clock-line {
     border: 0;
     border-top: 2px solid var(--border);
     width: min(80%, 720px);
     margin: 0 auto;
+    position: relative;
+    z-index: 2;
 }
 
-/* Clock box matching the line width; acts as the clipping box */
+/* Clock container */
 .site-clock .clock-shell {
     position: relative;
-    width: min(80%, 720px);             /* match the line width exactly */
-    margin-top: .35rem;                 /* space under the line */
-    overflow: hidden;                   /* clips the internal glow */
-    /* no background, no border-radius, no outer box-shadow */
+    width: min(80%, 720px);
+    margin-top: .35rem;
+    overflow: hidden; /* keeps glow from rising up */
 }
 
-/* Internal halo — narrower than the row so it DOESN'T hit the edges
-   Starts BELOW the line and stays clipped; soft, powdery falloff */
+/* Powder halo: narrower, softer, fading quickly */
 .site-clock .clock-shell::before {
     content: "";
     position: absolute;
-    top: 12px;                          /* distance from the line; tweak 8–14px */
+    top: 16px; /* start glow below the line */
     left: 50%;
     transform: translateX(-50%);
-    width: 70%;                         /* <<< key: narrower than the container */
-    max-width: 520px;                   /* keeps it from feeling wall-to-wall */
-    height: 160px;                      /* vertical reach of glow */
+    width: 60%;            /* <<< narrower so it doesn't look like a bar */
+    max-width: 420px;      /* tighter max width */
+    height: 140px;
     pointer-events: none;
     z-index: 0;
-    background:
-            radial-gradient(ellipse at 50% 25%,
-            rgba(52,102,203,.40),
-            rgba(52,102,203,.18) 45%,
-            rgba(52,102,203,0) 72%);
-    filter: blur(14px);                 /* softer edges = powder, not a bar */
+    background: radial-gradient(
+            ellipse at 50% 30%,
+            rgba(52,102,203,.45) 0%,
+            rgba(52,102,203,.20) 40%,
+            rgba(52,102,203,0) 70%
+    );
+    filter: blur(18px); /* feather out edges */
 }
 
-/* Clock text sits above the halo */
+/* Clock text above the halo */
 .site-clock .clock-time {
     position: relative;
     z-index: 1;
@@ -162,5 +157,5 @@
     letter-spacing: 0.08em;
     font-weight: 700;
     text-align: center;
-    padding: 0 12px;                    /* prevents AM/PM clipping on small screens */
+    padding: 0 12px;
 }
