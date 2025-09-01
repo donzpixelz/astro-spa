@@ -49,33 +49,30 @@
     outline-offset: 3px;
 }
 
-/* ---------- Clock inside the header (line = border; halo clipped) ---------- */
+/* ---------- Clock inside the header (centered line; halo below) ---------- */
 
 .site-header {
     border-bottom: 0 !important; /* no divider under header */
     text-align: center;
 }
 
-/* Centered container = same width as before.
-   Its TOP BORDER is the line. It also CLIPS the halo. */
 .site-clock {
-    width: min(80%, 720px);
-    margin: .25rem auto .35rem;
+    margin: .25rem 0 .35rem;
     position: relative;
-    border-top: 2px solid var(--border); /* ← the line */
-    padding-top: 10px;                   /* small gap under the line */
-    overflow: hidden;                    /* ← clips any powder/halo */
-    background: var(--bg, #fff);         /* ensure clean edge against page */
 }
 
-/* Hide any old <hr> that may still be in the markup */
-.site-clock .clock-line { display: none !important; }
+/* Centered line ABOVE the clock — original behavior */
+.site-clock .clock-line {
+    border: 0;
+    border-top: 2px solid var(--border);
+    width: min(80%, 720px);
+    margin: 0 auto .35rem;  /* centered, with space below */
+}
 
-/* Keep any halo behind the clock only (and inside the clipped box) */
+/* Keep the halo neatly inside; add tiny side padding for mobile so text never clips */
 .site-clock :where(.clock, .digital-clock) {
     isolation: isolate;
-    position: relative;
-    z-index: 0;
+    padding: 0 .75rem;      /* prevents AM/PM cutoff on small screens */
 }
 
 /* ---------- Mobile: two independently centered rows (<=540px) ---------- */
