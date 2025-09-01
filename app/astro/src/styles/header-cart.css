@@ -120,3 +120,12 @@
 
 /* Local guard so the powder/halo can’t invade the overline */
 .site-clock .clock-guard { overflow: hidden; padding-top: 8px; }
+
+/* --- Emergency hotfix: remove the blue halo completely --- */
+.site-clock .clock-shell,
+.site-clock .clock-time {
+    background: transparent !important;
+    box-shadow: none !important;
+    filter: none !important;
+}
+
