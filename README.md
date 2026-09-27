@@ -1,108 +1,102 @@
-# astro-spa (Astro + Nginx on AWS with GitHub Actions)
+# Astro SPA
 
-A single-page Astro site, served by **Nginx** on its own **EC2** instance.  
-Local dev runs via **Docker Compose**. CI/CD uses **GitHub Actions → S3 → SSM** with **OIDC** (no static AWS keys).
+A small Astro deployment project showing a browser application served through **Nginx** on **AWS EC2**, with local Docker development and a GitHub Actions delivery path using **S3**, **SSM**, and **OIDC**.
 
-**Region:** `us-east-2` (Ohio)  
-**Root served:** `/` (SPA with client-side routing)
+## What this demonstrates
 
----
+- Astro application build and static output
+- Nginx configuration for SPA-style client routing
+- Docker-based local preview
+- Terraform-managed AWS infrastructure
+- GitHub Actions using short-lived AWS OIDC credentials
+- artifact delivery through S3
+- remote deployment through AWS Systems Manager rather than long-lived AWS keys
 
-## What’s inside
+## Architecture
 
-- **Terraform** (`terraform/`)  
-  Defines a small **EC2** (Amazon Linux 2), opens **HTTP :80** to the world and **SSH :22** only to your current IP, installs Docker.
-  > We’re **not running it yet** — you created the SSH key locally and staged the files. We’ll apply when you’re ready.
+```text
+Astro source
+   ↓
+GitHub Actions
+   ↓
+Astro build
+   ↓
+artifact archive
+   ↓
+S3
+   ↓
+AWS SSM
+   ↓
+EC2 / Nginx
+```
 
-- **Nginx (Docker / EC2)**
-  - `nginx/default.conf` → SPA-friendly routing (serves `/index.html` for client routes; long-cache for assets).
-  - `nginx/99-no-cache.conf` → optional “no-cache” overlay (handy for local dev).
-
-- **GitHub Actions**
-  - `.github/workflows/deploy-site-ssm.yml` → builds Astro from `app/astro`, tars the output, uploads to S3, and deploys to EC2 via **SSM** (using the runner’s short-lived OIDC creds).
-
-- **Helper script**
-  - `deploy-site-now` → commit/push to trigger the workflow and open the Actions page.
-
----
+The repository separates application code, web-server configuration, infrastructure definition, and deployment automation so each layer can be inspected independently.
 
 ## Repository layout
 
+```text
 astro-spa/
-├─ app/
-│ └─ astro/ # your Astro project (npm install && npx astro build)
-├─ nginx/
-│ ├─ default.conf # SPA routing + caching
-│ └─ 99-no-cache.conf # (optional) dev-only no-cache headers
-├─ terraform/
-│ ├─ main.tf # provider, key pair import, SG, EC2
-│ ├─ variables.tf # dockerhub_username, docker_image
-│ └─ terraform.tfvars # per-project values (no secrets in git)
-├─ .github/
-│ └─ workflows/
-│ └─ deploy-site-ssm.yml
-├─ docker-compose.yml
-├─ Dockerfile
-└─ deploy-site-now
+├── app/
+│   └── astro/
+├── nginx/
+│   ├── default.conf
+│   └── 99-no-cache.conf
+├── terraform/
+│   ├── main.tf
+│   ├── variables.tf
+│   └── terraform.tfvars
+├── .github/
+│   └── workflows/
+│       └── deploy-site-ssm.yml
+├── docker-compose.yml
+├── Dockerfile
+└── deploy-site-now
+```
 
+## Local development
 
----
+Build the Astro application:
 
-## Prerequisites
-
-- **SSH key (local):** `~/.ssh/aws-ssh-key` + `~/.ssh/aws-ssh-key.pub`  
-  Created with:
-  ```bash
-  ssh-keygen -t rsa -b 4096 -C "chip@astro-spa" -f ~/.ssh/aws-ssh-key
-
-
-Node 20+ (for building Astro locally if you want)
-Docker (for local Nginx)
-
-Local develop & preview (no AWS)
-Build the Astro site:
-
+```bash
 cd app/astro
 npm install
 npx astro build
+```
 
-2. Serve via Nginx:
+Then serve the generated output through the local Nginx container:
 
-cd ../../
+```bash
+cd ../..
 docker compose up -d
-# open http://localhost:8080
+```
 
-docker-compose.yml mounts app/astro/dist to /usr/share/nginx/html, and mounts both nginx/*.conf.
+The local preview is available at `http://localhost:8080`.
 
-CI/CD (GitHub Actions → S3 → SSM)
-You’ll need these configured (either as Secrets or Variables):
-AWS_ROLE_TO_ASSUME → the IAM role ARN for GitHub OIDC (e.g., arn:aws:iam::ACCOUNT_ID:role/GitHubActions-astro-spa-ssh)
-AWS_REGION → us-east-2 (or your region)
-ARTIFACT_S3_BUCKET → an S3 bucket for deploy artifacts (e.g., astro-spa-artifacts-ACCOUNT_ID-us-east-2)
-(Optional) EC2_INSTANCE_ID → if you prefer explicit targeting; otherwise the workflow finds a running instance with tag:Name=astro-spa.
-Trigger a deploy:
+## AWS deployment path
 
-./deploy-site-now "site: update"
-# or push to main normally; or run the workflow manually in the Actions tab
+The deployment workflow expects AWS-side resources and repository configuration such as:
 
-The workflow:
-Builds Astro from app/astro
-Uploads site.tgz to your artifact bucket
-Uses SSM to connect to the instance and rsync files into Nginx’s docroot
-Reloads Nginx and prints a short diagnostic summary
+- an OIDC role that GitHub Actions may assume
+- an artifact S3 bucket
+- the target AWS region
+- an EC2 instance reachable through SSM
 
-Terraform (when you’re ready)
-From terraform/:
+The workflow builds the Astro site, packages the output, uploads the artifact to S3, and uses SSM to update the Nginx document root on the target instance.
 
+## Terraform
+
+Infrastructure definitions live in `terraform/`.
+
+Useful validation before an apply:
+
+```bash
+cd terraform
 terraform fmt -check
 terraform validate
-# when ready:
-terraform init
-terraform apply
+```
 
+Provisioning is intentionally separate from local development; an AWS apply should only be run when the required account resources and values are configured.
 
-Outputs will show public_ip / public_dns.
-SSH:
+## Security note
 
-ssh -i ~/.ssh/aws-ssh-key ec2-user@<PUBLIC_DNS_OR_IP>
-
+The CI/CD design uses GitHub OIDC for AWS authentication instead of storing static AWS access keys in the repository.
